@@ -20,4 +20,13 @@ Global
 		{AD89620E-3FA2-4572-A128-F6093411C7C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD89620E-3FA2-4572-A128-F6093411C7C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.StandardHeader = $2
+		$0.VersionControlPolicy = $3
+		description = SDK to facilitate .NET integrations with Stark Bank
+		version = 2.0.0
+	EndGlobalSection
 EndGlobal
