@@ -1,4 +1,5 @@
 using Xunit;
+using System;
 using StarkBank;
 
 
@@ -11,8 +12,8 @@ namespace StarkBankTests
         {
             (string privateKey, string publicKey) = Key.Create();
 
-            System.Console.WriteLine(privateKey);
-            System.Console.WriteLine(publicKey);
+            Console.WriteLine(privateKey);
+            Console.WriteLine(publicKey);
         }
 
         [Fact]
@@ -20,8 +21,8 @@ namespace StarkBankTests
         {
             (string privateKey, string publicKey) = Key.Create("keys");
 
-            System.Console.WriteLine(privateKey);
-            System.Console.WriteLine(publicKey);
+            Console.WriteLine(privateKey);
+            Console.WriteLine(publicKey);
         }
     }
 }
