@@ -7,6 +7,20 @@ namespace StarkBank.Utils
 {
     internal static class Checks
     {
+        internal static User CheckUser(User user)
+        {
+            if (user is null)
+            {
+                user = User.DefaultUser;
+            }
+            if (user != null)
+            {
+                return user;
+            }
+            throw new Exception("A user is required to access our API. Check our README: https://github.com/starkbank/sdk-dotnet/");
+
+        }
+
         internal static string CheckEnvironment(string environment)
         {
             List<string> environments = new List<string>() { "production", "sandbox" };

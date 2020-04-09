@@ -35,6 +35,8 @@ namespace StarkBank.Utils
 
         internal static Response Fetch(User user, HttpMethod method, string path, Dictionary<string, object> payload = null, Dictionary<string, object> query = null)
         {
+            user = Checks.CheckUser(user);
+
             string url = "";
             if (user.Environment == "production")
             {
