@@ -13,6 +13,7 @@
   <ItemGroup>
     <Folder Include="Utils\" />
     <Folder Include="User\" />
+    <Folder Include="Ledger\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Environment.cs" />

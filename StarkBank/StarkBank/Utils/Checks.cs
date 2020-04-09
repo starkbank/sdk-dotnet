@@ -47,5 +47,10 @@ namespace StarkBank.Utils
             }
             return pem;
         }
+
+        internal static DateTime CheckDateTime(string data)
+        {
+            return DateTime.Parse(data);
+        }
     }
 }

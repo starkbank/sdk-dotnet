@@ -12,8 +12,8 @@ namespace StarkBankTests
         {
             (string privateKey, string publicKey) = Key.Create();
 
-            Console.WriteLine(privateKey);
-            Console.WriteLine(publicKey);
+            Assert.True(privateKey.Length > 0);
+            Assert.True(publicKey.Length > 0);
         }
 
         [Fact]
@@ -21,8 +21,8 @@ namespace StarkBankTests
         {
             (string privateKey, string publicKey) = Key.Create("keys");
 
-            Console.WriteLine(privateKey);
-            Console.WriteLine(publicKey);
+            Assert.True(privateKey.Length > 0);
+            Assert.True(publicKey.Length > 0);
         }
     }
 }

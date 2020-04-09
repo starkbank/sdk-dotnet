@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
@@ -13,7 +14,8 @@ namespace StarkBank.Utils
 
         internal static JObject Decode(string content)
         {
-            return JObject.Parse(content) as JObject;
+            using (var reader = new JsonTextReader(new StringReader(content)) { DateParseHandling = DateParseHandling.None })
+                return JObject.Load(reader);
         }
     }
 }
