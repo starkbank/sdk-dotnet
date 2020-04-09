@@ -28,7 +28,7 @@ namespace StarkBank
         public string Name { get; }
         public List<string> AllowedIps { get; }
 
-        public Project(string id, string privateKey, string environment, string name = "", List<string> allowedIps = null) : base(id, privateKey, environment, "project")
+        public Project(string environment, string id, string privateKey, string name = "", List<string> allowedIps = null) : base(environment, id, privateKey, "project")
         {
             Name = name;
             AllowedIps = allowedIps;

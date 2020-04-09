@@ -8,7 +8,7 @@ namespace StarkBank
         public string Environment { get; }
         readonly private string Kind;
 
-        public User(string id, string privateKey, string environment, string kind) : base(id)
+        public User(string environment, string id, string privateKey, string kind) : base(id)
         {
             Pem = Checks.CheckPrivateKey(privateKey);
             Environment = Checks.CheckEnvironment(environment);
