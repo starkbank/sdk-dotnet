@@ -4,17 +4,17 @@ namespace StarkBank.Utils
 {
     internal static class Case
     {
-        internal static string UpperCamelToLowerCamel(string upperCamel)
+        internal static string PascalToCamel(string pascal)
         {
-            return char.ToLowerInvariant(upperCamel[0]) + upperCamel.Substring(1);
+            return char.ToLowerInvariant(pascal[0]) + pascal.Substring(1);
         }
 
-        internal static string LowerCamelToUpperCamel(string upperCamel)
+        internal static string CamelToPascal(string camel)
         {
-            return char.ToUpperInvariant(upperCamel[0]) + upperCamel.Substring(1);
+            return char.ToUpperInvariant(camel[0]) + camel.Substring(1);
         }
 
-        internal static string CamelToKebab(string camel)
+        internal static string CamelOrPascalToKebab(string camel)
         {
             var builder = new StringBuilder();
             builder.Append(char.ToLower(camel[0]));

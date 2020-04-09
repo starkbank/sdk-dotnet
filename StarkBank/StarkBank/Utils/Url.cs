@@ -17,7 +17,7 @@ namespace StarkBank.Utils
                     continue;
                 }
 
-                string key = Case.UpperCamelToLowerCamel(entry.Key);
+                string key = Case.PascalToCamel(entry.Key);
 
                 string value = "";
                 if (IsList(entry.Value))
