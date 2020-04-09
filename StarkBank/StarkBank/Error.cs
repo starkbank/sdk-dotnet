@@ -22,11 +22,17 @@ namespace StarkBank.Error
 
         public InputErrors(string content) : base(content)
         {
-            dynamic errors = Utils.Json.Decode(content);
+            dynamic json = Utils.Json.Decode(content);
+            dynamic errors = json.errors;
 
+            string code;
+            string message;
+            Errors = new List<Error>();
             foreach (dynamic error in errors)
             {
-                Errors.Add(new Error(error.code, error.message));
+                code = error.code;
+                message = error.message;
+                Errors.Add(new Error(code, message));
             }
         }
     }

@@ -14,6 +14,7 @@
     <Folder Include="Utils\" />
     <Folder Include="User\" />
     <Folder Include="Ledger\" />
+    <Folder Include="Boleto\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Environment.cs" />

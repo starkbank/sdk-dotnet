@@ -1,11 +1,7 @@
 ﻿namespace StarkBank.Utils
 {
-    public class Resource
+    public interface IResource
     {
         public string ID { get; }
-        public Resource(string id)
-        {
-            ID = id;
-        }
     }
 }

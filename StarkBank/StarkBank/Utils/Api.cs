@@ -8,13 +8,13 @@ namespace StarkBank.Utils
 {
     internal static class Api
     {
-        internal delegate Resource ResourceMaker(dynamic json);
+        internal delegate IResource ResourceMaker(dynamic json);
 
-        internal static Dictionary<string, object> ApiJson(Resource entity)
+        internal static Dictionary<string, object> ApiJson(IResource entity)
         {
             return CastJsonToApiFormat(entity.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(entity, null)));
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(entity)));
         }
 
         internal static Dictionary<string, object> CastJsonToApiFormat(Dictionary<string, object> json)
@@ -26,9 +26,20 @@ namespace StarkBank.Utils
                 {
                     continue;
                 }
+                string key = Case.PascalToCamel(entry.Key);
+                if (key.EndsWith("ID"))
+                {
+                    key = key.Substring(0, key.Length - 2) + "Id";
+                }
+                dynamic value = entry.Value;
+                if (value is DateTime)
+                {
+                    DateTime data = value;
+                    value = DateToString(data);
+                }
                 apiJson.Add(
-                    Case.PascalToCamel(entry.Key),
-                    DateToString(entry.Value)
+                    key,
+                    value
                 );
             }
             return apiJson;
@@ -39,12 +50,7 @@ namespace StarkBank.Utils
             return dateTime.ToString("yyyy-MM-dd");
         }
 
-        internal static object DateToString(object other)
-        {
-            return other;
-        }
-
-        internal static Resource FromApiJson(ResourceMaker resourceMaker, dynamic json)
+        internal static IResource FromApiJson(ResourceMaker resourceMaker, dynamic json)
         {
             return resourceMaker(json);
         }

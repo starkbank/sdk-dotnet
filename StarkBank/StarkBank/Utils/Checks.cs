@@ -52,5 +52,14 @@ namespace StarkBank.Utils
         {
             return DateTime.Parse(data);
         }
+
+        internal static DateTime? CheckNullableDateTime(string data)
+        {
+            if (data is null)
+            {
+                return null;
+            }
+            return CheckDateTime(data);
+        }
     }
 }
