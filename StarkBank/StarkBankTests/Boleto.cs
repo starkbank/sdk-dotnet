@@ -11,10 +11,31 @@ namespace StarkBankTests
         public readonly User user = TestUser.SetDefault();
 
         [Fact]
-        public void Create()
+        public void CreateGetGetPdfAndDelete()
         {
             List<Boleto> boletos = Boleto.Create(new List<Boleto>() {Example()});
+            Boleto boleto = boletos.First();
             Assert.NotNull(boletos.First().ID);
+            Boleto getBoleto = Boleto.Get(id: boleto.ID);
+            Assert.Equal(getBoleto.ID, boleto.ID);
+            string pdf = Boleto.Pdf(id: boleto.ID);
+            Assert.True(pdf.Length > 0);
+            System.IO.File.WriteAllText("boleto.pdf", pdf);
+            Boleto deleteBoleto = Boleto.Get(id: boleto.ID);
+            Assert.Equal(deleteBoleto.ID, boleto.ID);
+        }
+
+        [Fact]
+        public void Query()
+        {
+            List<Boleto> boletos = Boleto.Query(limit: 101, status: "paid").ToList();
+            Assert.Equal(101, boletos.Count);
+            Assert.True(boletos.First().ID != boletos.Last().ID);
+            foreach (Boleto boleto in boletos)
+            {
+                Assert.NotNull(boleto.ID);
+                Assert.Equal("paid", boleto.Status);
+            }
         }
 
         private Boleto Example()

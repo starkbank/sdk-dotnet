@@ -112,6 +112,110 @@ namespace StarkBank
             ).ToList().ConvertAll(o => (Boleto)o);
         }
 
+        /// <summary>
+        /// Retrieve a specific Boleto
+        /// 
+        /// Receive a single Boleto object previously created in the Stark Bank API by passing its id
+        /// 
+        /// Parameters(required) :
+        ///     id[string]: object unique id.ex: "5656565656565656"
+        /// Parameters(optional) :
+        ///     user[Project object]: Project object. Not necessary if starkbank.user was set before function call
+        /// Return:
+        ///     Boleto object with updated attributes
+        /// </summary>
+        public static Boleto Get(string id, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.GetId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                user: user
+            ) as Boleto;
+        }
+
+        /// <summary>
+        /// Retrieve a specific Boleto pdf file
+        /// 
+        /// Receive a single Boleto pdf file generated in the Stark Bank API by passing its id.
+        /// 
+        /// Parameters(required):
+        ///     id[string]: object unique id.ex: "5656565656565656"
+        /// Parameters(optional) :
+        ///     user[Project object]: Project object. Not necessary if starkbank.user was set before function call
+        /// Return:
+        ///     Boleto pdf file
+        /// </summary>
+        public static string Pdf(string id, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.GetPdf(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                user: user
+            );
+        }
+
+        /// <summary>
+        /// Retrieve Boletos
+        /// 
+        /// Receive a generator of Boleto objects previously created in the Stark Bank API
+        /// 
+        /// Parameters (optional):
+        ///     limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
+        ///     status [string, default None]: filter for status of retrieved objects. ex: "paid" or "registered"
+        ///     tags [list of strings, default None]: tags to filter retrieved objects. ex: ["tony", "stark"]
+        ///     ids [list of strings, default None]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
+        ///     after [datetime.date, default None] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
+        ///     before [datetime.date, default None] date filter for objects only before specified date. ex: datetime.date(2020, 3, 10)
+        ///     user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+        /// Return:
+        ///     generator of Boleto objects with updated attributes
+        /// </summary>
+        public static IEnumerable<Boleto> Query(int? limit = null, string status = null, List<string> tags = null, List<string> ids = null,
+            DateTime? after = null, DateTime? before = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.GetList(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "limit", limit },
+                    { "status", status },
+                    { "tags", tags },
+                    { "ids", ids },
+                    { "after", after },
+                    { "before", before }
+                },
+                user: user
+            ).Cast<Boleto>();
+        }
+
+        /// <summary>
+        /// Delete a Boleto entity
+        /// 
+        /// Delete a Boleto entity previously created in the Stark Bank API
+        /// 
+        /// Parameters(required) :
+        ///     id[string]: Boleto unique id.ex: "5656565656565656"
+        /// Parameters(optional) :
+        ///     user[Project object]: Project object. Not necessary if starkbank.user was set before function call
+        /// Return:
+        ///     deleted Boleto with updated attributes
+        /// </summary>
+        public static Boleto Delete(string id, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.DeleteId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                user: user
+            ) as Boleto;
+        }
+
         internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Boleto", resourceMaker: ResourceMaker);

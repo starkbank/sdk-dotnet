@@ -26,7 +26,8 @@ namespace StarkBank.Utils
                 dynamic json = Request.Fetch(
                     user: user,
                     method: Request.Get,
-                    path: Api.Endpoint(resourceName)
+                    path: Api.Endpoint(resourceName),
+                    query: query
                 ).Json();
 
                 foreach(dynamic entityJson in json[Api.LastNamePlural(resourceName)])
@@ -42,7 +43,7 @@ namespace StarkBank.Utils
 
                 cursor = json["cursor"];
                 query["cursor"] = cursor;
-            } while (cursor is null || (limited && limit <= 0));
+            } while (cursor != null && (!limited || limit > 0));
         }
 
         static internal IResource GetId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
@@ -55,7 +56,7 @@ namespace StarkBank.Utils
             return Api.FromApiJson(resourceMaker, json);
         }
 
-        static internal object GetPdf(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
+        static internal string GetPdf(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
         {
             return Request.Fetch(
                 user: user,
