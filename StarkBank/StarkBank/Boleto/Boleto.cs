@@ -147,7 +147,7 @@ namespace StarkBank
         /// Return:
         ///     Boleto pdf file
         /// </summary>
-        public static string Pdf(string id, User user = null)
+        public static byte[] Pdf(string id, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetPdf(

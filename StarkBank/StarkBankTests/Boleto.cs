@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 
+
 namespace StarkBankTests
 {
     public class BoletoTest
@@ -18,9 +19,9 @@ namespace StarkBankTests
             Assert.NotNull(boletos.First().ID);
             Boleto getBoleto = Boleto.Get(id: boleto.ID);
             Assert.Equal(getBoleto.ID, boleto.ID);
-            string pdf = Boleto.Pdf(id: boleto.ID);
+            byte[] pdf = Boleto.Pdf(id: boleto.ID);
             Assert.True(pdf.Length > 0);
-            System.IO.File.WriteAllText("boleto.pdf", pdf);
+            System.IO.File.WriteAllBytes("boleto.pdf", pdf);
             Boleto deleteBoleto = Boleto.Get(id: boleto.ID);
             Assert.Equal(deleteBoleto.ID, boleto.ID);
         }

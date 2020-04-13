@@ -9,13 +9,21 @@ namespace StarkBank.Utils
 {
     internal class Response
     {
-        internal string Content { get; }
+        internal byte[] ByteContent { get; }
         internal int Status { get; }
 
-        internal Response(string content, int status)
+        internal Response(byte[] byteContent, int status)
         {
-            Content = content;
+            ByteContent = byteContent;
             Status = status;
+        }
+
+        internal string Content
+        {
+            get
+            {
+                return System.Text.Encoding.UTF8.GetString(ByteContent);
+            }
         }
 
         internal JObject Json()
@@ -79,7 +87,7 @@ namespace StarkBank.Utils
             var result = Client.SendAsync(httpRequestMessage).Result;
 
             Response response = new Response(
-                result.Content.ReadAsStringAsync().Result,
+                result.Content.ReadAsByteArrayAsync().Result,
                 (int) result.StatusCode
             );
 
