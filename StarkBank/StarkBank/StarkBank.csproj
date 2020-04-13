@@ -19,6 +19,7 @@
     <Folder Include="Payment\" />
     <Folder Include="Payment\Boleto\" />
     <Folder Include="Payment\Utility\" />
+    <Folder Include="Webhook\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Environment.cs" />
