@@ -60,6 +60,7 @@ namespace StarkBank
         public string BarCode { get; }
         public string Status { get; }
         public DateTime? Created { get; }
+
         public Boleto(int amount, string name, string taxID, string streetLine1, string streetLine2, string district,
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
             int? overdueLimit = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
@@ -174,8 +175,8 @@ namespace StarkBank
         /// Return:
         ///     generator of Boleto objects with updated attributes
         /// </summary>
-        public static IEnumerable<Boleto> Query(int? limit = null, string status = null, List<string> tags = null, List<string> ids = null,
-            DateTime? after = null, DateTime? before = null, User user = null)
+        public static IEnumerable<Boleto> Query(int? limit = null, string status = null, List<string> tags = null,
+            List<string> ids = null, DateTime? after = null, DateTime? before = null, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
@@ -247,7 +248,8 @@ namespace StarkBank
             string createdString = json.created;
             DateTime? created = Utils.Checks.CheckDateTime(createdString);
 
-            return new Boleto(amount: amount, name: name, taxID: taxID, streetLine1: streetLine1, streetLine2: streetLine2,
+            return new Boleto(
+                amount: amount, name: name, taxID: taxID, streetLine1: streetLine1, streetLine2: streetLine2,
                 district: district, city: city, stateCode: stateCode, zipCode: zipCode, due: due, fine: fine,
                 interest: interest, overdueLimit: overdueLimit, tags: tags, descriptions: descriptions, id: id, fee: fee,
                 line: line, barCode: barCode, status: status, created: created

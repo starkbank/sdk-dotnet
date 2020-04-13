@@ -29,6 +29,7 @@ namespace StarkBank
             public string Type { get; }
             public List<string> Errors { get; }
             public Boleto Boleto { get; }
+
             public Log(string id, DateTime created, string type, List<string> errors, Boleto boleto)
             {
                 ID = id;

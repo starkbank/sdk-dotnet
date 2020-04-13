@@ -25,6 +25,7 @@ namespace StarkBank
         public int Amount { get; }
         public string Currency { get; }
         public DateTime Updated { get; }
+
         public Balance(string id, int amount, string currency, DateTime updated)
         {
             ID = id;

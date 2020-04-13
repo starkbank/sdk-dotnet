@@ -22,7 +22,7 @@ namespace StarkBankTests
             byte[] pdf = Boleto.Pdf(id: boleto.ID);
             Assert.True(pdf.Length > 0);
             System.IO.File.WriteAllBytes("boleto.pdf", pdf);
-            Boleto deleteBoleto = Boleto.Get(id: boleto.ID);
+            Boleto deleteBoleto = Boleto.Delete(id: boleto.ID);
             Assert.Equal(deleteBoleto.ID, boleto.ID);
         }
 
