@@ -8,6 +8,7 @@ namespace StarkBank.Utils
     {
         internal static string Encode(Dictionary<string, object> query)
         {
+            query = Api.CastJsonToApiFormat(query);
             List<string> queryStringList = new List<string>();
 
             foreach (KeyValuePair<string, object> entry in query)
@@ -17,18 +18,16 @@ namespace StarkBank.Utils
                     continue;
                 }
 
-                string key = Case.PascalToCamel(entry.Key);
-
-                string value = "";
+                string value;
                 if (IsList(entry.Value))
                 {
-                    value = string.Join(",", entry.Value);
-                } else
-                {
+                    List<string> list = entry.Value as List<string>;
+                    value = string.Join(",", list.ToArray());
+                } else {
                     value = entry.Value.ToString();
                 }
 
-                queryStringList.Add(key + "=" + value);
+                queryStringList.Add(entry.Key + "=" + value);
             }
 
             if (queryStringList.Count > 0)

@@ -37,7 +37,7 @@ namespace StarkBank
     ///     status [string, default None]: current Boleto status. ex: "registered" or "paid"
     ///     created [datetime.datetime, default None]: creation datetime for the Boleto. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
-    public class Boleto : Utils.IResource
+    public partial class Boleto : Utils.IResource
     {
         public string ID { get; }
         public int Amount { get; }
