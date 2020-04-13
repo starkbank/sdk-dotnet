@@ -43,7 +43,7 @@ namespace StarkBankTests
         {
             return new Boleto(
                 amount: 1000000,
-                due: DateTime.UtcNow.Date.AddDays(1),
+                due: DateTime.Today.Date.AddDays(1),
                 name: "Random Company",
                 streetLine1: "Rua ABC",
                 streetLine2: "Ap 123",

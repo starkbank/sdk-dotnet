@@ -115,6 +115,5 @@ namespace StarkBank
                 return new Log(id: id, created: created, type: type, errors: errors, boleto: boleto);
             }
         }
-
     }
 }

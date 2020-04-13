@@ -16,6 +16,8 @@
     <Folder Include="Ledger\" />
     <Folder Include="Boleto\" />
     <Folder Include="Transfer\" />
+    <Folder Include="Payment\" />
+    <Folder Include="Payment\Boleto\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Environment.cs" />

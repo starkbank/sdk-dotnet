@@ -14,7 +14,11 @@ namespace StarkBankTests
         [Fact]
         public void QueryAndGet()
         {
-            List<Transfer.Log> logs = Transfer.Log.Query(limit: 101, before: DateTime.Now, types: new List<string> { "success" }).ToList();
+            List<Transfer.Log> logs = Transfer.Log.Query(
+                limit: 101,
+                before: DateTime.Now,
+                types: new List<string> { "success" }
+            ).ToList();
             Assert.Equal(101, logs.Count);
             Assert.True(logs.First().ID != logs.Last().ID);
             foreach (Transfer.Log log in logs)
@@ -22,8 +26,8 @@ namespace StarkBankTests
                 Assert.NotNull(log.ID);
                 Assert.Equal("success", log.Type);
             }
-            Transfer.Log getTransfer = Transfer.Log.Get(id: logs.First().ID);
-            Assert.Equal(getTransfer.ID, logs.First().ID);
+            Transfer.Log getLog = Transfer.Log.Get(id: logs.First().ID);
+            Assert.Equal(getLog.ID, logs.First().ID);
         }
     }
 }
