@@ -148,8 +148,8 @@ namespace StarkBank
         {
             string id = json.id;
             int amount = json.amount;
-            string externalID = json.externalID;
-            string receiverID = json.receiverID;
+            string externalID = json.externalId;
+            string receiverID = json.receiverId;
             List<string> tags = json.tags.ToObject<List<string>>();
             int fee = json.fee;
             string description = json.description;
