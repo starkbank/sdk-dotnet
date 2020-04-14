@@ -5,14 +5,14 @@ namespace StarkBank
 {
     public abstract class User : IResource
     {
-        public static User DefaultUser;
+        public static User Default;
 
         public string ID { get; }
         public string Pem { get; }
         public string Environment { get; }
         readonly private string Kind;
 
-        public User(string environment, string id, string privateKey, string kind)
+        internal User(string environment, string id, string privateKey, string kind)
         {
             ID = id;
             Pem = Checks.CheckPrivateKey(privateKey);
