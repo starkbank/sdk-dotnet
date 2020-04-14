@@ -7,35 +7,35 @@ namespace StarkBank
 {
     /// <summary>
     /// Boleto object
-    ///  
+    /// <br/>
     /// When you initialize a Boleto, the entity will not be automatically
     /// sent to the Stark Bank API. The 'create' function sends the objects
     /// to the Stark Bank API and returns the list of created objects.
-    ///  
-    /// Parameters (required):
-    ///     amount [long integer]: Boleto value in cents. Minimum = 200 (R$2,00). ex: 1234 (= R$ 12.34)
-    ///     name [string]: payer full name. ex: "Anthony Edward Stark"
-    ///     tax_id [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
-    ///     street_line_1 [string]: payer main address. ex: Av. Paulista, 200
-    ///     street_line_2 [string]: payer address complement. ex: Apto. 123
-    ///     district [string]: payer address district / neighbourhood. ex: Bela Vista
-    ///     city [string]: payer address city. ex: Rio de Janeiro
-    ///     state_code [string]: payer address state. ex: GO
-    ///     zip_code [string]: payer address zip code. ex: 01311-200
-    ///     due [datetime.date, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30
-    /// Parameters (optional):
-    ///     fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5
-    ///     interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2
-    ///     overdue_limit [integer, default 59]: limit in days for automatic Boleto cancellation after due date. ex: 7 (max: 59)
-    ///     descriptions [list of dictionaries, default None]: list of dictionaries with "text":string and (optional) "amount":int pairs
-    ///     tags [list of strings]: list of strings for tagging
-    /// Attributes (return-only):
-    ///     id [string, default None]: unique id returned when Boleto is created. ex: "5656565656565656"
-    ///     fee [integer, default None]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)
-    ///     line [string, default None]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"
-    ///     bar_code [string, default None]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"
-    ///     status [string, default None]: current Boleto status. ex: "registered" or "paid"
-    ///     created [datetime.datetime, default None]: creation datetime for the Boleto. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+    /// <br/>
+    /// Properties:
+    /// <list>
+    ///     <item>Amount [long integer]: Boleto value in cents. Minimum = 200 (R$2,00). ex: 1234 (= R$ 12.34)</item>
+    ///     <item>Name [string]: payer full name. ex: "Anthony Edward Stark"</item>
+    ///     <item>TaxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+    ///     <item>StreetLine1 [string]: payer main address. ex: Av. Paulista, 200</item>
+    ///     <item>StreetLine2 [string]: payer address complement. ex: Apto. 123</item>
+    ///     <item>District [string]: payer address district / neighbourhood. ex: Bela Vista</item>
+    ///     <item>City [string]: payer address city. ex: Rio de Janeiro</item>
+    ///     <item>StateCode [string]: payer address state. ex: GO</item>
+    ///     <item>ZipCode [string]: payer address zip code. ex: 01311-200</item>
+    ///     <item>Due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30</item>
+    ///     <item>Fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
+    ///     <item>Interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
+    ///     <item>OverdueLimit [integer, default 59]: limit in days for automatic Boleto cancellation after due date. ex: 7 (max: 59)</item>
+    ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
+    ///     <item>Tags [list of strings]: list of strings for tagging</item>
+    ///     <item>ID [string, default null]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
+    ///     <item>Fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
+    ///     <item>Line [string, default null]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
+    ///     <item>BarCode [string, default null]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
+    ///     <item>Status [string, default null]: current Boleto status. ex: "registered" or "paid"</item>
+    ///     <item>Created [DateTime, default null]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    /// </list>
     /// </summary>
     public partial class Boleto : Utils.Resource
     {
@@ -60,6 +60,46 @@ namespace StarkBank
         public string Status { get; }
         public DateTime? Created { get; }
 
+        /// <summary>
+        /// Boleto object
+        /// <br/>
+        /// When you initialize a Boleto, the entity will not be automatically
+        /// sent to the Stark Bank API. The 'create' function sends the objects
+        /// to the Stark Bank API and returns the list of created objects.
+        /// <br/>
+        /// Parameters (required):
+        /// <list>
+        ///     <item>amount [long integer]: Boleto value in cents. Minimum = 200 (R$2,00). ex: 1234 (= R$ 12.34)</item>
+        ///     <item>name [string]: payer full name. ex: "Anthony Edward Stark"</item>
+        ///     <item>taxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+        ///     <item>streetLine1 [string]: payer main address. ex: Av. Paulista, 200</item>
+        ///     <item>streetLine2 [string]: payer address complement. ex: Apto. 123</item>
+        ///     <item>district [string]: payer address district / neighbourhood. ex: Bela Vista</item>
+        ///     <item>city [string]: payer address city. ex: Rio de Janeiro</item>
+        ///     <item>stateCode [string]: payer address state. ex: GO</item>
+        ///     <item>zipCode [string]: payer address zip code. ex: 01311-200</item>
+        ///     <item>due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30</item>
+        /// </list>
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
+        ///     <item>interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
+        ///     <item>overdueLimit [integer, default 59]: limit in days for automatic Boleto cancellation after due date. ex: 7 (max: 59)</item>
+        ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
+        ///     <item>tags [list of strings]: list of strings for tagging</item>
+        /// </list>
+        /// <br/>
+        /// Attributes (return-only):
+        /// <list>
+        ///     <item>id [string, default null]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
+        ///     <item>fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
+        ///     <item>line [string, default null]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
+        ///     <item>barCode [string, default null]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
+        ///     <item>status [string, default null]: current Boleto status. ex: "registered" or "paid"</item>
+        ///     <item>created [DateTime, default null]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        /// </list>
+        /// </summary>
         public Boleto(long amount, string name, string taxID, string streetLine1, string streetLine2, string district,
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
             int? overdueLimit = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
@@ -90,15 +130,23 @@ namespace StarkBank
 
         /// <summary>
         /// Create Boletos
-        ///
+        /// <br/>
         /// Send a list of Boleto objects for creation in the Stark Bank API
-        ///
+        /// <br/>
         /// Parameters (required):
-        ///     boletos [list of Boleto objects]: list of Boleto objects to be created in the API
+        /// <list>
+        ///     <item>boletos [list of Boleto objects]: list of Boleto objects to be created in the API</item>
+        /// <br/>
+        /// </list>
         /// Parameters (optional):
-        ///     user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+        /// <list>
+        ///     <item>user [Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
         /// Return:
-        ///     list of Boleto objects with updated attributes
+        /// <list>
+        ///     <item>list of Boleto objects with updated attributes</item>
+        /// </list>
         /// </summary>
         public static List<Boleto> Create(List<Boleto> boletos, User user = null)
         {
@@ -113,15 +161,23 @@ namespace StarkBank
 
         /// <summary>
         /// Retrieve a specific Boleto
-        /// 
+        /// <br/>
         /// Receive a single Boleto object previously created in the Stark Bank API by passing its id
-        /// 
-        /// Parameters(required) :
-        ///     id[string]: object unique id.ex: "5656565656565656"
-        /// Parameters(optional) :
-        ///     user[Project object]: Project object. Not necessary if starkbank.user was set before function call
+        /// <br/>
+        /// Parameters(required):
+        /// <list>
+        ///     <item>id[string]: object unique id.ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
+        /// Parameters(optional):
+        /// <list>
+        ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
         /// Return:
-        ///     Boleto object with updated attributes
+        /// <list>
+        ///     <item>Boleto object with updated attributes</item>
+        /// </list>
         /// </summary>
         public static Boleto Get(string id, User user = null)
         {
@@ -136,15 +192,23 @@ namespace StarkBank
 
         /// <summary>
         /// Retrieve a specific Boleto pdf file
-        /// 
+        /// <br/>
         /// Receive a single Boleto pdf file generated in the Stark Bank API by passing its id.
-        /// 
+        /// <br/>
+        /// <list>
         /// Parameters(required):
-        ///     id[string]: object unique id.ex: "5656565656565656"
+        ///     <item>id[string]: object unique id.ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
         /// Parameters(optional) :
-        ///     user[Project object]: Project object. Not necessary if starkbank.user was set before function call
+        /// <list>
+        ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
         /// Return:
-        ///     Boleto pdf file
+        /// <list>
+        ///     <item>Boleto pdf file</item>
+        /// </list>
         /// </summary>
         public static byte[] Pdf(string id, User user = null)
         {
@@ -159,19 +223,24 @@ namespace StarkBank
 
         /// <summary>
         /// Retrieve Boletos
-        /// 
-        /// Receive a generator of Boleto objects previously created in the Stark Bank API
-        /// 
+        /// <br/>
+        /// Receive an IEnumerable of Boleto objects previously created in the Stark Bank API
+        /// <br/>
         /// Parameters (optional):
-        ///     limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
-        ///     status [string, default None]: filter for status of retrieved objects. ex: "paid" or "registered"
-        ///     tags [list of strings, default None]: tags to filter retrieved objects. ex: ["tony", "stark"]
-        ///     ids [list of strings, default None]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-        ///     after [datetime.date, default None] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-        ///     before [datetime.date, default None] date filter for objects only before specified date. ex: datetime.date(2020, 3, 10)
-        ///     user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+        /// <list>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
+        ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
+        ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
         /// Return:
-        ///     generator of Boleto objects with updated attributes
+        /// <list>
+        ///     <item>IEnumerable of Boleto objects with updated attributes</item>
+        /// </list>
         /// </summary>
         public static IEnumerable<Boleto> Query(int? limit = null, string status = null, List<string> tags = null,
             List<string> ids = null, DateTime? after = null, DateTime? before = null, User user = null)
@@ -194,15 +263,23 @@ namespace StarkBank
 
         /// <summary>
         /// Delete a Boleto entity
-        /// 
+        /// <br/>
         /// Delete a Boleto entity previously created in the Stark Bank API
-        /// 
+        /// <br/>
         /// Parameters(required) :
-        ///     id[string]: Boleto unique id.ex: "5656565656565656"
+        /// <list>
+        ///     <item>id[string]: Boleto unique id.ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
         /// Parameters(optional) :
-        ///     user[Project object]: Project object. Not necessary if starkbank.user was set before function call
+        /// <list>
+        ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
         /// Return:
-        ///     deleted Boleto with updated attributes
+        /// <list>
+        ///     <item>deleted Boleto with updated attributes</item>
+        /// </list>
         /// </summary>
         public static Boleto Delete(string id, User user = null)
         {

@@ -7,16 +7,19 @@ namespace StarkBank
     {
         /// <summary>
         /// Generate a new key pair
-        ///
+        /// <br/>
         /// Generates a secp256k1 ECDSA private/public key pair to be used in the API authentications
-        ///
+        /// <br/>
         /// Parameters(optional):
-        ///     path[string]: path to save the keys.pem files.No files will be saved if this parameter isn't provided
-        ///
+        /// <list>
+        ///     <item>path[string]: path to save the keys.pem files.No files will be saved if this parameter isn't provided</item>
+        /// </list>
+        /// <br/>
         /// Return:
-        ///     private and public key pems
+        /// <list>
+        ///     <item>private and public key pems</item>
+        /// </list>
         /// </summary>
-        /// <returns></returns>
         public static (string privateKey, string publicKey) Create()
         {
             PrivateKey privateKey = new PrivateKey();
@@ -30,16 +33,19 @@ namespace StarkBank
 
         /// <summary>
         /// Generate a new key pair
-        ///
+        /// <br/>
         /// Generates a secp256k1 ECDSA private/public key pair to be used in the API authentications
-        ///
+        /// <br/>
         /// Parameters(optional):
-        ///     path[string]: path to save the keys.pem files.No files will be saved if this parameter isn't provided
-        ///
+        /// <list>
+        ///     <item>path[string]: path to save the keys.pem files.No files will be saved if this parameter isn't provided</item>
+        /// </list>
+        /// <br/>
         /// Return:
-        ///     private and public key pems
+        /// <list>
+        ///     <item>private and public key pems</item>
+        /// </list>
         /// </summary>
-        /// <returns></returns>
         public static (string privateKey, string publicKey) Create(string path)
         {
             (string privateKeyPem, string publicKeyPem) = Key.Create();
