@@ -16,6 +16,7 @@ namespace StarkBankTests
         {
             List<Boleto> boletos = Boleto.Create(new List<Boleto>() {Example()});
             Boleto boleto = boletos.First();
+            Console.WriteLine(boleto);
             Assert.NotNull(boletos.First().ID);
             Boleto getBoleto = Boleto.Get(id: boleto.ID);
             Assert.Equal(getBoleto.ID, boleto.ID);
@@ -24,6 +25,7 @@ namespace StarkBankTests
             System.IO.File.WriteAllBytes("boleto.pdf", pdf);
             Boleto deleteBoleto = Boleto.Delete(id: boleto.ID);
             Assert.Equal(deleteBoleto.ID, boleto.ID);
+            Console.WriteLine(boleto);
         }
 
         [Fact]
@@ -34,6 +36,7 @@ namespace StarkBankTests
             Assert.True(boletos.First().ID != boletos.Last().ID);
             foreach (Boleto boleto in boletos)
             {
+                Console.WriteLine(boleto);
                 Assert.NotNull(boleto.ID);
                 Assert.Equal("paid", boleto.Status);
             }

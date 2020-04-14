@@ -22,6 +22,7 @@ namespace StarkBankTests
             Assert.True(events.First().ID != events.Last().ID);
             foreach (Event eventObject in events)
             {
+                Console.WriteLine(eventObject);
                 Assert.NotNull(eventObject.ID);
                 Assert.False(eventObject.IsDelivered);
             }
@@ -33,6 +34,7 @@ namespace StarkBankTests
             Assert.True(updateEvent.IsDelivered);
             Event deleteEvent = Event.Delete(getEvent.ID);
             Assert.Equal(getEvent.ID, deleteEvent.ID);
+            Console.WriteLine(getEvent);
         }
 
         [Fact]
@@ -41,6 +43,7 @@ namespace StarkBankTests
             Event parsedEvent = Event.Parse(Content, GoodSignature);
             Assert.NotNull(parsedEvent.ID);
             Assert.NotNull(parsedEvent.Log);
+            Console.WriteLine(parsedEvent);
         }
 
         [Fact]

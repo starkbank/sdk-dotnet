@@ -19,6 +19,7 @@ namespace StarkBankTests
             Assert.NotNull(transactions.First().ID);
             Transaction deleteTransaction = Transaction.Get(id: transaction.ID);
             Assert.Equal(deleteTransaction.ID, transaction.ID);
+            Console.WriteLine(transaction);
         }
 
         [Fact]
@@ -29,6 +30,7 @@ namespace StarkBankTests
             Assert.True(transactions.First().ID != transactions.Last().ID);
             foreach (Transaction transaction in transactions)
             {
+                Console.WriteLine(transaction);
                 Assert.NotNull(transaction.ID);
             }
         }

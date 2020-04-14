@@ -23,11 +23,13 @@ namespace StarkBankTests
             Assert.True(logs.First().ID != logs.Last().ID);
             foreach (Transfer.Log log in logs)
             {
+                Console.WriteLine(log);
                 Assert.NotNull(log.ID);
                 Assert.Equal("success", log.Type);
             }
             Transfer.Log getLog = Transfer.Log.Get(id: logs.First().ID);
             Assert.Equal(getLog.ID, logs.First().ID);
+            Console.WriteLine(getLog);
         }
     }
 }

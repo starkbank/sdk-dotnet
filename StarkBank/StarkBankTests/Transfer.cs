@@ -22,6 +22,7 @@ namespace StarkBankTests
             byte[] pdf = Transfer.Pdf(id: transfer.ID);
             Assert.True(pdf.Length > 0);
             System.IO.File.WriteAllBytes("transfer.pdf", pdf);
+            Console.WriteLine(transfer);
         }
 
         [Fact]
@@ -32,6 +33,7 @@ namespace StarkBankTests
             Assert.True(transfers.First().ID != transfers.Last().ID);
             foreach (Transfer transfer in transfers)
             {
+                Console.WriteLine(transfer);
                 Assert.NotNull(transfer.ID);
                 Assert.Equal("success", transfer.Status);
             }

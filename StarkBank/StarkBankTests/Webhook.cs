@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using StarkBank;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -20,6 +21,7 @@ namespace StarkBankTests
             Assert.Equal(getWebhook.ID, webhook.ID);
             Webhook deleteWebhook = Webhook.Delete(id: webhook.ID);
             Assert.Equal(deleteWebhook.ID, webhook.ID);
+            Console.WriteLine(deleteWebhook);
         }
 
         [Fact]
@@ -28,6 +30,7 @@ namespace StarkBankTests
             List<Webhook> webhooks = Webhook.Query().ToList();
             foreach (Webhook webhook in webhooks)
             {
+                Console.WriteLine(webhook);
                 Assert.NotNull(webhook.ID);
                 Assert.NotNull(webhook.Url);
                 Assert.NotNull(webhook.Subscriptions);

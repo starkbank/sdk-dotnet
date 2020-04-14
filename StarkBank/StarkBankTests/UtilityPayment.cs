@@ -24,6 +24,7 @@ namespace StarkBankTests
             System.IO.File.WriteAllBytes("utilityPayment.pdf", pdf);
             UtilityPayment deleteUtilityPayment = UtilityPayment.Delete(id: payment.ID);
             Assert.Equal(deleteUtilityPayment.ID, payment.ID);
+            Console.WriteLine(payment);
         }
 
         [Fact]
@@ -34,6 +35,7 @@ namespace StarkBankTests
             Assert.True(payments.First().ID != payments.Last().ID);
             foreach (UtilityPayment payment in payments)
             {
+                Console.WriteLine(payment);
                 Assert.NotNull(payment.ID);
                 Assert.Equal("success", payment.Status);
             }
