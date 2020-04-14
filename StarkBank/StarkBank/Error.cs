@@ -53,5 +53,8 @@ namespace StarkBank.Error
 
     public class InvalidSignatureError : Exception
     {
+        public InvalidSignatureError(string message) : base(message)
+        {
+        }
     }
 }

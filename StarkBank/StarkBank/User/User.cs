@@ -5,8 +5,9 @@ namespace StarkBank
 {
     public abstract class User : IResource
     {
-        public string ID { get; }
         public static User DefaultUser;
+
+        public string ID { get; }
         public string Pem { get; }
         public string Environment { get; }
         readonly private string Kind;
