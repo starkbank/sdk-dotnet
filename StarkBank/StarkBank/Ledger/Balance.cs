@@ -15,17 +15,17 @@ namespace StarkBank
     /// 
     /// Attributes(return-only):
     ///     id [string, default None]: unique id returned when Boleto is created. ex: "5656565656565656"
-    ///     amount [integer, default None]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)
+    ///     amount [long integer, default None]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)
     ///     currency [string, default None]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"
     ///     updated [datetime.datetime, default None]: update datetime for the balance. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
     public class Balance : Utils.Resource
     {
-        public int Amount { get; }
+        public long Amount { get; }
         public string Currency { get; }
         public DateTime Updated { get; }
 
-        public Balance(string id, int amount, string currency, DateTime updated) : base(id)
+        public Balance(string id, long amount, string currency, DateTime updated) : base(id)
         {
             Amount = amount;
             Currency = currency;
@@ -63,7 +63,7 @@ namespace StarkBank
         internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
-            int amount = json.amount;
+            long amount = json.amount;
             string currency = json.currency;
             string updatedString = json.updated;
             DateTime updated = Utils.Checks.CheckDateTime(updatedString);

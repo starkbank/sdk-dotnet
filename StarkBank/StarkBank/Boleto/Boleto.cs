@@ -13,7 +13,7 @@ namespace StarkBank
     /// to the Stark Bank API and returns the list of created objects.
     ///  
     /// Parameters (required):
-    ///     amount [integer]: Boleto value in cents. Minimum = 200 (R$2,00). ex: 1234 (= R$ 12.34)
+    ///     amount [long integer]: Boleto value in cents. Minimum = 200 (R$2,00). ex: 1234 (= R$ 12.34)
     ///     name [string]: payer full name. ex: "Anthony Edward Stark"
     ///     tax_id [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
     ///     street_line_1 [string]: payer main address. ex: Av. Paulista, 200
@@ -39,7 +39,7 @@ namespace StarkBank
     /// </summary>
     public partial class Boleto : Utils.Resource
     {
-        public int Amount { get; }
+        public long Amount { get; }
         public string Name { get; }
         public string TaxID { get; }
         public string StreetLine1 { get; }
@@ -60,7 +60,7 @@ namespace StarkBank
         public string Status { get; }
         public DateTime? Created { get; }
 
-        public Boleto(int amount, string name, string taxID, string streetLine1, string streetLine2, string district,
+        public Boleto(long amount, string name, string taxID, string streetLine1, string streetLine2, string district,
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
             int? overdueLimit = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
             string id = null, int? fee = null, string line = null, string barCode = null, string status = null,
@@ -222,7 +222,7 @@ namespace StarkBank
 
         internal static Utils.Resource ResourceMaker(dynamic json)
         {
-            int amount = json.amount;
+            long amount = json.amount;
             string name = json.name;
             string taxID = json.taxId;
             string streetLine1 = json.streetLine1;

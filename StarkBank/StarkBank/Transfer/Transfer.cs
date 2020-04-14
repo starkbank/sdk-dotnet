@@ -13,7 +13,7 @@ namespace StarkBank
     /// to the Stark Bank API and returns the list of created objects.
     ///
     /// ## Parameters (required):
-    /// - amount [integer]: amount in cents to be transferred. ex: 1234 (= R$ 12.34)
+    /// - amount [long integer]: amount in cents to be transferred. ex: 1234 (= R$ 12.34)
     /// - name [string]: receiver full name. ex: "Anthony Edward Stark"
     /// - tax_id [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
     /// - bank_code [string]: receiver 1 to 3 digits of the bank institution in Brazil. ex: "200" or "341"
@@ -33,7 +33,7 @@ namespace StarkBank
     /// </summary>
     public partial class Transfer : Utils.Resource
     {
-        public int Amount { get; }
+        public long Amount { get; }
         public string Name { get; }
         public string TaxID { get; }
         public string BankCode { get; }
@@ -46,7 +46,7 @@ namespace StarkBank
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
 
-        public Transfer(int amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
+        public Transfer(long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
             string id = null, List<string> transactionIds = null, int? fee = null, List<string> tags = null,
             string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
         {
@@ -184,7 +184,7 @@ namespace StarkBank
         internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
-            int amount = json.amount;
+            long amount = json.amount;
             string name = json.name;
             string taxID = json.taxId;
             string bankCode = json.bankCode;

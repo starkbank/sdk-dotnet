@@ -27,13 +27,13 @@ namespace StarkBank
     /// ## Attributes (return-only):
     /// - id [string, default nil]: unique id returned when payment is created. ex: "5656565656565656"
     /// - status [string, default nil]: current payment status. ex: "registered" or "paid"
-    /// - amount [int, default nil]: amount automatically calculated from line or bar_code. ex: 23456 (= R$ 234.56)
+    /// - amount [long integer, default nil]: amount automatically calculated from line or bar_code. ex: 23456 (= R$ 234.56)
     /// - fee [integer, default nil]: fee charged when boleto payment is created. ex: 200 (= R$ 2.00)
     /// - created [DateTime, default nil]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
     public partial class BoletoPayment : Utils.Resource
     {
-        public int? Amount { get; }
+        public long? Amount { get; }
         public string Description { get; }
         public string TaxID { get; }
         public string Line { get; }
@@ -44,7 +44,7 @@ namespace StarkBank
         public int? Fee { get; }
         public DateTime? Created { get; }
 
-        public BoletoPayment(string taxID, string description, string id = null, int? amount = null, string line = null,
+        public BoletoPayment(string taxID, string description, string id = null, long? amount = null, string line = null,
             string barCode = null, DateTime? scheduled = null, List<string> tags = null, string status = null,
             int? fee = null, DateTime? created = null) : base(id)
         {
@@ -201,7 +201,7 @@ namespace StarkBank
         internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
-            int? amount = json.amount;
+            long? amount = json.amount;
             string description = json.description;
             string taxID = json.taxId;
             string line = json.line;
