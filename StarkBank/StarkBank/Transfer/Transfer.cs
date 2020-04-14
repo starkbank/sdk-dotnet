@@ -31,9 +31,8 @@ namespace StarkBank
     /// - created [DateTime, default nil]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     /// - updated [DateTime, default nil]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
-    public partial class Transfer : Utils.IResource
+    public partial class Transfer : Utils.Resource
     {
-        public string ID { get; }
         public int Amount { get; }
         public string Name { get; }
         public string TaxID { get; }
@@ -49,9 +48,8 @@ namespace StarkBank
 
         public Transfer(int amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
             string id = null, List<string> transactionIds = null, int? fee = null, List<string> tags = null,
-            string status = null, DateTime? created = null, DateTime? updated = null)
+            string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
         {
-            ID = id;
             Amount = amount;
             Name = name;
             TaxID = taxID;
@@ -183,7 +181,7 @@ namespace StarkBank
             return (resourceName: "Transfer", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.IResource ResourceMaker(dynamic json)
+        internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             int amount = json.amount;

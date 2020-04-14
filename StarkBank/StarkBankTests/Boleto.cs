@@ -55,6 +55,7 @@ namespace StarkBankTests
                 overdueLimit: 10,
                 fine: 0.00,
                 interest: 0.00,
+                tags: new List<string> { "custom", "tags" },
                 descriptions: new List<Dictionary<string, object>>() {
                     new Dictionary<string, object> {
                         {"text", "product A"},

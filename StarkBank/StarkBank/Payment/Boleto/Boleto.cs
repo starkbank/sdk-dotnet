@@ -31,9 +31,8 @@ namespace StarkBank
     /// - fee [integer, default nil]: fee charged when boleto payment is created. ex: 200 (= R$ 2.00)
     /// - created [DateTime, default nil]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
-    public partial class BoletoPayment : Utils.IResource
+    public partial class BoletoPayment : Utils.Resource
     {
-        public string ID { get; }
         public int? Amount { get; }
         public string Description { get; }
         public string TaxID { get; }
@@ -47,9 +46,8 @@ namespace StarkBank
 
         public BoletoPayment(string taxID, string description, string id = null, int? amount = null, string line = null,
             string barCode = null, DateTime? scheduled = null, List<string> tags = null, string status = null,
-            int? fee = null, DateTime? created = null)
+            int? fee = null, DateTime? created = null) : base(id)
         {
-            ID = id;
             Amount = amount;
             Description = description;
             TaxID = taxID;
@@ -200,7 +198,7 @@ namespace StarkBank
             return (resourceName: "BoletoPayment", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.IResource ResourceMaker(dynamic json)
+        internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             int? amount = json.amount;

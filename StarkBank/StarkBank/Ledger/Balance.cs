@@ -19,16 +19,14 @@ namespace StarkBank
     ///     currency [string, default None]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"
     ///     updated [datetime.datetime, default None]: update datetime for the balance. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
-    public class Balance : Utils.IResource
+    public class Balance : Utils.Resource
     {
-        public string ID { get; }
         public int Amount { get; }
         public string Currency { get; }
         public DateTime Updated { get; }
 
-        public Balance(string id, int amount, string currency, DateTime updated)
+        public Balance(string id, int amount, string currency, DateTime updated) : base(id)
         {
-            ID = id;
             Amount = amount;
             Currency = currency;
             Updated = updated;
@@ -62,7 +60,7 @@ namespace StarkBank
             return (resourceName: "Balance", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.IResource ResourceMaker(dynamic json)
+        internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             int amount = json.amount;

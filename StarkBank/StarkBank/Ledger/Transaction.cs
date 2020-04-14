@@ -31,9 +31,8 @@ namespace StarkBank
     /// - fee [integer, default nil]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
     /// - created [DateTime, default nil]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
-    public class Transaction : Utils.IResource
+    public class Transaction : Utils.Resource
     {
-        public string ID { get; }
         public int Amount { get; }
         public string ExternalID { get; }
         public string ReceiverID { get; }
@@ -44,9 +43,8 @@ namespace StarkBank
         public DateTime? Created { get; }
 
         public Transaction(int amount, string externalID, string receiverID, List<string> tags = null, string id = null,
-            int? fee = null, string description = null, DateTime? created = null, string source = null)
+            int? fee = null, string description = null, DateTime? created = null, string source = null) : base(id)
         {
-            ID = id;
             Amount = amount;
             ExternalID = externalID;
             ReceiverID = receiverID;
@@ -144,7 +142,7 @@ namespace StarkBank
             return (resourceName: "Transaction", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.IResource ResourceMaker(dynamic json)
+        internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             int amount = json.amount;

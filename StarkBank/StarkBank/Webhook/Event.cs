@@ -21,17 +21,15 @@ namespace StarkBank
     /// - is_delivered [bool]: true if the event has been successfully delivered to the user url. ex: False
     /// - subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"
     /// </summary>
-    public partial class Event : Utils.IResource
+    public partial class Event : Utils.Resource
     {
-        public string ID { get; }
-        public Utils.IResource Log { get; }
+        public Utils.Resource Log { get; }
         public bool? IsDelivered { get; }
         public string Subscription { get; }
         public DateTime? Created { get; }
 
-        public Event(string id, Utils.IResource log, bool? isDelivered, string subscription, DateTime? created = null)
+        public Event(string id, Utils.Resource log, bool? isDelivered, string subscription, DateTime? created = null) : base(id)
         {
-            ID = id;
             Log = log;
             IsDelivered = isDelivered;
             Subscription = subscription;
@@ -214,7 +212,7 @@ namespace StarkBank
             return (resourceName: "Event", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.IResource ResourceMaker(dynamic json)
+        internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             bool? isDelivered = json.isDelivered;
@@ -222,7 +220,7 @@ namespace StarkBank
             string createdString = json.created;
             DateTime? created = Utils.Checks.CheckDateTime(createdString);
 
-            Utils.IResource log = null;
+            Utils.Resource log = null;
             if (subscription == "transfer") {
                 log = Transfer.Log.ResourceMaker(json.log);
             } else if (subscription == "boleto") {

@@ -21,17 +21,15 @@ namespace StarkBank
         /// - type [string]: type of the Transfer event which triggered the log creation. ex: "processing" or "success"
         /// - created [DateTime]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
         /// </summary>
-        public class Log : Utils.IResource
+        public class Log : Utils.Resource
         {
-            public string ID { get; }
             public DateTime Created { get; }
             public string Type { get; }
             public List<string> Errors { get; }
             public Transfer Transfer { get; }
 
-            public Log(string id, DateTime created, string type, List<string> errors, Transfer transfer)
+            public Log(string id, DateTime created, string type, List<string> errors, Transfer transfer) : base(id)
             {
-                ID = id;
                 Created = created;
                 Type = type;
                 Errors = errors;
@@ -102,7 +100,7 @@ namespace StarkBank
                 return (resourceName: "TransferLog", resourceMaker: ResourceMaker);
             }
 
-            internal static Utils.IResource ResourceMaker(dynamic json)
+            internal static Utils.Resource ResourceMaker(dynamic json)
             {
                 List<string> errors = json.errors.ToObject<List<string>>();
                 string id = json.id;

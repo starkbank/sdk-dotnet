@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Reflection;
-using System;
+using System.Collections.Generic;
 
 
 namespace StarkBank.Utils
 {
     internal static class Api
     {
-        internal delegate IResource ResourceMaker(dynamic json);
+        internal delegate Resource ResourceMaker(dynamic json);
 
-        internal static Dictionary<string, object> ApiJson(IResource entity)
+        internal static Dictionary<string, object> ApiJson(Resource entity)
         {
             return CastJsonToApiFormat(entity.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
@@ -50,7 +50,7 @@ namespace StarkBank.Utils
             return dateTime.ToString("yyyy-MM-dd");
         }
 
-        internal static IResource FromApiJson(ResourceMaker resourceMaker, dynamic json)
+        internal static Resource FromApiJson(ResourceMaker resourceMaker, dynamic json)
         {
             return resourceMaker(json);
         }

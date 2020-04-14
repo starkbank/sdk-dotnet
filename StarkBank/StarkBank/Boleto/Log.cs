@@ -22,17 +22,15 @@ namespace StarkBank
         /// - type [string]: type of the Boleto event which triggered the log creation. ex: "registered" or "paid"
         /// - created [DateTime]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
         /// </summary>
-        public class Log : Utils.IResource
+        public class Log : Utils.Resource
         {
-            public string ID { get; }
             public DateTime Created { get; }
             public string Type { get; }
             public List<string> Errors { get; }
             public Boleto Boleto { get; }
 
-            public Log(string id, DateTime created, string type, List<string> errors, Boleto boleto)
+            public Log(string id, DateTime created, string type, List<string> errors, Boleto boleto) : base(id)
             {
-                ID = id;
                 Created = created;
                 Type = type;
                 Errors = errors;
@@ -103,7 +101,7 @@ namespace StarkBank
                 return (resourceName: "BoletoLog", resourceMaker: ResourceMaker);
             }
 
-            internal static Utils.IResource ResourceMaker(dynamic json)
+            internal static Utils.Resource ResourceMaker(dynamic json)
             {
                 List<string> errors = json.errors.ToObject<List<string>>();
                 string id = json.id;

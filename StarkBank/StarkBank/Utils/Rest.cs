@@ -6,7 +6,7 @@ namespace StarkBank.Utils
 {
     static internal class Rest
     {
-        internal static IEnumerable<IResource> GetList(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> query, User user)
+        internal static IEnumerable<Resource> GetList(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> query, User user)
         {
             object rawLimit = query.GetValueOrDefault("limit");
             query["limit"] = rawLimit;
@@ -15,7 +15,7 @@ namespace StarkBank.Utils
             if (rawLimit != null)
             {
                 limited = true;
-                limit = (int) rawLimit;
+                limit = (int)rawLimit;
                 query["limit"] = Math.Min(limit, 100);
             }
 
@@ -30,7 +30,7 @@ namespace StarkBank.Utils
                     query: query
                 ).Json();
 
-                foreach(dynamic entityJson in json[Api.LastNamePlural(resourceName)])
+                foreach (dynamic entityJson in json[Api.LastNamePlural(resourceName)])
                 {
                     yield return Api.FromApiJson(resourceMaker, entityJson);
                 }
@@ -46,7 +46,7 @@ namespace StarkBank.Utils
             } while (cursor != null && (!limited || limit > 0));
         }
 
-        static internal IResource GetId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
+        static internal Resource GetId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
         {
             dynamic json = Request.Fetch(
                 user: user,
@@ -65,10 +65,10 @@ namespace StarkBank.Utils
             ).ByteContent;
         }
 
-        static internal IEnumerable<IResource> Post(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<IResource> entities, User user)
+        static internal IEnumerable<Resource> Post(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<Resource> entities, User user)
         {
             List<object> jsons = new List<object>();
-            foreach (IResource entity in entities)
+            foreach (Resource entity in entities)
             {
                 jsons.Add(Api.ApiJson(entity));
             }
@@ -84,7 +84,7 @@ namespace StarkBank.Utils
                 payload: payload
             ).Json()[Api.LastNamePlural(resourceName)];
 
-            List<IResource> returnedEntities = new List<IResource>();
+            List<Resource> returnedEntities = new List<Resource>();
             foreach (dynamic json in fetchedJsons)
             {
                 returnedEntities.Add(Api.FromApiJson(resourceMaker, json));
@@ -92,7 +92,7 @@ namespace StarkBank.Utils
             return returnedEntities;
         }
 
-        static internal IResource PostSingle(string resourceName, Api.ResourceMaker resourceMaker, IResource entity, User user)
+        static internal Resource PostSingle(string resourceName, Api.ResourceMaker resourceMaker, Resource entity, User user)
         {
             dynamic json = Request.Fetch(
                 user: user,
@@ -103,7 +103,7 @@ namespace StarkBank.Utils
             return Api.FromApiJson(resourceMaker, json);
         }
 
-        static internal IResource DeleteId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
+        static internal Resource DeleteId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
         {
             dynamic json = Request.Fetch(
                 user: user,
@@ -113,7 +113,7 @@ namespace StarkBank.Utils
             return Api.FromApiJson(resourceMaker, json);
         }
 
-        static internal IResource PatchId(string resourceName, Api.ResourceMaker resourceMaker, string id, Dictionary<string, object> payload, User user)
+        static internal Resource PatchId(string resourceName, Api.ResourceMaker resourceMaker, string id, Dictionary<string, object> payload, User user)
         {
             dynamic json = Request.Fetch(
                 user: user,

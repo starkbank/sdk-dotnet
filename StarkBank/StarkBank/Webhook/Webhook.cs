@@ -19,15 +19,13 @@ namespace StarkBank
     /// ## Attributes:
     /// - id [string, default nil]: unique id returned when the log is created. ex: "5656565656565656"
     /// </summary>
-    public partial class Webhook : Utils.IResource
+    public partial class Webhook : Utils.Resource
     {
-        public string ID { get; }
         public string Url { get; }
         public List<string> Subscriptions { get; }
 
-        public Webhook(string url, List<string> subscriptions = null, string id = null)
+        public Webhook(string url, List<string> subscriptions = null, string id = null) : base(id)
         {
-            ID = id;
             Url = url;
             Subscriptions = subscriptions;
         }
@@ -138,7 +136,7 @@ namespace StarkBank
             return (resourceName: "Webhook", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.IResource ResourceMaker(dynamic json)
+        internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string url = json.url;
             List<string> subscriptions = json.subscriptions.ToObject<List<string>>();

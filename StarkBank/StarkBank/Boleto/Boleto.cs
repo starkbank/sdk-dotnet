@@ -37,9 +37,8 @@ namespace StarkBank
     ///     status [string, default None]: current Boleto status. ex: "registered" or "paid"
     ///     created [datetime.datetime, default None]: creation datetime for the Boleto. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
     /// </summary>
-    public partial class Boleto : Utils.IResource
+    public partial class Boleto : Utils.Resource
     {
-        public string ID { get; }
         public int Amount { get; }
         public string Name { get; }
         public string TaxID { get; }
@@ -65,9 +64,8 @@ namespace StarkBank
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
             int? overdueLimit = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
             string id = null, int? fee = null, string line = null, string barCode = null, string status = null,
-            DateTime? created = null)
+            DateTime? created = null) : base(id)
         {
-            ID = id;
             Amount = amount;
             Name = name;
             TaxID = taxID;
@@ -222,7 +220,7 @@ namespace StarkBank
             return (resourceName: "Boleto", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.IResource ResourceMaker(dynamic json)
+        internal static Utils.Resource ResourceMaker(dynamic json)
         {
             int amount = json.amount;
             string name = json.name;
