@@ -626,19 +626,26 @@ the event.
 ```c#
 Response response = listen()  // this is the method you made to get the events posted to your webhook
 
-StarkBank.Event parsedEvent = StarkBank.Event.parse(
+StarkBank.Event parsedEvent = StarkBank.Event.Parse(
     content: response.Content,
     signature: response.Headers["Digital-Signature"]
 );
 
-if (parsedEvent.subscription == "transfer") {
-  Console.WriteLine(parsedEvent.log.transfer);
-} else if (parsedEvent.subscription == "boleto") {
-  Console.WriteLine(parsedEvent.log.boleto);
-} else if (parsedEvent.subscription == "boleto-payment") {
-  Console.WriteLine(parsedEvent.log.payment);
-} else if (parsedEvent.subscription == "utility-payment") {
-  Console.WriteLine(parsedEvent.log.payment);
+if (parsedEvent.Subscription == "transfer") {
+    StarkBank.Transfer.Log log = parsedEvent.Log as StarkBank.Transfer.Log;
+    Console.WriteLine(log.Transfer);
+}
+else if (parsedEvent.Subscription == "boleto") {
+    StarkBank.Boleto.Log log = parsedEvent.Log as StarkBank.Boleto.Log;
+    Console.WriteLine(log.Boleto);
+}
+else if (parsedEvent.Subscription == "boleto-payment") {
+    StarkBank.BoletoPayment.Log log = parsedEvent.Log as StarkBank.BoletoPayment.Log;
+    Console.WriteLine(log.Payment);
+}
+else if (parsedEvent.Subscription == "utility-payment") {
+    StarkBank.UtilityPayment.Log log = parsedEvent.Log as StarkBank.UtilityPayment.Log;
+    Console.WriteLine(log.Payment);
 }
 ```
 
