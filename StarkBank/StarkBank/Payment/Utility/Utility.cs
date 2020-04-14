@@ -202,7 +202,7 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public static IEnumerable<UtilityPayment> Query(int? limit = null, string status = null, List<string> tags = null,
-            DateTime? after = null, DateTime? before = null, User user = null)
+            List<string> ids = null, DateTime? after = null, DateTime? before = null, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
@@ -212,6 +212,7 @@ namespace StarkBank
                     { "limit", limit },
                     { "status", status },
                     { "tags", tags },
+                    { "ids", ids },
                     { "after", after },
                     { "before", before }
                 },

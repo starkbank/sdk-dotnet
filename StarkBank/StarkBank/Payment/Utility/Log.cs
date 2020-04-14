@@ -103,7 +103,7 @@ namespace StarkBank
             ///     <item>list of Log objects with updated attributes</item>
             /// </list>
             /// </summary>
-            public static IEnumerable<Log> Query(int? limit = null, List<string> paymentIds = null, List<string> types = null, List<string> ids = null,
+            public static IEnumerable<Log> Query(int? limit = null, List<string> paymentIds = null, List<string> types = null,
                 User user = null)
             {
                 (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
