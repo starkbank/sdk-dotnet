@@ -1,4 +1,4 @@
-# Stark Bank .NET SDK
+# Stark Bank .NET SDK Beta
 
 Welcome to the Stark Bank .NET SDK! This tool is made for .NET
 developers who want to easily integrate with our API.
