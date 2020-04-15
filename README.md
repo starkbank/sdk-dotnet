@@ -20,7 +20,7 @@ If you want to take a look at our API, follow [this link](https://starkbank.com/
 
 ## Installation
 
-StarkBank`s .NET SDK is available on NuGet as StarkBank 2.0.0.
+StarkBank`s .NET SDK is available on NuGet as StarkBank 0.0.1.
 
 ## Versioning
 

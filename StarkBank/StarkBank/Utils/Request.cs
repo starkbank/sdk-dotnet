@@ -61,7 +61,7 @@ namespace StarkBank.Utils
                 url += Url.Encode(query);
             }
 
-            string agent = $".NET-{Environment.Version}-SDK-2.0.0";
+            string agent = $".NET-{Environment.Version}-SDK-0.0.1";
             string accessTime = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds.ToString();
             string body = "";
             if (payload != null)

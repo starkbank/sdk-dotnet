@@ -2,7 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <ReleaseVersion>2.0.0</ReleaseVersion>
+    <ReleaseVersion>0.0.1</ReleaseVersion>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageVersion>0.0.1</PackageVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Owners>StarkBank</Owners>
+    <PackageProjectUrl>https://github.com/starkbank/sdk-dotnet</PackageProjectUrl>
+    <Summary>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Summary>
+    <PackageTags>starkbank, openbanking, open, banking, bank</PackageTags>
+    <Title>StarkBank SDK</Title>
+    <Description>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Description>
   </PropertyGroup>
 
   <ItemGroup>
