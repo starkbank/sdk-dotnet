@@ -22,8 +22,15 @@ namespace StarkBankTests
             byte[] pdf = BoletoPayment.Pdf(id: payment.ID);
             Assert.True(pdf.Length > 0);
             System.IO.File.WriteAllBytes("boletoPayment.pdf", pdf);
-            BoletoPayment deleteBoletoPayment = BoletoPayment.Delete(id: payment.ID);
-            Assert.Equal(deleteBoletoPayment.ID, payment.ID);
+            try {
+                BoletoPayment deleteBoletoPayment = BoletoPayment.Delete(id: payment.ID);
+                Assert.Equal(deleteBoletoPayment.ID, payment.ID);
+            } catch (StarkBank.Error.InputErrors e)
+            {
+                foreach(StarkBank.Error.Error error in e.Errors) {
+                    Assert.Equal("invalidAction", error.Code);
+                }
+            }
             Console.WriteLine(payment);
         }
 
@@ -44,7 +51,7 @@ namespace StarkBankTests
         private BoletoPayment Example()
         {
             return new BoletoPayment(
-                line: "34191.09008 61713.957308 71444.640008 2 83430000984732",
+                line: "34191.09008 61713.957208 71444.640008 2 83430000984732",
                 scheduled: DateTime.Today.Date.AddDays(1),
                 description: "loading a random account",
                 taxID: "20.018.183/0001-80"
