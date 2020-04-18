@@ -180,26 +180,26 @@ using System;
 using System.Collections.Generic;
 
 List<StarkBank.Boleto> boletos = StarkBank.Boleto.Create(
-  boletos: new List<StarkBank.Boleto> {
-    new StarkBank.Boleto(
-      amount: 23571,  // R$ 235,71
-      name: "Buzz Aldrin",
-      taxID: "012.345.678-90",
-      streetLine1: "Av. Paulista, 200",
-      streetLine2: "10 andar",
-      district: "Bela Vista",
-      city: "São Paulo",
-      stateCode: "SP",
-      zipCode: "01310-000",
-      due: DateTime.Today.Date.AddDays(30),
-      fine: 5,  // 5%
-      interest: 2.5  // 2.5% per month
-    )
-  }
+    new List<StarkBank.Boleto> {
+        new StarkBank.Boleto(
+            amount: 23571,  // R$ 235,71
+            name: "Buzz Aldrin",
+            taxID: "012.345.678-90",
+            streetLine1: "Av. Paulista, 200",
+            streetLine2: "10 andar",
+            district: "Bela Vista",
+            city: "São Paulo",
+            stateCode: "SP",
+            zipCode: "01310-000",
+            due: DateTime.Today.Date.AddDays(30),
+            fine: 5,  // 5%
+            interest: 2.5  // 2.5% per month
+        )
+    }
 );
 
 foreach (StarkBank.Boleto boleto in boletos) {
-  Console.WriteLine(boleto);
+    Console.WriteLine(boleto);
 }
 ```
 
@@ -211,7 +211,7 @@ Its status indicates whether it's been paid.
 ```c#
 using System;
 
-StarkBank.Boleto boleto = StarkBank.Boleto.Get(id: "5155165527080960");
+StarkBank.Boleto boleto = StarkBank.Boleto.Get("5155165527080960");
 
 Console.WriteLine(boleto);
 ```
@@ -221,7 +221,7 @@ Console.WriteLine(boleto);
 After its creation, a boleto PDF may be retrieved by passing its id.
 
 ```c#
-byte[] pdf = StarkBank.Boleto.Pdf(id: "5155165527080960");
+byte[] pdf = StarkBank.Boleto.Pdf("5155165527080960");
 
 System.IO.File.WriteAllBytes("boleto.pdf", pdf);
 ```
@@ -238,7 +238,7 @@ Note that this is not possible if it has been processed already.
 ```c#
 using System;
 
-StarkBank.Boleto boleto = StarkBank.Boleto.Delete(id: "5155165527080960");
+StarkBank.Boleto boleto = StarkBank.Boleto.Delete("5155165527080960");
 
 Console.WriteLine(boleto);
 ```
@@ -252,12 +252,12 @@ using System;
 using System.Collections.Generic;
 
 IEnumerable<StarkBank.Boleto> boletos = StarkBank.Boleto.Query(
-  after: DateTime.Today.Date.AddDays(-10),
-  before: DateTime.Today.Date.AddDays(-1)
+    after: DateTime.Today.Date.AddDays(-10),
+    before: DateTime.Today.Date.AddDays(-1)
 );
 
 foreach(StarkBank.Boleto boleto in boletos) {
-  Console.WriteLine(boleto);
+    Console.WriteLine(boleto);
 }
 ```
 
@@ -272,7 +272,7 @@ using System.Collections.Generic;
 IEnumerable<StarkBank.Boleto.Log> logs = StarkBank.Boleto.Log.Query(limit: 150);
 
 foreach(StarkBank.Boleto.Log log in logs) {
-  Console.WriteLine(log);
+    Console.WriteLine(log);
 }
 ```
 
@@ -283,7 +283,7 @@ You can get a single log by its id.
 ```c#
 using System;
 
-StarkBank.Boleto.Log log = StarkBank.Boleto.Log.Get(id: "5155165527080960");
+StarkBank.Boleto.Log log = StarkBank.Boleto.Log.Get("5155165527080960");
 
 Console.WriteLine(log);
 ```
@@ -297,29 +297,29 @@ using System;
 using System.Collections.Generic;
 
 List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
-  transfers: new List<StarkBank.Transfer> {
-    new StarkBank.Transfer(
-      amount: 100,  // R$ 1,00
-      bankCode: "033",
-      branchCode: "0001",
-      accountNumber: "10000-0",
-      taxID: "012.345.678-90",
-      name: "Tony Stark",
-      tags: new List<string> { "iron", "suit" }
-    ),
-    new StarkBank.Transfer(
-      amount: 200,  // R$ 2,00
-      bankCode: "341",
-      branchCode: "1234",
-      accountNumber: "123456-7",
-      taxID: "012.345.678-90",
-      name: "Jon Snow"
-    )
-  }
+    new List<StarkBank.Transfer> {
+        new StarkBank.Transfer(
+            amount: 100,  // R$ 1,00
+            bankCode: "033",
+            branchCode: "0001",
+            accountNumber: "10000-0",
+            taxID: "012.345.678-90",
+            name: "Tony Stark",
+            tags: new List<string> { "iron", "suit" }
+        ),
+        new StarkBank.Transfer(
+            amount: 200,  // R$ 2,00
+            bankCode: "341",
+            branchCode: "1234",
+            accountNumber: "123456-7",
+            taxID: "012.345.678-90",
+            name: "Jon Snow"
+        )
+    }
 );
 
 foreach(StarkBank.Transfer transfer in transfers) {
-  Console.WriteLine(transfer);
+    Console.WriteLine(transfer);
 }
 ```
 
@@ -332,12 +332,12 @@ using System;
 using System.Collections.Generic;
 
 IEnumerable<StarkBank.Transfer> transfers = StarkBank.Transfer.Query(
-  after: DateTime.Today.Date.AddDays(-10),
-  before: DateTime.Today.Date.AddDays(-1)
+    after: DateTime.Today.Date.AddDays(-10),
+    before: DateTime.Today.Date.AddDays(-1)
 );
 
 foreach(StarkBank.Transfer transfer in transfers) {
-  Console.WriteLine(transfer.Name);
+    Console.WriteLine(transfer.Name);
 }
 ```
 
@@ -348,7 +348,7 @@ To get a single transfer by its id, run:
 ```c#
 using System;
 
-StarkBank.Transfer transfer = StarkBank.Transfer.Get(id: "5155165527080960");
+StarkBank.Transfer transfer = StarkBank.Transfer.Get("5155165527080960");
 
 Console.WriteLine(transfer);
 ```
@@ -359,7 +359,7 @@ A transfer PDF may also be retrieved by passing its id.
 This operation is only valid if the transfer status is "processing" or "success".
 
 ```c#
-byte[] pdf = StarkBank.Transfer.Pdf(id: "5155165527080960");
+byte[] pdf = StarkBank.Transfer.Pdf("5155165527080960");
 
 System.IO.File.WriteAllBytes("transfer.pdf", pdf);
 ```
@@ -379,7 +379,7 @@ using System.Collections.Generic;
 IEnumerable<StarkBank.Transfer.Log> logs = StarkBank.Transfer.Log.Query(limit: 50);
 
 foreach(StarkBank.Transfer.Log log in logs) {
-  Console.WriteLine(log);
+    Console.WriteLine(log);
 }
 ```
 
@@ -390,7 +390,7 @@ You can also get a specific log by its id.
 ```c#
 using System;
 
-StarkBank.Transfer.Log log = StarkBank.Transfer.Log.Get(id: "5155165527080960");
+StarkBank.Transfer.Log log = StarkBank.Transfer.Log.Get("5155165527080960");
 
 Console.WriteLine(log);
 ```
@@ -404,26 +404,26 @@ using System;
 using System.Collections.Generic;
 
 List<StarkBank.BoletoPayment> payments = StarkBank.BoletoPayment.Create(
-  payments: new List<StarkBank.BoletoPayment> {
-    new StarkBank.BoletoPayment(
-      line: "34191.09008 64694.017308 71444.640008 1 96610000014500",
-      taxID: "012.345.678-90",
-      scheduled: DateTime.Today.Date.AddDays(2),
-      description: "take my money",
-      tags: new List<string> { "take", "my", "money" }
-    ),
-    new StarkBank.BoletoPayment(
-      barCode: "34191972300000289001090064694197307144464000",
-      taxID: "012.345.678-90",
-      scheduled: DateTime.Today.Date.AddDays(1),
-      description: "take my money one more time",
-      tags: new List<string> { "again" }
-    )
-  }
+    new List<StarkBank.BoletoPayment> {
+        new StarkBank.BoletoPayment(
+            line: "34191.09008 64694.017308 71444.640008 1 96610000014500",
+            taxID: "012.345.678-90",
+            scheduled: DateTime.Today.Date.AddDays(2),
+            description: "take my money",
+            tags: new List<string> { "take", "my", "money" }
+        ),
+        new StarkBank.BoletoPayment(
+            barCode: "34191972300000289001090064694197307144464000",
+            taxID: "012.345.678-90",
+            scheduled: DateTime.Today.Date.AddDays(1),
+            description: "take my money one more time",
+            tags: new List<string> { "again" }
+        )
+    }
 );
 
 foreach(StarkBank.BoletoPayment payment in payments) {
-  Console.WriteLine(payment);
+    Console.WriteLine(payment);
 }
 ```
 
@@ -434,7 +434,7 @@ To get a single boleto payment by its id, run:
 ```c#
 using System;
 
-StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Get(id: "19278361897236187236");
+StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Get("19278361897236187236");
 
 Console.WriteLine(payment);
 ```
@@ -444,7 +444,7 @@ Console.WriteLine(payment);
 After its creation, a boleto payment PDF may be retrieved by passing its id.
 
 ```c#
-byte[] pdf = StarkBank.BoletoPayment.Pdf(id: "5155165527080960");
+byte[] pdf = StarkBank.BoletoPayment.Pdf("5155165527080960");
 
 System.IO.File.WriteAllBytes("boleto_payment.pdf", pdf);
 ```
@@ -461,7 +461,7 @@ Note that this is not possible if it has been processed already.
 ```c#
 using System;
 
-StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Delete(id: "5155165527080960");
+StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Delete("5155165527080960");
 
 Console.WriteLine(payment);
 ```
@@ -475,11 +475,11 @@ using System;
 using System.Collections.Generic;
 
 IEnumerable<StarkBank.BoletoPayment> payments = StarkBank.BoletoPayment.Query(
-  tags: new List<string> { "company_1", "company_2" }
+    tags: new List<string> { "company_1", "company_2" }
 );
 
 foreach(StarkBank.BoletoPayment payment in payments) {
-  Console.WriteLine(payment);
+    Console.WriteLine(payment);
 }
 ```
 
@@ -492,11 +492,11 @@ using System;
 using System.Collections.Generic;
 
 IEnumerable<StarkBank.BoletoPayment.Log> logs = StarkBank.BoletoPayment.Log.Query(
-  paymentIds: new List<string> { "5155165527080960", "76551659167801921" }
+    paymentIds: new List<string> { "5155165527080960", "76551659167801921" }
 );
 
 foreach(StarkBank.BoletoPayment.Log log in logs) {
-  Console.WriteLine(log);
+    Console.WriteLine(log);
 }
 ```
 
@@ -508,7 +508,7 @@ You can also get a boleto payment log by specifying its id.
 ```c#
 using System;
 
-StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get(id: "5155165527080960");
+StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get("5155165527080960");
 
 Console.WriteLine(log);
 ```
@@ -522,24 +522,24 @@ using System;
 using System.Collections.Generic;
 
 List<StarkBank.UtilityPayment> payments = StarkBank.UtilityPayment.Create(
-  payments: new List<StarkBank.UtilityPayment> {
-    new StarkBank.UtilityPayment(
-      line: "83680000001 7 08660138003 0 71070987611 8 00041351685 7",
-      scheduled: DateTime.Today.Date.AddDays(2),
-      description: "take my money",
-      tags: new List<string> { "take", "my", "money" }
-    ),
-    new StarkBank.UtilityPayment(
-      barCode: "83600000001512801380037107172881100021296561",
-      scheduled: DateTime.Today.Date.AddDays(1),
-      description: "take my money one more time",
-      tags: new List<string> { "again" }
-    )
-  }
+    new List<StarkBank.UtilityPayment> {
+        new StarkBank.UtilityPayment(
+            line: "83680000001 7 08660138003 0 71070987611 8 00041351685 7",
+            scheduled: DateTime.Today.Date.AddDays(2),
+            description: "take my money",
+            tags: new List<string> { "take", "my", "money" }
+        ),
+        new StarkBank.UtilityPayment(
+            barCode: "83600000001512801380037107172881100021296561",
+            scheduled: DateTime.Today.Date.AddDays(1),
+            description: "take my money one more time",
+            tags: new List<string> { "again" }
+        )
+    }
 );
 
 foreach(StarkBank.UtilityPayment payment in payments) {
-  Console.WriteLine(payment);
+    Console.WriteLine(payment);
 }
 ```
 
@@ -552,11 +552,11 @@ using System;
 using System.Collections.Generic;
 
 IEnumerable<StarkBank.UtilityPayment> payments = StarkBank.UtilityPayment.Query(
-  tags: new List<string> { "electricity", "gas" }
+    tags: new List<string> { "electricity", "gas" }
 );
 
 foreach(StarkBank.UtilityPayment payment in payments) {
-  Console.WriteLine(payment);
+    Console.WriteLine(payment);
 }
 ```
 
@@ -567,7 +567,7 @@ You can get a specific bill by its id:
 ```c#
 using System;
 
-StarkBank.UtilityPayment payment = StarkBank.UtilityPayment.Get(id: "5155165527080960");
+StarkBank.UtilityPayment payment = StarkBank.UtilityPayment.Get("5155165527080960");
 
 Console.WriteLine(payment);
 ```
@@ -577,7 +577,7 @@ Console.WriteLine(payment);
 After its creation, a utility payment PDF may also be retrieved by passing its id.
 
 ```c#
-byte[] pdf = StarkBank.UtilityPayment.Pdf(id: "5155165527080960");
+byte[] pdf = StarkBank.UtilityPayment.Pdf("5155165527080960");
 
 System.IO.File.WriteAllBytes("electricity_payment.pdf", pdf);
 ```
@@ -594,7 +594,7 @@ Note that this is not possible if it has been processed already.
 ```c#
 using System;
 
-StarkBank.UtilityPayment payment = StarkBank.UtilityPayment.Delete(id: "5155165527080960");
+StarkBank.UtilityPayment payment = StarkBank.UtilityPayment.Delete("5155165527080960");
 
 Console.WriteLine(payment);
 ```
@@ -609,11 +609,11 @@ using System;
 using System.Collections.Generic;
 
 IEnumerable<StarkBank.UtilityPayment.Log> logs = StarkBank.UtilityPayment.Log.Query(
-  paymentIds: new List<string> { "102893710982379182", "92837912873981273" }
+    paymentIds: new List<string> { "102893710982379182", "92837912873981273" }
 );
 
 foreach(StarkBank.UtilityPayment.Log log in logs) {
-  Console.WriteLine(log);
+    Console.WriteLine(log);
 }
 ```
 
@@ -624,7 +624,7 @@ If you want to get a specific payment log by its id, just run:
 ```c#
 using System;
 
-StarkBank.UtilityPayment.Log log = StarkBank.UtilityPayment.Log.Get(id: "1902837198237992");
+StarkBank.UtilityPayment.Log log = StarkBank.UtilityPayment.Log.Get("1902837198237992");
 
 Console.WriteLine(log);
 ```
@@ -638,26 +638,26 @@ using System;
 using System.Collections.Generic;
 
 List<StarkBank.Transaction> transactions = StarkBank.Transaction.Create(
-  transactions: new List<StarkBank.Transaction> {
-    new StarkBank.Transaction(
-      amount: 100,  // (R$ 1.00)
-      receiverID: "1029378109327810",
-      description: "Transaction to dear provider",
-      externalID: "12345",  // so we can block anything you send twice by mistake
-      tags: new List<string> { "provider" }
-    ),
-    new StarkBank.Transaction(
-      amount: 234,  // (R$ 2.34)
-      receiverID: "2093029347820947",
-      description: "Transaction to the other provider",
-      externalID: "12346",  // so we can block anything you send twice by mistake
-      tags: new List<string> { "provider" }
-    )
-  }
+    new List<StarkBank.Transaction> {
+        new StarkBank.Transaction(
+            amount: 100,  // (R$ 1.00)
+            receiverID: "1029378109327810",
+            description: "Transaction to dear provider",
+            externalID: "12345",  // so we can block anything you send twice by mistake
+            tags: new List<string> { "provider" }
+        ),
+        new StarkBank.Transaction(
+            amount: 234,  // (R$ 2.34)
+            receiverID: "2093029347820947",
+            description: "Transaction to the other provider",
+            externalID: "12346",  // so we can block anything you send twice by mistake
+            tags: new List<string> { "provider" }
+        )
+    }
 );
 
 foreach(StarkBank.Transaction transaction in transactions) {
-  Console.WriteLine(transaction);
+    Console.WriteLine(transaction);
 }
 ```
 
@@ -672,12 +672,12 @@ using System;
 using System.Collections.Generic;
 
 IEnumerable<StarkBank.Transaction> transactions = StarkBank.Transaction.Query(
-  after: DateTime.Today.Date.AddDays(-10),
-  before: DateTime.Today.Date.AddDays(-1)
+    after: DateTime.Today.Date.AddDays(-10),
+    before: DateTime.Today.Date.AddDays(-1)
 );
 
 foreach(StarkBank.Transaction transaction in transactions) {
-  Console.WriteLine(transaction);
+    Console.WriteLine(transaction);
 }
 ```
 
@@ -688,7 +688,7 @@ You can get a specific transaction by its id:
 ```c#
 using System;
 
-StarkBank.Transaction transaction = StarkBank.Transaction.Get(id: "5155165527080960");
+StarkBank.Transaction transaction = StarkBank.Transaction.Get("5155165527080960");
 
 Console.WriteLine(transaction);
 ```
@@ -701,8 +701,8 @@ To create a webhook subscription and be notified whenever an event occurs, run:
 using System;
 
 StarkBank.Webhook webhook = StarkBank.Webhook.Create(
-  url: "https://webhook.site/dd784f26-1d6a-4ca6-81cb-fda0267761ec",
-  subscriptions: new List<string> { "transfer", "boleto", "boleto-payment", "utility-payment" }
+    url: "https://webhook.site/dd784f26-1d6a-4ca6-81cb-fda0267761ec",
+    subscriptions: new List<string> { "transfer", "boleto", "boleto-payment", "utility-payment" }
 );
 
 Console.WriteLine(webhook);
@@ -719,7 +719,7 @@ using System.Collections.Generic;
 IEnumerable<StarkBank.Webhook> webhooks = StarkBank.Webhook.Query();
 
 foreach(StarkBank.Webhook webhook in webhooks) {
-  Console.WriteLine(webhook);
+    Console.WriteLine(webhook);
 }
 ```
 
@@ -730,7 +730,7 @@ You can get a specific webhook by its id.
 ```c#
 using System;
 
-StarkBank.Webhook webhook = StarkBank.Webhook.Get(id: "10827361982368179");
+StarkBank.Webhook webhook = StarkBank.Webhook.Get("10827361982368179");
 
 Console.WriteLine(webhook);
 ```
@@ -742,7 +742,7 @@ You can also delete a specific webhook by its id.
 ```c#
 using System;
 
-StarkBank.Webhook webhook = StarkBank.Webhook.Delete(id: "10827361982368179");
+StarkBank.Webhook webhook = StarkBank.Webhook.Delete("10827361982368179");
 
 Console.WriteLine(webhook);
 ```
@@ -795,7 +795,7 @@ IEnumerable<StarkBank.Event> events = StarkBank.Event.Query(
 );
 
 foreach(StarkBank.Event eventObject in events) {
-  Console.WriteLine(eventObject);
+    Console.WriteLine(eventObject);
 }
 ```
 
@@ -806,7 +806,7 @@ You can get a specific webhook event by its id.
 ```c#
 using System;
 
-StarkBank.Event eventObject = StarkBank.Event.Get(id: "10827361982368179");
+StarkBank.Event eventObject = StarkBank.Event.Get("10827361982368179");
 
 Console.WriteLine(eventObject);
 ```
@@ -818,7 +818,7 @@ You can also delete a specific webhook event by its id.
 ```c#
 using System;
 
-StarkBank.Event eventObject = StarkBank.Event.Delete(id: "10827361982368179");
+StarkBank.Event eventObject = StarkBank.Event.Delete("10827361982368179");
 
 Console.WriteLine(eventObject);
 ```
@@ -832,7 +832,7 @@ With this function, you can manually set events retrieved from the API as
 ```c#
 using System;
 
-StarkBank.Event eventObject = StarkBank.Event.Update(id: "129837198237192", isDelivered: true);
+StarkBank.Event eventObject = StarkBank.Event.Update("129837198237192", isDelivered: true);
 
 Console.WriteLine(eventObject);
 ```
@@ -849,10 +849,11 @@ For example:
 ```c#
 using System;
 using System.Collections.Generic;
+using StarkBank.Error;
 
 try {
     List<StarkBank.Transaction> transactions = StarkBank.Transaction.Create(
-        transactions: new List<StarkBank.Transaction> {
+        new List<StarkBank.Transaction> {
             new StarkBank.Transaction(
                 amount: 99999999999999,  // (R$ 999,999,999,999.99)
                 receiverID: "1029378109327810",
@@ -862,9 +863,8 @@ try {
             )
         }
     );
-} catch (StarkBank.Error.InputErrors e) {
-    foreach (StarkBank.Error.Error error in e.Errors)
-    {
+} catch (InputErrors e) {
+    foreach (ErrorElement error in e.Errors) {
         Console.WriteLine(error.Code);
         Console.WriteLine(error.Message);
     }

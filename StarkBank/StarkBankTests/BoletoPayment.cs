@@ -27,7 +27,7 @@ namespace StarkBankTests
                 Assert.Equal(deleteBoletoPayment.ID, payment.ID);
             } catch (StarkBank.Error.InputErrors e)
             {
-                foreach(StarkBank.Error.Error error in e.Errors) {
+                foreach(StarkBank.Error.ErrorElement error in e.Errors) {
                     Assert.Equal("invalidAction", error.Code);
                 }
             }
