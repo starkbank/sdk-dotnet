@@ -46,7 +46,7 @@ namespace StarkBankTests
         {
             return new Boleto(
                 amount: 1000000,
-                due: DateTime.Today.Date.AddDays(1),
+                due: DateTime.Today.Date.AddDays(5),
                 name: "Random Company",
                 streetLine1: "Rua ABC",
                 streetLine2: "Ap 123",
@@ -71,6 +71,16 @@ namespace StarkBankTests
                     new Dictionary<string, object> {
                         { "text", "product C"},
                         { "amount", 789}
+                    }
+                },
+                discounts: new List<Dictionary<string, object>>() {
+                    new Dictionary<string, object> {
+                        {"percentage", 5},
+                        {"date", DateTime.Today.Date.AddDays(1)}
+                    },
+                    new Dictionary<string, object> {
+                        {"percentage", 3.5},
+                        {"date", DateTime.Today.Date.AddDays(2)}
                     }
                 }
             );

@@ -160,7 +160,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (required):
         /// <list>
-        ///     <item>id [list of strings]: Event unique ids. ex: "5656565656565656"</item>
+        ///     <item>id [string]: Event unique ids. ex: "5656565656565656"</item>
         ///     <item>isDelivered [bool]: If True and event hasn't been delivered already, event will be set as delivered. ex: True</item>
         /// </list>
         /// <br/>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -26,17 +27,34 @@ namespace StarkBank.Utils
                 {
                     continue;
                 }
+
                 string key = Case.PascalToCamel(entry.Key);
                 if (key.EndsWith("ID"))
                 {
-                    key = key.Substring(0, key.Length - 2) + "Id";
+                    key = key[0..^2] + "Id";
                 }
+
                 dynamic value = entry.Value;
                 if (value is DateTime)
                 {
                     DateTime data = value;
                     value = DateToString(data);
                 }
+                if (value is IList) {
+                    bool nested = false;
+                    List<object> casted = new List<object>();
+                    foreach (object nestedEntry in value) {
+                        if(nestedEntry is Dictionary<string, object>) {
+                            Dictionary<string, object> castedNestedEntry = nestedEntry as Dictionary<string, object>;
+                            casted.Add(CastJsonToApiFormat(castedNestedEntry));
+                            nested = true;
+                        }
+                    }
+                    if (nested) {
+                        value = casted;
+                    }
+                }
+
                 apiJson.Add(
                     key,
                     value
@@ -69,7 +87,7 @@ namespace StarkBank.Utils
         internal static string LastName(string resourceName)
         {
             string[] names = Case.CamelOrPascalToKebab(resourceName).Split("-");
-            return names[names.Length - 1];
+            return names[^1];
         }
     }
 }
