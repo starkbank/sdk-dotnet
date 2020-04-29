@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 using EllipticCurve;
 
 
@@ -62,7 +63,7 @@ namespace StarkBank.Utils
             }
 
             string agent = $".NET-{Environment.Version}-SDK-0.2.0";
-            string accessTime = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            string accessTime = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds.ToString(new CultureInfo("en-US"));
             string body = "";
             if (payload != null)
             {

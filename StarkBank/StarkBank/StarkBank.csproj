@@ -29,15 +29,19 @@
   <ItemGroup>
     <Folder Include="Utils\" />
     <Folder Include="User\" />
-    <Folder Include="Ledger\" />
+    <Folder Include="Transaction\" />
     <Folder Include="Boleto\" />
     <Folder Include="Transfer\" />
-    <Folder Include="Payment\" />
-    <Folder Include="Payment\Boleto\" />
-    <Folder Include="Payment\Utility\" />
     <Folder Include="Webhook\" />
+    <Folder Include="Balance\" />
+    <Folder Include="Event\" />
+    <Folder Include="BoletoPayment\" />
+    <Folder Include="UtilityPayment\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Environment.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Payment\Boleto\.DS_Store" />
   </ItemGroup>
 </Project>
