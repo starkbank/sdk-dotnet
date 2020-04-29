@@ -35,7 +35,14 @@ namespace StarkBank.Utils
 
     internal static class Request
     {
-        private static readonly HttpClient Client = new HttpClient();
+        private static HttpClient makeClient()
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", $".NET-{Environment.Version}-SDK-0.3.0");
+            return client;
+        }
+
+        private static readonly HttpClient Client = makeClient();
         internal static readonly HttpMethod Get = HttpMethod.Get;
         internal static readonly HttpMethod Put = HttpMethod.Put;
         internal static readonly HttpMethod Post = HttpMethod.Post;
@@ -62,7 +69,6 @@ namespace StarkBank.Utils
                 url += Url.Encode(query);
             }
 
-            string agent = $".NET-{Environment.Version}-SDK-0.3.0";
             string accessTime = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds.ToString(new CultureInfo("en-US"));
             string body = "";
             if (payload != null)
@@ -82,7 +88,6 @@ namespace StarkBank.Utils
             httpRequestMessage.Content.Headers.TryAddWithoutValidation("Access-Id", user.AccessId());
             httpRequestMessage.Content.Headers.TryAddWithoutValidation("Access-Time", accessTime);
             httpRequestMessage.Content.Headers.TryAddWithoutValidation("Access-Signature", signature);
-            httpRequestMessage.Content.Headers.TryAddWithoutValidation("User-Agent", agent);
             httpRequestMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
             var result = Client.SendAsync(httpRequestMessage).Result;
