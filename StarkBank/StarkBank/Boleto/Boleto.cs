@@ -164,6 +164,37 @@ namespace StarkBank
         }
 
         /// <summary>
+        /// Create Boletos
+        /// <br/>
+        /// Send a list of Boleto objects for creation in the Stark Bank API
+        /// <br/>
+        /// Parameters (required):
+        /// <list>
+        ///     <item>boletos [list of Boleto objects]: list of Boleto objects to be created in the API</item>
+        /// <br/>
+        /// </list>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>user [Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of Boleto objects with updated attributes</item>
+        /// </list>
+        /// </summary>
+        public static List<Boleto> Create(List<Dictionary<string, object>> boletos, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.Post(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                entities: boletos,
+                user: user
+            ).ToList().ConvertAll(o => (Boleto)o);
+        }
+
+        /// <summary>
         /// Retrieve a specific Boleto
         /// <br/>
         /// Receive a single Boleto object previously created in the Stark Bank API by passing its id

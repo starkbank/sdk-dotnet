@@ -203,6 +203,8 @@ foreach (StarkBank.Boleto boleto in boletos) {
 }
 ```
 
+**Note**: Instead of using Boleto objects, you can also pass each boleto element in dictionary format
+
 ### Get boleto
 
 After its creation, information on a boleto may be retrieved by passing its id.
@@ -323,6 +325,8 @@ foreach(StarkBank.Transfer transfer in transfers) {
 }
 ```
 
+**Note**: Instead of using Transfer objects, you can also pass each transfer element in dictionary format
+
 ### Query transfers
 
 You can query multiple transfers according to filters.
@@ -426,6 +430,8 @@ foreach(StarkBank.BoletoPayment payment in payments) {
     Console.WriteLine(payment);
 }
 ```
+
+**Note**: Instead of using BoletoPayment objects, you can also pass each payment element in dictionary format
 
 ### Get boleto payment
 
@@ -542,6 +548,8 @@ foreach(StarkBank.UtilityPayment payment in payments) {
     Console.WriteLine(payment);
 }
 ```
+
+**Note**: Instead of using UtilityPayment objects, you can also pass each payment element in dictionary format
 
 ### Query utility payments
 
@@ -660,6 +668,8 @@ foreach(StarkBank.Transaction transaction in transactions) {
     Console.WriteLine(transaction);
 }
 ```
+
+**Note**: Instead of using Transaction objects, you can also pass each transaction element in dictionary format
 
 ### Query transactions
 
