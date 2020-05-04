@@ -27,6 +27,7 @@ namespace StarkBank
     ///     <item>Source [string, default null]: locator of the entity that generated the transaction. ex: "charge/1827351876292", "transfer/92873912873/chargeback"</item>
     ///     <item>ID [string, default null]: unique id returned when Transaction is created. ex: "7656565656565656"</item>
     ///     <item>Fee [integer, default null]: fee charged when transfer is created. ex: 200 (= R$ 2.00)</item>
+    ///     <item>balance [integer, default null]: account balance after transaction was processed. ex: 100000000 (= R$ 1,000,000.00)</item>
     ///     <item>Created [DateTime, default null]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
@@ -40,6 +41,7 @@ namespace StarkBank
         public int? Fee { get; }
         public string Description { get; }
         public string Source { get; }
+        public long? Balance { get; }
         public DateTime? Created { get; }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public Transaction(long amount, string externalID, string receiverID, string senderID = null, List<string> tags = null, string id = null,
-            int? fee = null, string description = null, DateTime? created = null, string source = null) : base(id)
+            int? fee = null, string description = null, string source = null, long? balance = null, DateTime? created = null) : base(id)
         {
             Amount = amount;
             ExternalID = externalID;
@@ -86,6 +88,7 @@ namespace StarkBank
             Fee = fee;
             Description = description;
             Source = source;
+            Balance = balance;
             Created = created;
         }
 
@@ -232,12 +235,13 @@ namespace StarkBank
             int fee = json.fee;
             string description = json.description;
             string source = json.source;
+            long balance = json.balance;
             string createdString = json.created;
             DateTime? created = Utils.Checks.CheckDateTime(createdString);
 
             return new Transaction(
                 id: id, amount: amount, externalID: externalID, receiverID: receiverID, senderID: senderID, tags: tags, fee: fee,
-                description: description, source: source, created: created
+                description: description, source: source, balance: balance, created: created
             );
         }
     }
