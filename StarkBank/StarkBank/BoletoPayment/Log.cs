@@ -20,8 +20,8 @@ namespace StarkBank
         ///     <item>ID [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
         ///     <item>Payment [BoletoPayment]: BoletoPayment entity to which the log refers to.</item>
         ///     <item>Errors [list of strings]: list of errors linked to this BoletoPayment event.</item>
-        ///     <item>Type [string]: type of the BoletoPayment event which triggered the log creation. ex: "registered" or "paid"</item>
-        ///     <item>Created [DateTime]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>Type [string]: type of the BoletoPayment event which triggered the log creation. ex: "processing" or "success"</item>
+        ///     <item>Created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public class Log : Utils.Resource
@@ -44,8 +44,8 @@ namespace StarkBank
             ///     <item>id [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
             ///     <item>payment [BoletoPayment]: BoletoPayment entity to which the log refers to.</item>
             ///     <item>errors [list of strings]: list of errors linked to this BoletoPayment event.</item>
-            ///     <item>type [string]: type of the BoletoPayment event which triggered the log creation. ex: "registered" or "paid"</item>
-            ///     <item>created [DateTime]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+            ///     <item>type [string]: type of the BoletoPayment event which triggered the log creation. ex: "processing" or "success"</item>
+            ///     <item>created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
             /// </list>
             /// </summary>
             public Log(string id, DateTime created, string type, List<string> errors, BoletoPayment payment) : base(id)
@@ -95,8 +95,8 @@ namespace StarkBank
             /// Parameters (optional):
             /// <list>
             ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-            ///     <item>after [Date, default null] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)</item>
-            ///     <item>before [Date, default null] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)</item>
+            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>types [list of strings, default null]: filter retrieved objects by event types. ex: "paid" or "registered"</item>
             ///     <item>paymentIds [list of strings, default null]: list of BoletoPayment ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
             ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>

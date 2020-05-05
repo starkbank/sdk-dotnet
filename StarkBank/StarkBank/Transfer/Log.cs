@@ -20,7 +20,7 @@ namespace StarkBank
         ///     <item>Transfer [Transfer]: Transfer entity to which the log refers to.</item>
         ///     <item>Errors [list of strings]: list of errors linked to this BoletoPayment event.</item>
         ///     <item>Type [string]: type of the Transfer event which triggered the log creation. ex: "processing" or "success"</item>
-        ///     <item>Created [DateTime]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>Created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public class Log : Utils.Resource
@@ -43,7 +43,7 @@ namespace StarkBank
             ///     <item>transfer [Transfer]: Transfer entity to which the log refers to.</item>
             ///     <item>errors [list of strings]: list of errors linked to this BoletoPayment event.</item>
             ///     <item>type [string]: type of the Transfer event which triggered the log creation. ex: "processing" or "success"</item>
-            ///     <item>created [DateTime]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+            ///     <item>created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
             /// </list>
             /// </summary>
             public Log(string id, DateTime created, string type, List<string> errors, Transfer transfer) : base(id)
@@ -93,8 +93,8 @@ namespace StarkBank
             /// Parameters (optional):
             /// <list>
             ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-            ///     <item>after [Date, default null] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)</item>
-            ///     <item>before [Date, default null] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)</item>
+            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>types [list of strings, default null]: filter retrieved objects by types. ex: "success" or "failed"</item>
             ///     <item>transferIds [list of strings, default null]: list of Transfer ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
             ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
