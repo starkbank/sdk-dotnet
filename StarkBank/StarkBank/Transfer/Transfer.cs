@@ -17,16 +17,16 @@ namespace StarkBank
     ///     <item>Amount [long integer]: amount in cents to be transferred. ex: 1234 (= R$ 12.34)</item>
     ///     <item>Name [string]: receiver full name. ex: "Anthony Edward Stark"</item>
     ///     <item>TaxID [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
-    ///     <item>BankCode [string]: receiver 1 to 3 digits of the bank institution in Brazil. ex: "200" or "341"</item>
+    ///     <item>BankCode [string]: 1 to 3 digits code of the bank institution in Brazil. ex: "200" or "341"</item>
     ///     <item>BranchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
-    ///     <item>Tags [list of strings]: list of strings for reference when searching for transfers. ex: ["employees", "monthly"]</item>
+    ///     <item>Tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
     ///     <item>ID [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
-    ///     <item>Fee [integer, default null]: fee charged when transfer is created. ex: 200 (= R$ 2.00)</item>
-    ///     <item>Status [string, default null]: current boleto status. ex: "registered" or "paid"</item>
-    ///     <item>TransactionIds [list of strings, default null]: ledger transaction ids linked to this transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
+    ///     <item>Status [string, default null]: current Transfer status. ex: "success" or "failed"</item>
+    ///     <item>TransactionIds [list of strings, default null]: ledger Transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
+    ///     <item>Created [DateTime, default null]: creation datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Updated [DateTime, default null]: latest update datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class Transfer : Utils.Resource
@@ -56,24 +56,24 @@ namespace StarkBank
         ///     <item>amount [long integer]: amount in cents to be transferred. ex: 1234 (= R$ 12.34)</item>
         ///     <item>name [string]: receiver full name. ex: "Anthony Edward Stark"</item>
         ///     <item>taxID [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
-        ///     <item>bankCode [string]: receiver 1 to 3 digits of the bank institution in Brazil. ex: "200" or "341"</item>
+        ///     <item>bankCode [string]: 1 to 3 digits code of the bank institution in Brazil. ex: "200" or "341"</item>
         ///     <item>branchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
         ///     <item>accountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>tags [list of strings]: list of strings for reference when searching for transfers. ex: ["employees", "monthly"]</item>
+        ///     <item>tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
         /// <list>
         ///     <item>id [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
-        ///     <item>fee [integer, default null]: fee charged when transfer is created. ex: 200 (= R$ 2.00)</item>
-        ///     <item>status [string, default null]: current boleto status. ex: "registered" or "paid"</item>
-        ///     <item>transactionIds [list of strings, default null]: ledger transaction ids linked to this transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
+        ///     <item>status [string, default null]: current Transfer status. ex: "success" or "failed"</item>
+        ///     <item>transactionIds [list of strings, default null]: ledger transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
+        ///     <item>created [DateTime, default null]: creation datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>updated [DateTime, default null]: latest update datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public Transfer(long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
@@ -132,7 +132,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (required):
         /// <list>
-        ///     <item>transfers [list of Transfer objects]: list of Transfer objects to be created in the API</item>
+        ///     <item>transfers [list of Dictionaries]: list of Dictionaries representing the Transfers to be created in the API</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
@@ -227,8 +227,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [Date, default null] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)</item>
-        ///     <item>before [Date, default null] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null] date filter for objects created or updated only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created or updated only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>transactionIds [list of strings, default null]: list of transaction IDs linked to the desired transfers. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
         ///     <item>sort sort [string, default "-created".]sort order considered in the response. Options are: "created", "-created", "updated" and "-updated". "-" means descending order.</item>

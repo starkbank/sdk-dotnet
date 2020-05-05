@@ -23,12 +23,12 @@ namespace StarkBank
     ///     <item>City [string]: payer address city. ex: Rio de Janeiro</item>
     ///     <item>StateCode [string]: payer address state. ex: GO</item>
     ///     <item>ZipCode [string]: payer address zip code. ex: 01311-200</item>
-    ///     <item>Due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30</item>
+    ///     <item>Due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: DateTime.new(2020, 3, 10)</item>
     ///     <item>Fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
-    ///     <item>OverdueLimit [integer, default 59]: limit in days for automatic Boleto cancellation after due date. ex: 7 (max: 59)</item>
+    ///     <item>OverdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
     ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
-    ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":double and "date":DateTime pairs</item>
+    ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ID [string, default null]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
     ///     <item>Fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
@@ -84,12 +84,12 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30</item>
+        ///     <item>due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: DateTime.new(2020, 3, 10)</item>
         ///     <item>fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
         ///     <item>interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
-        ///     <item>overdueLimit [integer, default 59]: limit in days for automatic Boleto cancellation after due date. ex: 7 (max: 59)</item>
+        ///     <item>overdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
         ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
-        ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":double and "date":DateTime pairs</item>
+        ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs</item>
         ///     <item>tags [list of strings]: list of strings for tagging</item>
         /// </list>
         /// <br/>
@@ -170,7 +170,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (required):
         /// <list>
-        ///     <item>boletos [list of Boleto objects]: list of Boleto objects to be created in the API</item>
+        ///     <item>boletos [list of Dictionaries]: list of Dictionaries representing the Boletos to be created in the API</item>
         /// <br/>
         /// </list>
         /// Parameters (optional):
@@ -265,7 +265,7 @@ namespace StarkBank
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
         ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>

@@ -16,10 +16,10 @@ namespace StarkBank
     /// <br/>
     /// Properties:
     /// <list>
-    ///     <item>ID [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
+    ///     <item>ID [string]: unique id returned when the Event is created. ex: "5656565656565656"</item>
     ///     <item>Log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)</item>
     ///     <item>Created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>IsDelivered [bool]: true if the event has been successfully delivered to the user url. ex: False</item>
+    ///     <item>IsDelivered [bool]: true if the Event has been successfully delivered to the user url. ex: False</item>
     ///     <item>Subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"</item>
     /// </list>
     /// </summary>
@@ -39,10 +39,10 @@ namespace StarkBank
         /// <br/>
         /// Attributes:
         /// <list>
-        ///     <item>id [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
+        ///     <item>id [string]: unique id returned when the Event is created. ex: "5656565656565656"</item>
         ///     <item>log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)</item>
         ///     <item>created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>isDelivered [bool]: true if the event has been successfully delivered to the user url. ex: False</item>
+        ///     <item>isDelivered [bool]: true if the Event has been successfully delivered to the user url. ex: False</item>
         ///     <item>subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"</item>
         /// </list>
         /// </summary>
@@ -93,8 +93,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [Date, default null]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)</item>
-        ///     <item>before [Date, default null]: date filter for objects only before specified date. ex: Date.new(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>isDelivered [bool, default null]: bool to filter successfully delivered events. ex: True or False</item>
         ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>

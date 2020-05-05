@@ -17,12 +17,12 @@ namespace StarkBank
     ///     <item>Line [string, default null]: Number sequence that describes the payment. Either 'line' or 'barCode' parameters are required. If both are sent, they must match. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
     ///     <item>BarCode [string, default null]: Bar code number that describes the payment. Either 'line' or 'barCode' parameters are required. If both are sent, they must match. ex: "34195819600000000621090063571277307144464000"</item>
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
-    ///     <item>Scheduled [Date, default today]: payment scheduled date. ex: Date.new(2020, 3, 10)</item>
+    ///     <item>Scheduled [DateTime, default today]: payment scheduled date. ex: DateTime.new(2020, 3, 10)</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ID [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
-    ///     <item>Status [string, default null]: current payment status. ex: "registered" or "paid"</item>
+    ///     <item>Status [string, default null]: current payment status. ex: "success" or "failed"</item>
     ///     <item>Amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
-    ///     <item>Fee [integer, default null]: fee charged when utility payment is created. ex: 200 (= R$ 2.00)</item>
+    ///     <item>Fee [integer, default null]: fee charged when UtilityPayment is created. ex: 200 (= R$ 2.00)</item>
     ///     <item>Created [DateTime, default null]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
@@ -58,16 +58,16 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>scheduled [Date, default today]: payment scheduled date. ex: Date.new(2020, 3, 10)</item>
+        ///     <item>scheduled [DateTime, default today]: payment scheduled date. ex: DateTime.new(2020, 3, 10)</item>
         ///     <item>tags [list of strings]: list of strings for tagging</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
         /// <list>
         ///     <item>id [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
-        ///     <item>status [string, default null]: current payment status. ex: "registered" or "paid"</item>
+        ///     <item>status [string, default null]: current payment status. ex: "success" or "failed"</item>
         ///     <item>amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
-        ///     <item>fee [integer, default null]: fee charged when utility payment is created. ex: 200 (= R$ 2.00)</item>
+        ///     <item>fee [integer, default null]: fee charged when UtilityPayment is created. ex: 200 (= R$ 2.00)</item>
         ///     <item>created [DateTime, default null]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
@@ -124,7 +124,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (required):
         /// <list>
-        ///     <item>payments [list of UtilityPayment objects]: list of UtilityPayment objects to be created in the API</item>
+        ///     <item>payments [list of Dictionaries]: list of Dictionaries representing the UtilityPayments to be created in the API</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
@@ -219,8 +219,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [Date, default null] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)</item>
-        ///     <item>before [Date, default null] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid"</item>
