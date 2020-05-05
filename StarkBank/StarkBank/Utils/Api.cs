@@ -18,6 +18,11 @@ namespace StarkBank.Utils
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(entity)));
         }
 
+        internal static Dictionary<string, object> ApiJson(Dictionary<string, object> entity)
+        {
+            return CastJsonToApiFormat(entity);
+        }
+
         internal static Dictionary<string, object> CastJsonToApiFormat(Dictionary<string, object> json)
         {
             Dictionary<string, object> apiJson = new Dictionary<string, object>();

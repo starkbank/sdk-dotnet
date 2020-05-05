@@ -121,6 +121,37 @@ namespace StarkBank
         }
 
         /// <summary>
+        /// Create Transactions
+        /// <br/>
+        /// Send a list of Transaction objects for creation in the Stark Bank API
+        /// <br/>
+        /// Parameters (required):
+        /// <list>
+        ///     <item>transactions [list of Transaction objects]: list of Transaction objects to be created in the API</item>
+        /// </list>
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>user [Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of Transaction objects with updated attributes</item>
+        /// </list>
+        /// </summary>
+        public static List<Transaction> Create(List<Dictionary<string, object>> transactions, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.Post(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                entities: transactions,
+                user: user
+            ).ToList().ConvertAll(o => (Transaction)o);
+        }
+
+        /// <summary>
         /// Retrieve a specific Transaction
         /// <br/>
         /// Receive a single Transaction object previously created in the Stark Bank API by passing its id

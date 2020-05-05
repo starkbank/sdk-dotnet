@@ -118,6 +118,37 @@ namespace StarkBank
         }
 
         /// <summary>
+        /// Create UtilityPayments
+        /// <br/>
+        /// Send a list of UtilityPayment objects for creation in the Stark Bank API
+        /// <br/>
+        /// Parameters (required):
+        /// <list>
+        ///     <item>payments [list of UtilityPayment objects]: list of UtilityPayment objects to be created in the API</item>
+        /// </list>
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>user [Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of UtilityPayment objects with updated attributes</item>
+        /// </list>
+        /// </summary>
+        public static List<UtilityPayment> Create(List<Dictionary<string, object>> payments, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.Post(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                entities: payments,
+                user: user
+            ).ToList().ConvertAll(o => (UtilityPayment)o);
+        }
+
+        /// <summary>
         /// Retrieve a specific UtilityPayment
         /// <br/>
         /// Receive a single UtilityPayment object previously created by the Stark Bank API by passing its id

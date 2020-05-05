@@ -67,14 +67,29 @@ namespace StarkBank.Utils
 
         static internal IEnumerable<Resource> Post(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<Resource> entities, User user)
         {
-            List<object> jsons = new List<object>();
+            List<Dictionary<string, object>> jsons = new List<Dictionary<string, object>>();
             foreach (Resource entity in entities)
             {
                 jsons.Add(Api.ApiJson(entity));
             }
+            return PrivatePost(resourceName, resourceMaker, jsons, user);
+        }
+
+        static internal IEnumerable<Resource> Post(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<Dictionary<string, object>> entities, User user)
+        {
+            List<Dictionary<string, object>> jsons = new List<Dictionary<string, object>>();
+            foreach (Dictionary<string, object> entity in entities)
+            {
+                jsons.Add(Api.ApiJson(entity));
+            }
+            return PrivatePost(resourceName, resourceMaker, jsons, user);
+        }
+
+        static private IEnumerable<Resource> PrivatePost(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<Dictionary<string, object>> entities, User user)
+        {
             Dictionary<string, object> payload = new Dictionary<string, object>
             {
-                {Api.LastNamePlural(resourceName), jsons}
+                {Api.LastNamePlural(resourceName), entities}
             };
 
             dynamic fetchedJsons = Request.Fetch(
