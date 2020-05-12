@@ -56,6 +56,8 @@ namespace StarkBankTests
                 zipCode: "01234-567",
                 taxID: "012.345.678-90",
                 overdueLimit: 10,
+                receiverName: "Random Receiver",
+                receiverTaxID: "123.456.789-09",
                 fine: 0.00,
                 interest: 0.00,
                 tags: new List<string> { "custom", "tags" },
