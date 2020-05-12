@@ -81,14 +81,16 @@ namespace StarkBank.Utils
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage
             {
                 Method = method,
-                RequestUri = new Uri(url),
-                Content = new StringContent(body)
+                RequestUri = new Uri(url)
             };
+            if (body.Length > 0) {
+                httpRequestMessage.Content = new StringContent(body);
+            }
 
-            httpRequestMessage.Content.Headers.TryAddWithoutValidation("Access-Id", user.AccessId());
-            httpRequestMessage.Content.Headers.TryAddWithoutValidation("Access-Time", accessTime);
-            httpRequestMessage.Content.Headers.TryAddWithoutValidation("Access-Signature", signature);
-            httpRequestMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+            httpRequestMessage.Headers.TryAddWithoutValidation("Access-Id", user.AccessId());
+            httpRequestMessage.Headers.TryAddWithoutValidation("Access-Time", accessTime);
+            httpRequestMessage.Headers.TryAddWithoutValidation("Access-Signature", signature);
+            httpRequestMessage.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
             var result = Client.SendAsync(httpRequestMessage).Result;
 
