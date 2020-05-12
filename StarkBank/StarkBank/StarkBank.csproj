@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <ReleaseVersion>0.4.0</ReleaseVersion>
     <PackageVersion>0.4.0</PackageVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -22,9 +22,9 @@
     <DebugType></DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="starkbank-ecdsa" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="starkbank-ecdsa" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\" />
