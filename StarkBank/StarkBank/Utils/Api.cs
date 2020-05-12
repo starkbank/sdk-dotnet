@@ -36,7 +36,7 @@ namespace StarkBank.Utils
                 string key = Case.PascalToCamel(entry.Key);
                 if (key.EndsWith("ID"))
                 {
-                    key = key[0..^2] + "Id";
+                    key = key.Substring(0, key.Length - 2) + "Id";
                 }
 
                 dynamic value = entry.Value;
@@ -91,8 +91,8 @@ namespace StarkBank.Utils
 
         internal static string LastName(string resourceName)
         {
-            string[] names = Case.CamelOrPascalToKebab(resourceName).Split("-");
-            return names[^1];
+            string[] names = Case.CamelOrPascalToKebab(resourceName).Split(new string[] { "-" }, StringSplitOptions.None);
+            return names.Last();
         }
     }
 }

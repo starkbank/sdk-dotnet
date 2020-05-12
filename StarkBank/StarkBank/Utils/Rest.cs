@@ -8,7 +8,7 @@ namespace StarkBank.Utils
     {
         internal static IEnumerable<Resource> GetList(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> query, User user)
         {
-            object rawLimit = query.GetValueOrDefault("limit");
+            query.TryGetValue("limit", out object rawLimit);
             query["limit"] = rawLimit;
             int limit = 0;
             bool limited = false;

@@ -43,11 +43,11 @@ namespace StarkBank.Utils
         }
 
         private static readonly HttpClient Client = makeClient();
-        internal static readonly HttpMethod Get = HttpMethod.Get;
-        internal static readonly HttpMethod Put = HttpMethod.Put;
-        internal static readonly HttpMethod Post = HttpMethod.Post;
-        internal static readonly HttpMethod Patch = HttpMethod.Patch;
-        internal static readonly HttpMethod Delete = HttpMethod.Delete;
+        internal static readonly HttpMethod Get = new HttpMethod("GET");
+        internal static readonly HttpMethod Put = new HttpMethod("PUT");
+        internal static readonly HttpMethod Post = new HttpMethod("POST");
+        internal static readonly HttpMethod Patch = new HttpMethod("PATCH");
+        internal static readonly HttpMethod Delete = new HttpMethod("DELETE");
 
         internal static Response Fetch(User user, HttpMethod method, string path, Dictionary<string, object> payload = null, Dictionary<string, object> query = null)
         {
