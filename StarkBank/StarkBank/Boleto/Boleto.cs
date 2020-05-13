@@ -27,6 +27,8 @@ namespace StarkBank
     ///     <item>Fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
     ///     <item>OverdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
+    ///     <item>ReceiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
+    ///     <item>ReceiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting.ex: "01234567890" or "20.018.183/0001-80"</item>
     ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
     ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
@@ -53,6 +55,8 @@ namespace StarkBank
         public double? Fine { get; }
         public double? Interest { get; }
         public int? OverdueLimit { get; }
+        public string ReceiverName { get; }
+        public string ReceiverTaxID { get; }
         public List<string> Tags { get; }
         public List<Dictionary<string, object>> Descriptions { get; }
         public List<Dictionary<string, object>> Discounts { get; }
@@ -88,6 +92,8 @@ namespace StarkBank
         ///     <item>fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
         ///     <item>interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
         ///     <item>overdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
+        ///     <item>receiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
+        ///     <item>receiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting.ex: "01234567890" or "20.018.183/0001-80"</item>
         ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
         ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs</item>
         ///     <item>tags [list of strings]: list of strings for tagging</item>
@@ -105,7 +111,7 @@ namespace StarkBank
         /// </summary>
         public Boleto(long amount, string name, string taxID, string streetLine1, string streetLine2, string district,
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
-            int? overdueLimit = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
+            int? overdueLimit = null, string receiverName = null, string receiverTaxID = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
             List<Dictionary<string, object>> discounts = null, string id = null, int? fee = null, string line = null,
             string barCode = null, string status = null, DateTime? created = null) : base(id)
         {
@@ -122,6 +128,8 @@ namespace StarkBank
             Fine = fine;
             Interest = interest;
             OverdueLimit = overdueLimit;
+            ReceiverName = receiverName;
+            ReceiverTaxID = receiverTaxID;
             Tags = tags;
             Descriptions = descriptions;
             Discounts = discounts;
@@ -348,6 +356,8 @@ namespace StarkBank
             double fine = json.fine;
             double interest = json.interest;
             int overdueLimit = json.overdueLimit;
+            string receiverName = json.receiverName;
+            string receiverTaxID = json.receiverTaxId;
             List<string> tags = json.tags.ToObject<List<string>>();
             List<Dictionary<string, object>> descriptions = json.descriptions.ToObject<List<Dictionary<string, object>>>();
             List<Dictionary<string, object>> discounts = json.discounts.ToObject<List<Dictionary<string, object>>>();
@@ -362,8 +372,9 @@ namespace StarkBank
             return new Boleto(
                 amount: amount, name: name, taxID: taxID, streetLine1: streetLine1, streetLine2: streetLine2,
                 district: district, city: city, stateCode: stateCode, zipCode: zipCode, due: due, fine: fine,
-                interest: interest, overdueLimit: overdueLimit, tags: tags, descriptions: descriptions,
-                discounts: discounts, id: id, fee: fee, line: line, barCode: barCode, status: status, created: created
+                interest: interest, overdueLimit: overdueLimit, receiverName: receiverName, receiverTaxID: receiverTaxID,
+                tags: tags, descriptions: descriptions, discounts: discounts, id: id, fee: fee, line: line,
+                barCode: barCode, status: status, created: created
             );
         }
     }
