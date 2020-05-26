@@ -23,6 +23,9 @@ namespace StarkBankTests
             byte[] pdf = Boleto.Pdf(id: boleto.ID);
             Assert.True(pdf.Length > 0);
             System.IO.File.WriteAllBytes("boleto.pdf", pdf);
+            byte[] bookletPdf = Boleto.Pdf(id: boleto.ID, layout: "booklet");
+            Assert.True(bookletPdf.Length > 0);
+            System.IO.File.WriteAllBytes("boleto-booklet.pdf", bookletPdf);
             Boleto deleteBoleto = Boleto.Delete(id: boleto.ID);
             Assert.Equal(deleteBoleto.ID, boleto.ID);
             Console.WriteLine(boleto);

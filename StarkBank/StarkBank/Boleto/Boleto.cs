@@ -245,6 +245,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters(optional) :
         /// <list>
+        ///     <item>layout[string]: Layout specification. Available options are "default" and "booklet"</item>
         ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
         /// <br/>
@@ -253,13 +254,17 @@ namespace StarkBank
         ///     <item>Boleto pdf file</item>
         /// </list>
         /// </summary>
-        public static byte[] Pdf(string id, User user = null)
+        public static byte[] Pdf(string id, string layout = null, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+
             return Utils.Rest.GetPdf(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
+                options: new Dictionary<string, object> {
+                    { "layout", layout }
+                },
                 user: user
             );
         }
