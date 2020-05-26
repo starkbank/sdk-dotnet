@@ -14,10 +14,11 @@ namespace StarkBankTests
         [Fact]
         public void QueryAndGet()
         {
+            Settings.Language = "pt-BR";
             List<Transfer.Log> logs = Transfer.Log.Query(
                 limit: 101,
                 before: DateTime.Now,
-                types: new List<string> { "success" }
+                types: new List<string> { "failed" }
             ).ToList();
             Assert.Equal(101, logs.Count);
             Assert.True(logs.First().ID != logs.Last().ID);
@@ -25,7 +26,7 @@ namespace StarkBankTests
             {
                 Console.WriteLine(log);
                 Assert.NotNull(log.ID);
-                Assert.Equal("success", log.Type);
+                Assert.Equal("failed", log.Type);
             }
             Transfer.Log getLog = Transfer.Log.Get(id: logs.First().ID);
             Assert.Equal(getLog.ID, logs.First().ID);

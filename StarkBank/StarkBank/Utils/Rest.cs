@@ -56,12 +56,13 @@ namespace StarkBank.Utils
             return Api.FromApiJson(resourceMaker, json);
         }
 
-        static internal byte[] GetPdf(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
+        static internal byte[] GetPdf(string resourceName, Api.ResourceMaker resourceMaker, string id, Dictionary<string, object> options = null, User user = null)
         {
             return Request.Fetch(
                 user: user,
                 method: Request.Get,
-                path: $"{Api.Endpoint(resourceName)}/{id}/pdf"
+                path: $"{Api.Endpoint(resourceName)}/{id}/pdf",
+                query: options
             ).ByteContent;
         }
 

@@ -15,6 +15,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [Unreleased]
 ### Added
 - StarkBank.Settings.Language to specify error language as "en-US" or "pt-BR"
+- Boleto PDF layout option
 ### Change
 - Test user credentials to environment variable instead of hard-code
 - Default user from StarkBank.User.Default to StarkBank.Settings.User

@@ -223,7 +223,7 @@ Console.WriteLine(boleto);
 After its creation, a boleto PDF may be retrieved by passing its id.
 
 ```c#
-byte[] pdf = StarkBank.Boleto.Pdf("5155165527080960");
+byte[] pdf = StarkBank.Boleto.Pdf("5155165527080960", layout: "default");
 
 System.IO.File.WriteAllBytes("boleto.pdf", pdf);
 ```
