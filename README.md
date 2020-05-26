@@ -133,7 +133,7 @@ StarkBank.Balance balance = StarkBank.Balance.Get(user: project);
 4.2 Set it as a default user in the SDK:
 
 ```c#
-StarkBank.User.Default = project;
+StarkBank.Settings.User = project;
 
 StarkBank.Balance balance = StarkBank.Balance.Get();
 ```

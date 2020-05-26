@@ -13,8 +13,11 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- StarkBank.Settings.Language to specify error language as "en-US" or "pt-BR"
 ### Change
 - Test user credentials to environment variable instead of hard-code
+- Default user from StarkBank.User.Default to StarkBank.Settings.User
 
 ## [0.6.0] - 2020-05-12
 ### Added

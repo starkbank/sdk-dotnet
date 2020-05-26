@@ -91,6 +91,7 @@ namespace StarkBank.Utils
             httpRequestMessage.Headers.TryAddWithoutValidation("Access-Time", accessTime);
             httpRequestMessage.Headers.TryAddWithoutValidation("Access-Signature", signature);
             httpRequestMessage.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+            httpRequestMessage.Headers.TryAddWithoutValidation("Accept-Language", Settings.Language);
 
             var result = Client.SendAsync(httpRequestMessage).Result;
 
