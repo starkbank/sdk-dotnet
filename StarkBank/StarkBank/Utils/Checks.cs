@@ -11,7 +11,7 @@ namespace StarkBank.Utils
         {
             if (user is null)
             {
-                user = User.Default;
+                user = Settings.User;
             }
             if (user != null)
             {

@@ -37,6 +37,7 @@
     <Folder Include="Event\" />
     <Folder Include="BoletoPayment\" />
     <Folder Include="UtilityPayment\" />
+    <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Environment.cs" />
