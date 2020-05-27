@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [0.7.0] - 2020-05-26
 ### Added
 - StarkBank.Settings.Language to specify error language as "en-US" or "pt-BR"
 - Boleto PDF layout option
