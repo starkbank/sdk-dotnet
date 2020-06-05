@@ -37,14 +37,14 @@ namespace StarkBankTests
         [Fact]
         public void Query()
         {
-            List<BoletoPayment> payments = BoletoPayment.Query(limit: 101, status: "success").ToList();
+            List<BoletoPayment> payments = BoletoPayment.Query(limit: 101, status: "failed").ToList();
             Assert.True(payments.Count <= 101);
             Assert.True(payments.First().ID != payments.Last().ID);
             foreach (BoletoPayment payment in payments)
             {
                 Console.WriteLine(payment);
                 Assert.NotNull(payment.ID);
-                Assert.Equal("success", payment.Status);
+                Assert.Equal("failed", payment.Status);
             }
         }
 
