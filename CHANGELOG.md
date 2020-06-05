@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [0.8.0] - 2020-06-05
 ### Added
 - Transfer query taxID parameter
 
