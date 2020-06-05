@@ -15,7 +15,7 @@ namespace StarkBankTests
         {
             List<BoletoPayment.Log> logs = BoletoPayment.Log.Query(
                 limit: 101,
-                types: new List<string> { "success" }
+                types: new List<string> { "failed" }
             ).ToList();
             Assert.True(logs.Count <= 101);
             Assert.True(logs.First().ID != logs.Last().ID);
@@ -23,7 +23,7 @@ namespace StarkBankTests
             {
                 Console.WriteLine(log);
                 Assert.NotNull(log.ID);
-                Assert.Equal("success", log.Type);
+                Assert.Equal("failed", log.Type);
             }
             BoletoPayment.Log getLog = BoletoPayment.Log.Get(id: logs.First().ID);
             Assert.Equal(getLog.ID, logs.First().ID);

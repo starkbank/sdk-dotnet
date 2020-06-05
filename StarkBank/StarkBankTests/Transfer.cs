@@ -29,7 +29,7 @@ namespace StarkBankTests
         public void Query()
         {
             List<Transfer> transfers = Transfer.Query(limit: 101, status: "success").ToList();
-            Assert.Equal(101, transfers.Count);
+            Assert.True(transfers.Count <= 101);
             Assert.True(transfers.First().ID != transfers.Last().ID);
             foreach (Transfer transfer in transfers)
             {
