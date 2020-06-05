@@ -32,7 +32,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [0.5.1] - 2020-05-12
 ### Fixed
-- /GET requests in .NET Standard 4.6.1
+- /GET requests in .NET Framework 4.6.1
 
 ## [0.5.0] - 2020-05-12
 ### Added

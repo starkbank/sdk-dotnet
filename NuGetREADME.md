@@ -14,7 +14,7 @@ is as easy as sending a text message to your client!
 
 This library supports the following .NET versions:
 
-* .NET Standard 2.1+
+* .NET Standard 2.0+
 
 ## Stark Bank API documentation
 
