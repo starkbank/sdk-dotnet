@@ -231,6 +231,7 @@ namespace StarkBank
         ///     <item>before [DateTime, default null] date filter for objects created or updated only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>transactionIds [list of strings, default null]: list of transaction IDs linked to the desired transfers. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
+        ///     <item>taxID [string, default null]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"</item>
         ///     <item>sort sort [string, default "-created".]sort order considered in the response. Options are: "created", "-created", "updated" and "-updated". "-" means descending order.</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
@@ -242,7 +243,7 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public static IEnumerable<Transfer> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            List<string> transactionIds = null, string status = null, string sort = null, List<string> tags = null,
+            List<string> transactionIds = null, string status = null, string taxID = null, string sort = null, List<string> tags = null,
             User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
@@ -255,6 +256,7 @@ namespace StarkBank
                     { "before", before },
                     { "transactionIds", transactionIds },
                     { "status", status },
+                    { "taxID", taxID },
                     { "sort", sort },
                     { "tags", tags },
                 },
