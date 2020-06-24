@@ -40,7 +40,6 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Utils\Environment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Payment\Boleto\.DS_Store" />

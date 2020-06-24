@@ -21,7 +21,5 @@
     <ProjectReference Include="..\StarkBank\StarkBank.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="TransferLog.cs" />
-    <Compile Remove="Boleto.cs" />
   </ItemGroup>
 </Project>
