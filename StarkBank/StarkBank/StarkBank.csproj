@@ -38,6 +38,8 @@
     <Folder Include="BoletoPayment\" />
     <Folder Include="UtilityPayment\" />
     <Folder Include="Settings\" />
+    <Folder Include="DasPayment\" />
+    <Folder Include="IssPayment\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

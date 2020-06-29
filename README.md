@@ -647,6 +647,242 @@ StarkBank.UtilityPayment.Log log = StarkBank.UtilityPayment.Log.Get("19028371982
 Console.WriteLine(log);
 ```
 
+### Create DAS payment
+
+It"s also simple to pay DAS taxes in the SDK.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.DasPayment> payments = StarkBank.DasPayment.Create(
+    new List<StarkBank.DasPayment> {
+        new StarkBank.DasPayment(
+            line: "83680000001 7 08660138003 0 71070987611 8 00041351685 7",
+            scheduled: DateTime.Today.Date.AddDays(2),
+            description: "take my money",
+            tags: new List<string> { "take", "my", "money" }
+        ),
+        new StarkBank.DasPayment(
+            barCode: "83600000001512801380037107172881100021296561",
+            scheduled: DateTime.Today.Date.AddDays(1),
+            description: "take my money one more time",
+            tags: new List<string> { "again" }
+        )
+    }
+);
+
+foreach(StarkBank.DasPayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+**Note**: Instead of using DasPayment objects, you can also pass each payment element in dictionary format
+
+### Query DAS payments
+
+To search for DAS payments using filters, run:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.DasPayment> payments = StarkBank.DasPayment.Query(
+    tags: new List<string> { "electricity", "gas" }
+);
+
+foreach(StarkBank.DasPayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+### Get DAS payment
+
+You can get a specific tax by its id:
+
+```c#
+using System;
+
+StarkBank.DasPayment payment = StarkBank.DasPayment.Get("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
+### Get DAS payment PDF
+
+After its creation, a DAS payment PDF may also be retrieved by passing its id.
+
+```c#
+byte[] pdf = StarkBank.DasPayment.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("das_payment.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Delete DAS payment
+
+You can also cancel a DAS payment by its id.
+Note that this is not possible if it has been processed already.
+
+```c#
+using System;
+
+StarkBank.DasPayment payment = StarkBank.DasPayment.Delete("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
+### Query DAS tax payment logs
+
+You can search for payments by specifying filters. Use this to understand the
+taxes life cycles.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.DasPayment.Log> logs = StarkBank.DasPayment.Log.Query(
+    paymentIds: new List<string> { "102893710982379182", "92837912873981273" }
+);
+
+foreach(StarkBank.DasPayment.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get DAS tax payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```c#
+using System;
+
+StarkBank.DasPayment.Log log = StarkBank.DasPayment.Log.Get("1902837198237992");
+
+Console.WriteLine(log);
+```
+
+### Create ISS payment
+
+It"s also simple to pay ISS taxes in the SDK.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.IssPayment> payments = StarkBank.IssPayment.Create(
+    new List<StarkBank.IssPayment> {
+        new StarkBank.IssPayment(
+            line: "83680000001 7 08660138003 0 71070987611 8 00041351685 7",
+            scheduled: DateTime.Today.Date.AddDays(2),
+            description: "take my money",
+            tags: new List<string> { "take", "my", "money" }
+        ),
+        new StarkBank.IssPayment(
+            barCode: "83600000001512801380037107172881100021296561",
+            scheduled: DateTime.Today.Date.AddDays(1),
+            description: "take my money one more time",
+            tags: new List<string> { "again" }
+        )
+    }
+);
+
+foreach(StarkBank.IssPayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+**Note**: Instead of using IssPayment objects, you can also pass each payment element in dictionary format
+
+### Query ISS payments
+
+To search for ISS payments using filters, run:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.IssPayment> payments = StarkBank.IssPayment.Query(
+    tags: new List<string> { "electricity", "gas" }
+);
+
+foreach(StarkBank.IssPayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+### Get ISS payment
+
+You can get a specific tax by its id:
+
+```c#
+using System;
+
+StarkBank.IssPayment payment = StarkBank.IssPayment.Get("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
+### Get ISS payment PDF
+
+After its creation, a ISS payment PDF may also be retrieved by passing its id.
+
+```c#
+byte[] pdf = StarkBank.IssPayment.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("iss_payment.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Delete ISS payment
+
+You can also cancel a ISS payment by its id.
+Note that this is not possible if it has been processed already.
+
+```c#
+using System;
+
+StarkBank.IssPayment payment = StarkBank.IssPayment.Delete("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
+### Query ISS tax payment logs
+
+You can search for payments by specifying filters. Use this to understand the
+taxes life cycles.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.IssPayment.Log> logs = StarkBank.IssPayment.Log.Query(
+    paymentIds: new List<string> { "102893710982379182", "92837912873981273" }
+);
+
+foreach(StarkBank.IssPayment.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get ISS tax payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```c#
+using System;
+
+StarkBank.IssPayment.Log log = StarkBank.IssPayment.Log.Get("1902837198237992");
+
+Console.WriteLine(log);
+```
+
 ### Create transactions
 
 To send money between Stark Bank accounts, you can create transactions:
