@@ -315,7 +315,7 @@ namespace StarkBank
             string branchCode = json.branchCode;
             string accountNumber = json.accountNumber;
             string scheduledString = json.scheduled;
-            DateTime? scheduled = Utils.Checks.CheckDateTime(scheduledString);
+            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
             List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
             int? fee = json.fee;
             List<string> tags = json.tags.ToObject<List<string>>();
