@@ -22,6 +22,8 @@ namespace StarkBankTests
             byte[] pdf = Transfer.Pdf(id: transfer.ID);
             Assert.True(pdf.Length > 0);
             System.IO.File.WriteAllBytes("transfer.pdf", pdf);
+            Transfer deleteTransfer = Transfer.Delete(id: transfer.ID);
+            Assert.True(deleteTransfer.Status == "canceled");
             Console.WriteLine(transfer);
         }
 
@@ -47,7 +49,8 @@ namespace StarkBankTests
                 taxID: "01234567890",
                 bankCode: "01",
                 branchCode: "0001",
-                accountNumber: "10000-0"
+                accountNumber: "10000-0",
+                scheduled: DateTime.Today.Date.AddDays(1)
             );
         }
     }

@@ -325,7 +325,8 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
             branchCode: "1234",
             accountNumber: "123456-7",
             taxID: "012.345.678-90",
-            name: "Jon Snow"
+            name: "Jon Snow",
+            scheduled: DateTime.Today.Date.AddDays(1)
         )
     }
 );
@@ -363,6 +364,18 @@ To get a single transfer by its id, run:
 using System;
 
 StarkBank.Transfer transfer = StarkBank.Transfer.Get("5155165527080960");
+
+Console.WriteLine(transfer);
+```
+
+### Cancel a scheduled transfer
+
+To cancel a single scheduled transfer by its id, run:
+
+```c#
+using System;
+
+StarkBank.Transfer transfer = StarkBank.Transfer.Delete("5155165527080960");
 
 Console.WriteLine(transfer);
 ```
