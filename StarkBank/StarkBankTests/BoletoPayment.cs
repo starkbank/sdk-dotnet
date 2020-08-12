@@ -52,7 +52,7 @@ namespace StarkBankTests
         {
             Random random = new Random();
             return new BoletoPayment(
-                line: "34191.09008 61713.957208 71444.640008 2 834300" + random.Next(0, 99999999).ToString("D8"),
+                line: "34191.09008 61713.957208 71444.640008 2 934300" + random.Next(0, 99999999).ToString("D8"),
                 scheduled: DateTime.Today.Date.AddDays(1),
                 description: "loading a random account",
                 taxID: "20.018.183/0001-80"

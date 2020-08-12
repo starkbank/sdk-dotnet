@@ -20,6 +20,7 @@ namespace StarkBank
     ///     <item>BankCode [string]: 1 to 3 digits code of the bank institution in Brazil. ex: "200" or "341"</item>
     ///     <item>BranchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
+    ///     <item>Scheduled [DateTime, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 0, 0, 0)</item>
     ///     <item>Tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
     ///     <item>ID [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
     ///     <item>Fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
@@ -37,6 +38,7 @@ namespace StarkBank
         public string BankCode { get; }
         public string BranchCode { get; }
         public string AccountNumber { get; }
+        public DateTime? Scheduled { get; }
         public List<string> TransactionIds { get; }
         public int? Fee { get; }
         public List<string> Tags { get; }
@@ -64,6 +66,7 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
+        ///     <item>scheduled [DateTime, default now]: datetime when the transfer will be processed.May be pushed to next business day if necessary.ex: DateTime.new(2020, 3, 11, 8, 0, 0, 0)</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
@@ -77,8 +80,9 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public Transfer(long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
-            string id = null, List<string> transactionIds = null, int? fee = null, List<string> tags = null,
-            string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
+            DateTime? scheduled = null, string id = null, List<string> transactionIds = null, int? fee = null,
+            List<string> tags = null, string status = null, DateTime? created = null, DateTime? updated = null
+            ) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -86,6 +90,7 @@ namespace StarkBank
             BankCode = bankCode;
             BranchCode = branchCode;
             AccountNumber = accountNumber;
+            Scheduled = scheduled;
             TransactionIds = transactionIds;
             Fee = fee;
             Tags = tags;
@@ -188,6 +193,37 @@ namespace StarkBank
         }
 
         /// <summary>
+        /// Cancel a Transfer entity
+        /// <br/>
+        /// Cancel a scheduled Transfer entity previously created in the Stark Bank API
+        /// <br/>
+        /// Parameters(required) :
+        /// <list>
+        ///     <item>id[string]: Transfer unique id.ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
+        /// Parameters(optional) :
+        /// <list>
+        ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>deleted Transfer object</item>
+        /// </list>
+        /// </summary>
+        public static Transfer Delete(string id, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.DeleteId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                user: user
+            ) as Transfer;
+        }
+
+        /// <summary>
         /// Retrieve a specific Transfer pdf file
         /// <br/>
         /// Receive a single Transfer pdf receipt file generated in the Stark Bank API by passing its id.
@@ -278,6 +314,8 @@ namespace StarkBank
             string bankCode = json.bankCode;
             string branchCode = json.branchCode;
             string accountNumber = json.accountNumber;
+            string scheduledString = json.scheduled;
+            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
             List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
             int? fee = json.fee;
             List<string> tags = json.tags.ToObject<List<string>>();
@@ -289,7 +327,7 @@ namespace StarkBank
 
             return new Transfer(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
-                accountNumber: accountNumber, transactionIds: transactionIds, fee: fee, tags: tags, status: status,
+                accountNumber: accountNumber, scheduled: scheduled, transactionIds: transactionIds, fee: fee, tags: tags, status: status,
                 created: created, updated: updated
             );
         }

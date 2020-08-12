@@ -268,7 +268,7 @@ namespace StarkBank
         /// <br/>
         /// Return:
         /// <list>
-        ///     <item>deleted UtilityPayment with updated attributes</item>
+        ///     <item>deleted UtilityPayment object</item>
         /// </list>
         /// </summary>
         public static UtilityPayment Delete(string id, User user = null)

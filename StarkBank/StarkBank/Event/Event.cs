@@ -138,7 +138,7 @@ namespace StarkBank
         /// <br/>
         /// Return:
         /// <list>
-        ///     <item>deleted Event with updated attributes</item>
+        ///     <item>deleted Event object</item>
         /// </list>
         /// </summary>
         public static Event Delete(string id, User user = null)

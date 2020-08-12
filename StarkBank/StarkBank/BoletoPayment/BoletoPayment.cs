@@ -270,7 +270,7 @@ namespace StarkBank
         /// </list>
         /// Return:
         /// <list>
-        ///     <item>deleted BoletoPayment with updated attributes</item>
+        ///     <item>deleted BoletoPayment object</item>
         /// </list>
         /// </summary>
         public static BoletoPayment Delete(string id, User user = null)
