@@ -27,6 +27,6 @@ Global
 		$0.StandardHeader = $2
 		$0.VersionControlPolicy = $3
 		description = SDK to facilitate .NET integrations with Stark Bank
-		version = 0.8.0
+		version = 0.9.0
 	EndGlobalSection
 EndGlobal

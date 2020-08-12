@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [0.9.0] - 2020-08-12
 ### Added
 - Transfer.scheduled parameter to allow Transfer scheduling
 - Transfer.Delete to cancel scheduled Transfers
