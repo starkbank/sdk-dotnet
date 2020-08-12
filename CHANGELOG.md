@@ -16,6 +16,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ### Added
 - Transfer.scheduled parameter to allow Transfer scheduling
 - Transfer.Delete to cancel scheduled Transfers
+- Transaction query by tags
 
 ## [0.8.0] - 2020-06-05
 ### Added
