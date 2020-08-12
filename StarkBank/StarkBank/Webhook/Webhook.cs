@@ -157,7 +157,7 @@ namespace StarkBank
         /// <br/>
         /// Return:
         /// <list>
-        ///     <item>deleted Webhook with updated attributes</item>
+        ///     <item>deleted Webhook object</item>
         /// </list>
         /// </summary>
         public static Webhook Delete(string id, User user = null)
