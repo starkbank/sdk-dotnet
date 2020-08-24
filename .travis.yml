@@ -3,5 +3,5 @@ mono: none
 dotnet:
   - 3.1.4
 script:
-  # - sudo apt-get install dotnet-sdk-2.1.4
+  - sudo apt-get install dotnet-sdk-2.1.4
   - cd StarkBank/StarkBankTests && dotnet test
