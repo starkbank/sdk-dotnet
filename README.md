@@ -77,24 +77,33 @@ You can use one of following methods:
 (string privateKey, string publicKey) = StarkBank.Key.Create("file/keys");
 ```
 
-**NOTE**: When you are creating a new Project, it is recommended that you create the
+**NOTE**: When you are creating a new integration user, it is recommended that you create the
 keys inside the infrastructure that will use it, in order to avoid risky internet
 transmissions of your **private-key**. Then you can export the **public-key** alone to the
 computer where it will be used in the new Project creation.
 
-### 3. Create a Project
+### 3. Register your user credentials
 
-You need a project for direct API integrations. To create one in Sandbox:
+You can interact directly with our API using two types of users: Projects and Organizations.
 
-3.1. Log into [Starkbank Sandbox](https://sandbox.web.starkbank.com)
+- **Projects** are workspace-specific users, that is, they are bound to the workspaces they are created in.
+One workspace can have multiple Projects.
+- **Organizations** are general users that control your entire organization.
+They can control all your Workspaces and even create new ones. The Organization is bound to your company's tax-ID only.
+Since this user is unique in your entire organization, only one credential can be linked to it.
 
-3.2. Go to Menu > Usuários (Users) > Projetos (Projects)
 
-3.3. Create a Project: Give it a name and upload the public key you created in section 2.
+3.1 To create a Project in Sandbox:
 
-3.4. After creating the Project, get its Project ID
+3.1.1. Log into [Starkbank Sandbox](https://sandbox.web.starkbank.com)
 
-3.5. Use the Project ID and private key to create the object below:
+3.1.2. Go to Menu > Projects
+
+3.1.3. Create a Project: Give it a name and upload the public key you created in section 2.
+
+3.1.4. After creating the Project, get its Project ID
+
+3.1.5. Use the Project ID and private key to create the object below:
 
 ```c#
 // Get your private key from an environment variable or an encrypted database.
@@ -108,11 +117,30 @@ StarkBank.Project project = new StarkBank.Project(
 );
 ```
 
+3.2 While this feature is in beta, to register your Organization's public key, a legal representative of your organization must send an e-mail with the desired public key to developers@starkbank.com. Don`t worry, this flow will soon be integrated with our website. Here is an example on how to handle your Organization in the SDK:
+
+```c#
+// Get your private key from an environment variable or an encrypted database.
+// This is only an example of a private key content. You should use your own key.
+string privateKeyContent = "-----BEGIN EC PARAMETERS-----\nBgUrgQQACg==\n-----END EC PARAMETERS-----\n-----BEGIN EC PRIVATE KEY-----\nMHQCAQEEIMCwW74H6egQkTiz87WDvLNm7fK/cA+ctA2vg/bbHx3woAcGBSuBBAAK\noUQDQgAE0iaeEHEgr3oTbCfh8U2L+r7zoaeOX964xaAnND5jATGpD/tHec6Oe9U1\nIF16ZoTVt1FzZ8WkYQ3XomRD4HS13A==\n-----END EC PRIVATE KEY-----";
+
+StarkBank.Organization organization = new StarkBank.Organization(
+    environment: "sandbox",
+    id: "5656565656565656",
+    privateKey: privateKeyContent,
+    workspaceID: null  // You only need to set the workspaceID when you are operating a specific workspaceID
+);
+
+// To dynamically use your organization credentials in a specific workspaceID,
+// you can use the Organization.WithWorkspace() method:
+StarkBank.Balance.Get(user: organization.WithWorkspace("4848484848484848"));
+```
+
 NOTE 1: Never hard-code your private key. Get it from an environment variable or an encrypted database.
 
 NOTE 2: We support `'sandbox'` and `'production'` as environments.
 
-NOTE 3: The project you created in `sandbox` does not exist in `production` and vice versa.
+NOTE 3: The credentials you registered in `sandbox` do not exist in `production` and vice versa.
 
 
 ### 4. Setting up the user
@@ -1276,7 +1304,7 @@ foreach(StarkBank.Webhook webhook in webhooks) {
 }
 ```
 
-### Get webhook
+### Get a webhook
 
 You can get a specific webhook by its id.
 
@@ -1426,6 +1454,56 @@ IEnumerable<StarkBank.DictKey> dictKeys = StarkBank.DictKey.Query(
 foreach(StarkBank.DictKey dictKey in dictKeys) {
     Console.WriteLine(dictKey);
 }
+```
+
+### Create new Workspaces
+
+The Organization user allows you to create new Workspaces (bank accounts) under your organization.
+Workspaces have independent balances, statements, operations and users.
+The only link between your Workspaces is the Organization that controls them.
+
+**Note**: This route will only work if the Organization user is used with a null workspaceID.
+
+```c#
+using System;
+
+StarkBank.Workspace workspace = StarkBank.Workspace.Create(
+    username: "iron-bank-workspace-1",
+    name: "Iron Bank Workspace 1",
+    user: organization
+);
+
+Console.WriteLine(workspace);
+```
+
+### List your Workspaces
+
+This route lists Workspaces. If no parameter is passed, all the workspaces the user has access to will be listed, but
+you can also find other Workspaces by searching for their usernames or IDs directly.
+
+```c#
+using System;
+
+List<StarkBank.Workspace> workspaces = StarkBank.Workspace.Query(
+    limit: 30
+).ToList();
+
+foreach (StarkBank.Workspace workspace in workspaces)
+{
+    Console.WriteLine(workspace);
+}
+```
+
+### Get a Workspace
+
+You can get a specific Workspace by its id.
+
+```c#
+using System;
+
+StarkBank.Workspace workspace = StarkBank.Workspace.Get("10827361982368179");
+
+Console.WriteLine(workspace);
 ```
 
 ## Handling errors
