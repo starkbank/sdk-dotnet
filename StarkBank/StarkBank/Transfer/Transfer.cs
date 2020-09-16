@@ -270,6 +270,7 @@ namespace StarkBank
         ///     <item>taxID [string, default null]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"</item>
         ///     <item>sort sort [string, default "-created".]sort order considered in the response. Options are: "created", "-created", "updated" and "-updated". "-" means descending order.</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
+        ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
         /// <br/>
@@ -279,7 +280,7 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public static IEnumerable<Transfer> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            List<string> transactionIds = null, string status = null, string taxID = null, string sort = null, List<string> tags = null,
+            List<string> transactionIds = null, string status = null, string taxID = null, string sort = null, List<string> tags = null, List<string> ids = null,
             User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
@@ -295,6 +296,7 @@ namespace StarkBank
                     { "taxID", taxID },
                     { "sort", sort },
                     { "tags", tags },
+                    { "ids", ids }
                 },
                 user: user
             ).Cast<Transfer>();

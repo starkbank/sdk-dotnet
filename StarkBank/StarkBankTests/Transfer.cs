@@ -41,6 +41,34 @@ namespace StarkBankTests
             }
         }
 
+        [Fact]
+        public void QueryIds()
+        {
+            List<Transfer> transfers = Transfer.Query(limit: 10).ToList();
+            List<String> transfersIdsExpected = new List<string>();
+            Assert.Equal(10, transfers.Count);
+            Assert.True(transfers.First().ID != transfers.Last().ID);
+            foreach (Transfer transaction in transfers)
+            {
+                Assert.NotNull(transaction.ID);
+                transfersIdsExpected.Add(transaction.ID);
+            }
+
+            List<Transfer> transfersResult = Transfer.Query(limit:10, ids: transfersIdsExpected).ToList();
+            List<String> transfersIdsResult = new List<string>();
+            Assert.Equal(10, transfers.Count);
+            Assert.True(transfers.First().ID != transfers.Last().ID);
+            foreach (Transfer transaction in transfersResult)
+            {
+                Assert.NotNull(transaction.ID);
+                transfersIdsResult.Add(transaction.ID);
+            }
+
+            transfersIdsExpected.Sort();
+            transfersIdsResult.Sort();
+            Assert.Equal(transfersIdsExpected, transfersIdsResult);
+        }
+
         private Transfer Example()
         {
             return new Transfer(
