@@ -17,6 +17,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - ids parameter to Transaction.query
 - ids parameter to Transfer.query
 
+### Fixed
+- BoletoPayment test case
+
 ## [0.9.0] - 2020-08-12
 ### Added
 - Transfer.scheduled parameter to allow Transfer scheduling
