@@ -19,6 +19,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ### Fixed
 - BoletoPayment test case
+- UtilityPayment test case
 
 ## [0.9.0] - 2020-08-12
 ### Added
