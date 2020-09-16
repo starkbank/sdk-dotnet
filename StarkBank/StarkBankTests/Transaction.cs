@@ -35,6 +35,34 @@ namespace StarkBankTests
             }
         }
 
+        [Fact]
+        public void QueryIds()
+        {
+            List<Transaction> transactions = Transaction.Query(limit: 10).ToList();
+            List<String> transactionsIdsExpected = new List<string>();
+            Assert.Equal(10, transactions.Count);
+            Assert.True(transactions.First().ID != transactions.Last().ID);
+            foreach (Transaction transaction in transactions)
+            {
+                Assert.NotNull(transaction.ID);
+                transactionsIdsExpected.Add(transaction.ID);
+            }
+
+            List<Transaction> transactionsResult = Transaction.Query(limit:10, ids:transactionsIdsExpected).ToList();
+            List<String> transactionsIdsResult = new List<string>();
+            Assert.Equal(10, transactions.Count);
+            Assert.True(transactions.First().ID != transactions.Last().ID);
+            foreach (Transaction transaction in transactionsResult)
+            {
+                Assert.NotNull(transaction.ID);
+                transactionsIdsResult.Add(transaction.ID);
+            }
+
+            transactionsIdsExpected.Sort();
+            transactionsIdsResult.Sort();
+            Assert.Equal(transactionsIdsExpected, transactionsIdsResult);
+        }
+
         private Transaction Example()
         {
             return new Transaction(

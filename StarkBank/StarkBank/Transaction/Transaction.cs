@@ -198,6 +198,7 @@ namespace StarkBank
         ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>externalIds [list of strings, default null]: list of external ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+        ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
         /// <br/>
@@ -205,7 +206,7 @@ namespace StarkBank
         ///     <item>IEnumerable of Transaction objects with updated attributes</item>
         /// </summary>
         public static IEnumerable<Transaction> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            List<string> tags = null, List<string> externalIds = null, User user = null)
+            List<string> tags = null, List<string> externalIds = null, List<string> ids = null, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
@@ -216,7 +217,8 @@ namespace StarkBank
                     { "after", after },
                     { "before", before },
                     { "tags", tags },
-                    { "externalIds", externalIds }
+                    { "externalIds", externalIds },
+                    { "ids", ids }
                 },
                 user: user
             ).Cast<Transaction>();

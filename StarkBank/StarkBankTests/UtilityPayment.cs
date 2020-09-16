@@ -45,7 +45,7 @@ namespace StarkBankTests
         {
             Random random = new Random();
             return new UtilityPayment(
-                barCode: "8366" + random.Next(100, 100000).ToString("D11") + "02380074119002551100010601813",
+                barCode: "8366" + random.Next(100, 100000).ToString("D11") + "01380074119002551100010601813",
                 scheduled: DateTime.Today.Date.AddDays(2),
                 description: "pagando a conta"
             );
