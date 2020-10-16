@@ -298,12 +298,15 @@ namespace StarkBank
             string line = json.line;
             string barCode = json.barCode;
             string scheduledString = json.scheduled;
-            DateTime? scheduled = Utils.Checks.CheckDateTime(scheduledString);
-            List<string> tags = json.tags.ToObject<List<string>>();
+            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
+            List<string> tags = new List<string>();
+            if (json.tags != null) {
+                tags = json.tags.ToObject<List<string>>();
+            }
             string status = json.status;
-            int fee = json.fee;
+            int? fee = json.fee;
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
 
             return new BoletoPayment(
                 id: id, amount: amount, description: description, taxID: taxID, line: line, barCode: barCode,

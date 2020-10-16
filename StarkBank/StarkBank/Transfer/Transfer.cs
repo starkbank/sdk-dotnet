@@ -318,14 +318,20 @@ namespace StarkBank
             string accountNumber = json.accountNumber;
             string scheduledString = json.scheduled;
             DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
-            List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
+            List<string> transactionIds = new List<string>();
+            if (json.transactionIds != null) {
+                transactionIds = json.transactionIds.ToObject<List<string>>();
+            }
             int? fee = json.fee;
-            List<string> tags = json.tags.ToObject<List<string>>();
+            List<string> tags = new List<string>();
+            if (json.tags != null) {
+                tags = json.tags.ToObject<List<string>>();
+            }
             string status = json.status;
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
-            DateTime? updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime? updated = Utils.Checks.CheckNullableDateTime(updatedString);
 
             return new Transfer(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,

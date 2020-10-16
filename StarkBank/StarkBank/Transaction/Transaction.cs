@@ -236,13 +236,16 @@ namespace StarkBank
             string externalID = json.externalId;
             string receiverID = json.receiverId;
             string senderID = json.senderId;
-            List<string> tags = json.tags.ToObject<List<string>>();
-            int fee = json.fee;
+            List<string> tags = new List<string>();
+            if (json.tags != null) {
+                tags = json.tags.ToObject<List<string>>();
+            }
+            int? fee = json.fee;
             string description = json.description;
             string source = json.source;
-            long balance = json.balance;
+            long? balance = json.balance;
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
 
             return new Transaction(
                 id: id, amount: amount, externalID: externalID, receiverID: receiverID, senderID: senderID, tags: tags, fee: fee,
