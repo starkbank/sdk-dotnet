@@ -31,7 +31,7 @@ namespace StarkBankTests
                     Assert.Equal("invalidAction", error.Code);
                 }
             }
-            Console.WriteLine(payment);
+            TestUtils.Log(payment);
         }
 
         [Fact]
@@ -42,20 +42,25 @@ namespace StarkBankTests
             Assert.True(payments.First().ID != payments.Last().ID);
             foreach (BoletoPayment payment in payments)
             {
-                Console.WriteLine(payment);
+                TestUtils.Log(payment);
                 Assert.NotNull(payment.ID);
                 Assert.Equal("failed", payment.Status);
             }
         }
 
-        private BoletoPayment Example()
+        internal static BoletoPayment Example(bool schedule = true)
         {
-            Random random = new Random();
+            DateTime? scheduled = null;
+            if (schedule) {
+                scheduled = DateTime.Today.Date.AddDays(1);
+            }
+            Boleto boleto = BoletoTest.Example();
+            boleto = Boleto.Create(new List<Boleto>() { boleto }).First();
             return new BoletoPayment(
-                line: "34191.09008 61713.957308 71444.640008 2 934300" + random.Next(0, 99999999).ToString("D8"),
-                scheduled: DateTime.Today.Date.AddDays(1),
+                line: boleto.Line,
+                scheduled: scheduled,
                 description: "loading a random account",
-                taxID: "20.018.183/0001-80"
+                taxID: boleto.TaxID
             );
         }
     }

@@ -24,7 +24,7 @@ namespace StarkBankTests
             System.IO.File.WriteAllBytes("utilityPayment.pdf", pdf);
             UtilityPayment deleteUtilityPayment = UtilityPayment.Delete(id: payment.ID);
             Assert.Equal(deleteUtilityPayment.ID, payment.ID);
-            Console.WriteLine(payment);
+            TestUtils.Log(payment);
         }
 
         [Fact]
@@ -35,18 +35,23 @@ namespace StarkBankTests
             Assert.True(payments.First().ID != payments.Last().ID);
             foreach (UtilityPayment payment in payments)
             {
-                Console.WriteLine(payment);
+                TestUtils.Log(payment);
                 Assert.NotNull(payment.ID);
                 Assert.Equal("success", payment.Status);
             }
         }
 
-        private UtilityPayment Example()
+        internal static UtilityPayment Example(bool schedule = true)
         {
+            DateTime? scheduled = null;
+            if (schedule)
+            {
+                scheduled = DateTime.Today.Date.AddDays(2);
+            }
             Random random = new Random();
             return new UtilityPayment(
                 barCode: "8366" + random.Next(100, 100000).ToString("D11") + "01380074119002551100010601813",
-                scheduled: DateTime.Today.Date.AddDays(2),
+                scheduled: scheduled,
                 description: "pagando a conta"
             );
         }
