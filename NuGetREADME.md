@@ -1,6 +1,6 @@
 To check out the complete README, visit our [GitHub page](https://github.com/starkbank/sdk-dotnet).
 
-# Stark Bank .NET SDK Beta
+# Stark Bank .NET SDK
 
 Welcome to the Stark Bank .NET SDK! This tool is made for .NET
 developers who want to easily integrate with our API.
