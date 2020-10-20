@@ -28,7 +28,7 @@ namespace StarkBank
     ///     <item>ID [string, default null]: unique id returned when Transaction is created. ex: "7656565656565656"</item>
     ///     <item>Fee [integer, default null]: fee charged when Transaction is created. ex: 200 (= R$ 2.00)</item>
     ///     <item>Balance [long integer, default null]: account balance after Transaction was processed. ex: 100000000 (= R$ 1,000,000.00)</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the Transaction. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Created [DateTime, default null]: creation datetime for the Transaction. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public class Transaction : Utils.Resource
@@ -75,7 +75,7 @@ namespace StarkBank
         ///     <item>id [string, default null]: unique id returned when Transaction is created. ex: "7656565656565656"</item>
         ///     <item>fee [integer, default null]: fee charged when Transaction is created. ex: 200 (= R$ 2.00)</item>
         ///     <item>balance [long integer, default null]: account balance after Transaction was processed. ex: 100000000 (= R$ 1,000,000.00)</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the Transaction. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>created [DateTime, default null]: creation datetime for the Transaction. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public Transaction(long amount, string externalID, string receiverID, string senderID = null, List<string> tags = null, string id = null,
@@ -236,13 +236,16 @@ namespace StarkBank
             string externalID = json.externalId;
             string receiverID = json.receiverId;
             string senderID = json.senderId;
-            List<string> tags = json.tags.ToObject<List<string>>();
-            int fee = json.fee;
+            List<string> tags = new List<string>();
+            if (json.tags != null) {
+                tags = json.tags.ToObject<List<string>>();
+            }
+            int? fee = json.fee;
             string description = json.description;
             string source = json.source;
-            long balance = json.balance;
+            long? balance = json.balance;
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
 
             return new Transaction(
                 id: id, amount: amount, externalID: externalID, receiverID: receiverID, senderID: senderID, tags: tags, fee: fee,

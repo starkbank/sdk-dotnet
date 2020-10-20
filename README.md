@@ -726,6 +726,73 @@ StarkBank.Transaction transaction = StarkBank.Transaction.Get("5155165527080960"
 Console.WriteLine(transaction);
 ```
 
+### Create payment requests to be approved by authorized people in a cost center 
+
+You can also request payments that must pass through a specific cost center approval flow to be executed.
+In certain structures, this allows double checks for cash-outs and also gives time to load your account
+with the required amount before the payments take place.
+The approvals can be granted at our web banking and must be performed according to the rules
+specified in the cost center.
+
+**Note**: The value of the centerID parameter can be consulted by logging into our web banking and going
+to the desired Cost Center page.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.PaymentRequest> requests = StarkBank.PaymentRequest.Create(
+    new List<StarkBank.PaymentRequest> {
+        new StarkBank.PaymentRequest(
+            centerID: "5656565656565656",
+            due: DateTime.Today.Date.AddDays(2),
+            payment: new StarkBank.Transfer(
+                amount: 100,  // R$ 1,00
+                bankCode: "033",
+                branchCode: "0001",
+                accountNumber: "10000-0",
+                taxID: "012.345.678-90",
+                name: "Master Yoda"
+            )
+        ),
+        new StarkBank.PaymentRequest(
+            centerID: "5656565656565656",
+            payment: new StarkBank.BoletoPayment(
+                line: "34191.09008 64694.017308 71444.640008 1 96610000014500",
+                taxID: "012.345.678-90",
+                description: "Payment for spare droid parts"
+            ),
+            tags: new List<string> { "rd2d", "invoice/1234" }
+        )
+    }
+);
+
+foreach(StarkBank.PaymentRequest request in requests) {
+    Console.WriteLine(request);
+}
+```
+
+**Note**: Instead of using PaymentRequest objects, you can also pass each payment element in dictionary format
+
+### Query payment requests
+
+To search for payment requests, run:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.PaymentRequest> requests = StarkBank.PaymentRequest.Query(
+    centerID: "5656565656565656",
+    after: DateTime.Today.Date.AddDays(-10),
+    before: DateTime.Today.Date.AddDays(-1)
+);
+
+foreach(StarkBank.PaymentRequest request in requests) {
+    Console.WriteLine(request);
+}
+```
+
 ### Create webhook subscription
 
 To create a webhook subscription and be notified whenever an event occurs, run:

@@ -24,7 +24,7 @@ namespace StarkBankTests
             System.IO.File.WriteAllBytes("transfer.pdf", pdf);
             Transfer deleteTransfer = Transfer.Delete(id: transfer.ID);
             Assert.True(deleteTransfer.Status == "canceled");
-            Console.WriteLine(transfer);
+            TestUtils.Log(transfer);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace StarkBankTests
             Assert.True(transfers.First().ID != transfers.Last().ID);
             foreach (Transfer transfer in transfers)
             {
-                Console.WriteLine(transfer);
+                TestUtils.Log(transfer);
                 Assert.NotNull(transfer.ID);
                 Assert.Equal("success", transfer.Status);
             }
@@ -68,9 +68,12 @@ namespace StarkBankTests
             transfersIdsResult.Sort();
             Assert.Equal(transfersIdsExpected, transfersIdsResult);
         }
-
-        private Transfer Example()
+        internal static Transfer Example(bool schedule = true)
         {
+            DateTime? scheduled = null;
+            if (schedule) {
+                scheduled = DateTime.Today.Date.AddDays(1);
+            }
             return new Transfer(
                 amount: new Random().Next(1, 1000),
                 name: "João",
@@ -78,7 +81,7 @@ namespace StarkBankTests
                 bankCode: "01",
                 branchCode: "0001",
                 accountNumber: "10000-0",
-                scheduled: DateTime.Today.Date.AddDays(1)
+                scheduled: scheduled
             );
         }
     }

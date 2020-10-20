@@ -22,7 +22,7 @@ namespace StarkBankTests
             Assert.True(events.First().ID != events.Last().ID);
             foreach (Event eventObject in events)
             {
-                Console.WriteLine(eventObject);
+                TestUtils.Log(eventObject);
                 Assert.NotNull(eventObject.ID);
                 Assert.False(eventObject.IsDelivered);
             }
@@ -34,7 +34,7 @@ namespace StarkBankTests
             Assert.True(updateEvent.IsDelivered);
             Event deleteEvent = Event.Delete(getEvent.ID);
             Assert.Equal(getEvent.ID, deleteEvent.ID);
-            Console.WriteLine(getEvent);
+            TestUtils.Log(getEvent);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace StarkBankTests
             Event parsedEvent = Event.Parse(Content, GoodSignature);
             Assert.NotNull(parsedEvent.ID);
             Assert.NotNull(parsedEvent.Log);
-            Console.WriteLine(parsedEvent);
+            TestUtils.Log(parsedEvent);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace StarkBankTests
             try {
                 Event parsedEvent = Event.Parse(Content, BadSignature);
             } catch (StarkBank.Error.InvalidSignatureError e) {
-                Console.WriteLine(e);
+                TestUtils.Log(e);
                 return;
             }
             throw new Exception("failed to raise InvalidSignatureError");
@@ -67,7 +67,7 @@ namespace StarkBankTests
             }
             catch (StarkBank.Error.InvalidSignatureError e)
             {
-                Console.WriteLine(e);
+                TestUtils.Log(e);
                 return;
             }
             throw new Exception("failed to raise InvalidSignatureError");

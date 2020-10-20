@@ -38,6 +38,7 @@
     <Folder Include="BoletoPayment\" />
     <Folder Include="UtilityPayment\" />
     <Folder Include="Settings\" />
+    <Folder Include="PaymentRequest\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

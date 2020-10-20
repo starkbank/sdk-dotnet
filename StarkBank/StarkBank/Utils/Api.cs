@@ -59,6 +59,9 @@ namespace StarkBank.Utils
                         value = casted;
                     }
                 }
+                if (value is Resource) {
+                    value = ApiJson(value);
+                }
 
                 apiJson.Add(
                     key,

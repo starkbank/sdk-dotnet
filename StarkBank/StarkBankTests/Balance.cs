@@ -17,7 +17,7 @@ namespace StarkBankTests
             Assert.True(balance.Amount >= 0);
             Assert.Equal(3, balance.Currency.Length);
             Assert.True(balance.Updated <= DateTime.UtcNow);
-            Console.WriteLine(balance);
+            TestUtils.Log(balance);
         }
     }
 }

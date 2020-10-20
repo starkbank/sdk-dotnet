@@ -15,8 +15,8 @@ namespace StarkBankTests
             Assert.True(privateKey.Length > 0);
             Assert.True(publicKey.Length > 0);
 
-            Console.WriteLine(privateKey);
-            Console.WriteLine(publicKey);
+            TestUtils.Log(privateKey);
+            TestUtils.Log(publicKey);
         }
 
         [Fact]
@@ -27,8 +27,8 @@ namespace StarkBankTests
             Assert.True(privateKey.Length > 0);
             Assert.True(publicKey.Length > 0);
 
-            Console.WriteLine(privateKey);
-            Console.WriteLine(publicKey);
+            TestUtils.Log(privateKey);
+            TestUtils.Log(publicKey);
         }
     }
 }
