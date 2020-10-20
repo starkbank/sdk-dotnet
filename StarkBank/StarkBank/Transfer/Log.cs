@@ -20,7 +20,7 @@ namespace StarkBank
         ///     <item>Transfer [Transfer]: Transfer entity to which the log refers to.</item>
         ///     <item>Errors [list of strings]: list of errors linked to this BoletoPayment event.</item>
         ///     <item>Type [string]: type of the Transfer event which triggered the log creation. ex: "processing" or "success"</item>
-        ///     <item>Created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>Created [DateTime]: creation datetime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public class Log : Utils.Resource
@@ -43,7 +43,7 @@ namespace StarkBank
             ///     <item>transfer [Transfer]: Transfer entity to which the log refers to.</item>
             ///     <item>errors [list of strings]: list of errors linked to this BoletoPayment event.</item>
             ///     <item>type [string]: type of the Transfer event which triggered the log creation. ex: "processing" or "success"</item>
-            ///     <item>created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+            ///     <item>created [DateTime]: creation datetime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
             /// </list>
             /// </summary>
             public Log(string id, DateTime created, string type, List<string> errors, Transfer transfer) : base(id)

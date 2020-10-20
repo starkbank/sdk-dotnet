@@ -20,14 +20,14 @@ namespace StarkBank
     ///     <item>BankCode [string]: 1 to 3 digits code of the bank institution in Brazil. ex: "200" or "341"</item>
     ///     <item>BranchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
-    ///     <item>Scheduled [DateTime, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 0, 0, 0)</item>
+    ///     <item>Scheduled [DateTime, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
     ///     <item>Tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
     ///     <item>ID [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
     ///     <item>Fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
     ///     <item>Status [string, default null]: current Transfer status. ex: "success" or "failed"</item>
     ///     <item>TransactionIds [list of strings, default null]: ledger Transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Created [DateTime, default null]: creation datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Updated [DateTime, default null]: latest update datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class Transfer : Utils.Resource
@@ -66,7 +66,7 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
-        ///     <item>scheduled [DateTime, default now]: datetime when the transfer will be processed.May be pushed to next business day if necessary.ex: DateTime.new(2020, 3, 11, 8, 0, 0, 0)</item>
+        ///     <item>scheduled [DateTime, default now]: datetime when the transfer will be processed.May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
@@ -75,8 +75,8 @@ namespace StarkBank
         ///     <item>fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
         ///     <item>status [string, default null]: current Transfer status. ex: "success" or "failed"</item>
         ///     <item>transactionIds [list of strings, default null]: ledger transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the Transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>created [DateTime, default null]: creation datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>updated [DateTime, default null]: latest update datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public Transfer(long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
@@ -199,7 +199,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters(required) :
         /// <list>
-        ///     <item>id[string]: Transfer unique id.ex: "5656565656565656"</item>
+        ///     <item>id[string]: Transfer unique id. ex: "5656565656565656"</item>
         /// </list>
         /// <br/>
         /// Parameters(optional) :

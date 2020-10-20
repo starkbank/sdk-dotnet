@@ -18,7 +18,7 @@ namespace StarkBank
     /// <list>
     ///     <item>ID [string]: unique id returned when the Event is created. ex: "5656565656565656"</item>
     ///     <item>Log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)</item>
-    ///     <item>Created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Created [DateTime]: creation datetime for the notification event. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     ///     <item>IsDelivered [bool]: true if the Event has been successfully delivered to the user url. ex: False</item>
     ///     <item>Subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"</item>
     /// </list>
@@ -41,7 +41,7 @@ namespace StarkBank
         /// <list>
         ///     <item>id [string]: unique id returned when the Event is created. ex: "5656565656565656"</item>
         ///     <item>log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)</item>
-        ///     <item>created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>created [DateTime]: creation datetime for the notification event. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         ///     <item>isDelivered [bool]: true if the Event has been successfully delivered to the user url. ex: False</item>
         ///     <item>subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"</item>
         /// </list>

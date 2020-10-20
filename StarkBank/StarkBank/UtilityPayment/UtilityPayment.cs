@@ -17,13 +17,13 @@ namespace StarkBank
     ///     <item>Line [string, default null]: Number sequence that describes the payment. Either 'line' or 'barCode' parameters are required. If both are sent, they must match. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
     ///     <item>BarCode [string, default null]: Bar code number that describes the payment. Either 'line' or 'barCode' parameters are required. If both are sent, they must match. ex: "34195819600000000621090063571277307144464000"</item>
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
-    ///     <item>Scheduled [DateTime, default today]: payment scheduled date. ex: DateTime.new(2020, 3, 10)</item>
+    ///     <item>Scheduled [DateTime, default today]: payment scheduled date. ex: new DateTime(2020, 3, 10)</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ID [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
     ///     <item>Status [string, default null]: current payment status. ex: "success" or "failed"</item>
     ///     <item>Amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
     ///     <item>Fee [integer, default null]: fee charged when UtilityPayment is created. ex: 200 (= R$ 2.00)</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Created [DateTime, default null]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class UtilityPayment : Utils.Resource
@@ -58,7 +58,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>scheduled [DateTime, default today]: payment scheduled date. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>scheduled [DateTime, default today]: payment scheduled date. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings]: list of strings for tagging</item>
         /// </list>
         /// <br/>
@@ -68,7 +68,7 @@ namespace StarkBank
         ///     <item>status [string, default null]: current payment status. ex: "success" or "failed"</item>
         ///     <item>amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
         ///     <item>fee [integer, default null]: fee charged when UtilityPayment is created. ex: 200 (= R$ 2.00)</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>created [DateTime, default null]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public UtilityPayment(string description, string id = null, long? amount = null, string line = null,

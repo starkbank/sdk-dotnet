@@ -23,14 +23,14 @@ namespace StarkBank
     ///     <item>City [string]: payer address city. ex: Rio de Janeiro</item>
     ///     <item>StateCode [string]: payer address state. ex: GO</item>
     ///     <item>ZipCode [string]: payer address zip code. ex: 01311-200</item>
-    ///     <item>Due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: DateTime.new(2020, 3, 10)</item>
+    ///     <item>Due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: new DateTime(2020, 3, 10)</item>
     ///     <item>Fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
     ///     <item>OverdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
     ///     <item>ReceiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
-    ///     <item>ReceiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting.ex: "01234567890" or "20.018.183/0001-80"</item>
-    ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
-    ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs</item>
+    ///     <item>ReceiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+    ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
+    ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ID [string, default null]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
     ///     <item>Fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
@@ -88,14 +88,14 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
         ///     <item>interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
         ///     <item>overdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
         ///     <item>receiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
-        ///     <item>receiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting.ex: "01234567890" or "20.018.183/0001-80"</item>
-        ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs</item>
-        ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs</item>
+        ///     <item>receiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+        ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
+        ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
         ///     <item>tags [list of strings]: list of strings for tagging</item>
         /// </list>
         /// <br/>
@@ -209,7 +209,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters(required):
         /// <list>
-        ///     <item>id[string]: object unique id.ex: "5656565656565656"</item>
+        ///     <item>id[string]: object unique id. ex: "5656565656565656"</item>
         /// </list>
         /// <br/>
         /// Parameters(optional):
@@ -240,7 +240,7 @@ namespace StarkBank
         /// <br/>
         /// <list>
         /// Parameters(required):
-        ///     <item>id[string]: object unique id.ex: "5656565656565656"</item>
+        ///     <item>id[string]: object unique id. ex: "5656565656565656"</item>
         /// </list>
         /// <br/>
         /// Parameters(optional) :
@@ -316,7 +316,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters(required) :
         /// <list>
-        ///     <item>id[string]: Boleto unique id.ex: "5656565656565656"</item>
+        ///     <item>id[string]: Boleto unique id. ex: "5656565656565656"</item>
         /// </list>
         /// <br/>
         /// Parameters(optional) :

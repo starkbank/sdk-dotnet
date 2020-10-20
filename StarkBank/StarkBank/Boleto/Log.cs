@@ -21,7 +21,7 @@ namespace StarkBank
         ///     <item>Boleto [Boleto]: Boleto entity to which the log refers to.</item>
         ///     <item>Errors [list of strings]: list of errors linked to this Boleto event</item>
         ///     <item>Type [string]: type of the Boleto event which triggered the log creation. ex: "registered" or "paid"</item>
-        ///     <item>Created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>Created [DateTime]: creation datetime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public class Log : Utils.Resource
@@ -45,7 +45,7 @@ namespace StarkBank
             ///     <item>boleto [Boleto]: Boleto entity to which the log refers to.</item>
             ///     <item>errors [list of strings]: list of errors linked to this Boleto event</item>
             ///     <item>type [string]: type of the Boleto event which triggered the log creation. ex: "registered" or "paid"</item>
-            ///     <item>created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+            ///     <item>created [DateTime]: creation datetime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
             /// </list>
             /// </summary>
             public Log(string id, DateTime created, string type, List<string> errors, Boleto boleto) : base(id)
