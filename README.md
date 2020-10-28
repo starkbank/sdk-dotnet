@@ -542,6 +542,95 @@ StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get("5155165527080
 Console.WriteLine(log);
 ```
 
+### Investigate a boleto
+
+You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
+This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
+Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
+happens asynchronously and the most common way to retrieve the results is to register a "boleto-holmes" webhook
+subscription, although polling is also possible. 
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.BoletoHolmes> payments = StarkBank.BoletoHolmes.Create(
+    new List<StarkBank.BoletoHolmes> {
+        new StarkBank.BoletoHolmes(
+            boletoID: "5656565656565656",
+        ),
+        new StarkBank.BoletoHolmes(
+            boletoID: "4848484848484848",
+            tags: new List<string> { "elementary" }
+        )
+    }
+);
+
+foreach(StarkBank.BoletoHolmes sherlock in holmes) {
+    Console.WriteLine(sherlock);
+}
+```
+
+**Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in dictionary format
+
+### Get boleto holmes
+
+To get a single Holmes by its id, run:
+
+```c#
+using System;
+
+StarkBank.BoletoHolmes sherlock = StarkBank.BoletoHolmes.Get("5155165527080960");
+
+Console.WriteLine(sherlock);
+```
+
+### Query boleto holmes
+
+You can search for boleto Holmes using filters. 
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BoletoHolmes> holmes = StarkBank.BoletoHolmes.Query(
+    tags: new List<string> { "elementary" }
+);
+
+foreach(StarkBank.BoletoHolmes sherlock in holmes) {
+    Console.WriteLine(sherlock);
+}
+```
+
+### Query boleto holmes logs
+
+Searches are also possible with boleto holmes logs:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BoletoHolmes.Log> logs = StarkBank.BoletoHolmes.Log.Query(
+    holmesIds: new List<string> { "5155165527080960", "76551659167801921" }
+);
+
+foreach(StarkBank.BoletoHolmes.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get boleto holmes log
+
+You can also get a boleto holmes log by specifying its id.
+
+```c#
+using System;
+
+StarkBank.BoletoHolmes.Log log = StarkBank.BoletoHolmes.Log.Get("5155165527080960");
+
+Console.WriteLine(log);
+```
+
 ### Create utility payment
 
 It"s also simple to pay utility bills (such as electricity and water bills) in the SDK.

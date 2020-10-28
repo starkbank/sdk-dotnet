@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="starkbank-ecdsa" Version="1.1.0" />
+    <PackageReference Include="starkbank-ecdsa" Version="1.2.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\" />
@@ -39,6 +39,7 @@
     <Folder Include="UtilityPayment\" />
     <Folder Include="Settings\" />
     <Folder Include="PaymentRequest\" />
+    <Folder Include="BoletoHolmes\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

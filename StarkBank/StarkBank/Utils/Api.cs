@@ -89,7 +89,15 @@ namespace StarkBank.Utils
 
         internal static string LastNamePlural(string resourceName)
         {
-            return $"{LastName(resourceName)}s";
+            string lastName = LastName(resourceName);
+            if (lastName.EndsWith("s")) {
+                return lastName;
+            }
+            if (lastName.EndsWith("y"))
+            {
+                return $"{lastName.Remove(lastName.Length - 1)}ies";
+            }
+            return $"{lastName}s";
         }
 
         internal static string LastName(string resourceName)

@@ -16,7 +16,7 @@ namespace StarkBankTests
         {
             List<BoletoPayment> payments = BoletoPayment.Create(new List<BoletoPayment>() { Example() });
             BoletoPayment payment = payments.First();
-            Assert.NotNull(payments.First().ID);
+            Assert.NotNull(payment.ID);
             BoletoPayment getBoletoPayment = BoletoPayment.Get(id: payment.ID);
             Assert.Equal(getBoletoPayment.ID, payment.ID);
             byte[] pdf = BoletoPayment.Pdf(id: payment.ID);

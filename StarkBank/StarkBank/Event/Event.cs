@@ -286,6 +286,8 @@ namespace StarkBank
                 log = BoletoPayment.Log.ResourceMaker(json.log);
             } else if (subscription == "utility-payment") {
                 log = UtilityPayment.Log.ResourceMaker(json.log);
+            } else if (subscription == "boleto-holmes") {
+                log = BoletoHolmes.Log.ResourceMaker(json.log);
             }
 
             return new Event(
