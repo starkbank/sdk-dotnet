@@ -180,6 +180,160 @@ StarkBank.Balance balance = StarkBank.Balance.Get();
 Console.WriteLine(balance);
 ```
 
+### Create invoices
+
+You can create dynamic QR Code invoices to charge customers or to receive money from accounts
+you have in other banks.
+
+```c#
+# coding: utf-8
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.Invoice> invoices = StarkBank.Invoice.Create(
+    new List<StarkBank.Invoice> {
+        new StarkBank.Invoice(
+            amount: 248,
+            descriptions: new List<Dictionary<string, object>>() {
+                new Dictionary<string, object> {
+                    {"key", "Arya"},
+                    {"value", "Not today"}
+                }
+            },
+            discounts: new List<Dictionary<string, object>>() {
+                new Dictionary<string, object> {
+                    {"percentage", 10},
+                    {"date", new DateTime(2021, 4, 25)}
+                }
+            },
+            due: "2020-12-28T17:59:26.249976+00:00",
+            expiration: 123456789,
+            fine: 2.5,
+            interest: 1.3,
+            name: "Arya Stark",
+            tags: new List<string> { "New sword", "Invoice #1234" },
+            taxID: "29.176.331/0001-69"
+        )
+    }
+);
+
+foreach(StarkBank.Invoice invoice in invoices) {
+    Console.WriteLine(invoice);
+}
+```
+
+**Note**: Instead of using Invoice objects, you can also pass each invoice element in dictionary format
+
+### Get an invoice
+
+After its creation, information on an invoice may be retrieved by its id.
+Its status indicates whether it's been paid.
+
+```c#
+using System;
+
+StarkBank.Invoice invoice = StarkBank.Invoice.Get("5715709195714560");
+
+Console.WriteLine(invoice);
+```
+
+### Get an invoice PDF (COMING SOON)
+
+After its creation, an invoice PDF may be retrieved by its id.
+
+```c#
+using System;
+
+StarkBank.Invoice pdf = StarkBank.Invoice.Pdf("5715709195714560");
+
+System.IO.File.WriteAllBytes("invoice.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Cancel an invoice
+
+You can also cancel an invoice by its id.
+Note that this is not possible if it has been paid already.
+
+```c#
+using System;
+
+StarkBank.Invoice invoiceObject = StarkBank.Invoice.Update(
+    "6312789471657984",
+    status: "canceled"
+);
+
+Console.WriteLine(invoiceObject);
+```
+
+### Update an invoice
+
+You can update an invoice's amount, due date and expiration by its id.
+Note that this is not possible if it has been paid already.
+
+```c#
+using System;
+
+StarkBank.Invoice invoiceObject = StarkBank.Invoice.Update(
+    "6312789471657984",
+    amount: 99999
+);
+
+Console.WriteLine(invoiceObject);
+```
+
+### Query invoices
+
+You can get a list of created invoices given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Invoice> invoices = StarkBank.Invoice.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Invoice invoice in invoices) {
+    Console.WriteLine(invoice);
+}
+```
+
+### Query invoice logs
+
+Logs are pretty important to understand the life cycle of an invoice.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Invoice.Log> logs = StarkBank.Invoice.Log.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Invoice.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get an invoice log
+
+You can get a single log by its id.
+
+```c#
+using System;
+
+StarkBank.Invoice.Log log = StarkBank.Invoice.Log.Get("4701727546671104");
+
+Console.WriteLine(log);
+```
+
+
 ### Create boletos
 
 You can create boletos to charge customers or to receive money from accounts
@@ -548,7 +702,7 @@ You can discover if a StarkBank boleto has been recently paid before we receive 
 This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
 Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
 happens asynchronously and the most common way to retrieve the results is to register a "boleto-holmes" webhook
-subscription, although polling is also possible. 
+subscription, although polling is also possible.
 
 ```c#
 using System;
@@ -587,7 +741,7 @@ Console.WriteLine(sherlock);
 
 ### Query boleto holmes
 
-You can search for boleto Holmes using filters. 
+You can search for boleto Holmes using filters.
 
 ```c#
 using System;
@@ -815,7 +969,7 @@ StarkBank.Transaction transaction = StarkBank.Transaction.Get("5155165527080960"
 Console.WriteLine(transaction);
 ```
 
-### Create payment requests to be approved by authorized people in a cost center 
+### Create payment requests to be approved by authorized people in a cost center
 
 You can also request payments that must pass through a specific cost center approval flow to be executed.
 In certain structures, this allows double checks for cash-outs and also gives time to load your account
