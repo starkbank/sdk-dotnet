@@ -73,7 +73,10 @@ namespace StarkBank.Utils
 
         internal static object DateToString(DateTime dateTime)
         {
-            return dateTime.ToString("yyyy-MM-dd");
+            if (dateTime == dateTime.Date) {
+                return dateTime.ToString("yyyy-MM-dd");
+            }
+            return dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.ffffffzzz");
         }
 
         internal static Resource FromApiJson(ResourceMaker resourceMaker, dynamic json)
