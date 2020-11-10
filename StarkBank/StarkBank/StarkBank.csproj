@@ -32,6 +32,7 @@
     <Folder Include="Transaction\" />
     <Folder Include="Boleto\" />
     <Folder Include="Invoice\" />
+    <Folder Include="DictKey\" />
     <Folder Include="Transfer\" />
     <Folder Include="Webhook\" />
     <Folder Include="Balance\" />

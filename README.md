@@ -180,6 +180,18 @@ StarkBank.Balance balance = StarkBank.Balance.Get();
 Console.WriteLine(balance);
 ```
 
+### Get dict key
+
+You can get PIX key's parameters by its id.
+
+```c#
+using System;
+
+StarkBank.DictKey dictKey = DictKey.Get("tony@starkbank.com");
+
+Console.WriteLine(dictKey);
+```
+
 ### Create invoices
 
 You can create dynamic QR Code invoices to charge customers or to receive money from accounts
