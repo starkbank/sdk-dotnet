@@ -12,7 +12,7 @@ namespace StarkBankTests
         public readonly User user = TestUser.SetDefault();
 
         [Fact]
-        public void CreateGetGetPdf()
+        public void CreateAndGetPdf()
         {
             List<Invoice> invoices = Invoice.Create(new List<Invoice>() { Example(), Example(), Example() });
             Invoice invoice = invoices.First();

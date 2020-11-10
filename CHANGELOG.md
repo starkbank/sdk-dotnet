@@ -16,6 +16,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ### Added
 - Invoice resource to load your account with dynamic QR Codes
 - DictKey resource to get DICT (PIX) key parameters
+- Deposit resource to receive transfers passively
 
 ## [2.1.0] - 2020-10-28
 ### Added

@@ -280,6 +280,10 @@ namespace StarkBank
             Utils.Resource log = null;
             if (subscription == "transfer") {
                 log = Transfer.Log.ResourceMaker(json.log);
+            } else if (subscription == "invoice") {
+                log = Invoice.Log.ResourceMaker(json.log);
+            } else if (subscription == "deposit") {
+                log = Deposit.Log.ResourceMaker(json.log);
             } else if (subscription == "boleto") {
                 log = Boleto.Log.ResourceMaker(json.log);
             } else if (subscription == "boleto-payment") {

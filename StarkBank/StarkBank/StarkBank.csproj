@@ -42,6 +42,7 @@
     <Folder Include="Settings\" />
     <Folder Include="PaymentRequest\" />
     <Folder Include="BoletoHolmes\" />
+    <Folder Include="Deposit\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

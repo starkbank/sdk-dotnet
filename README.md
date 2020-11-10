@@ -361,6 +361,65 @@ StarkBank.Invoice.Log log = StarkBank.Invoice.Log.Get("4701727546671104");
 Console.WriteLine(log);
 ```
 
+### Query deposits
+
+You can get a list of created deposits given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Deposit> deposits = StarkBank.Deposit.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Deposit deposit in deposits) {
+    Console.WriteLine(deposit);
+}
+```
+
+### Get a deposit
+
+After its creation, information on a deposit may be retrieved by its id. 
+
+```c#
+using System;
+
+StarkBank.Deposit deposit = StarkBank.Deposit.Get("5715709195714560");
+
+Console.WriteLine(deposit);
+```
+
+### Query deposit logs
+
+Logs are pretty important to understand the life cycle of a deposit.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Deposit.Log> logs = StarkBank.Deposit.Log.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Deposit.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get a deposit log
+
+You can get a single log by its id.
+
+```c#
+using System;
+
+StarkBank.Deposit.Log log = StarkBank.Deposit.Log.Get("4701727546671104");
+
+Console.WriteLine(log);
+```
 
 ### Create boletos
 
