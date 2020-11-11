@@ -553,7 +553,7 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
     new List<StarkBank.Transfer> {
         new StarkBank.Transfer(
             amount: 100,  // R$ 1,00
-            bankCode: "033",
+            bankCode: "260",
             branchCode: "0001",
             accountNumber: "10000-0",
             taxID: "012.345.678-90",
@@ -562,12 +562,12 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
         ),
         new StarkBank.Transfer(
             amount: 200,  // R$ 2,00
-            bankCode: "341",
+            bankCode: "20018183",
             branchCode: "1234",
             accountNumber: "123456-7",
             taxID: "012.345.678-90",
             name: "Jon Snow",
-            scheduled: DateTime.Today.Date.AddDays(1)
+            scheduled: DateTime.Now.AddDays(1)
         )
     }
 );

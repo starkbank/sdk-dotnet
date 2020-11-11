@@ -8,9 +8,7 @@ namespace StarkBank
     /// <summary>
     /// Deposit object
     /// <br/>
-    /// When you initialize a Deposit, the entity will not be automatically
-    /// sent to the Stark Bank API. The 'create' function sends the objects
-    /// to the Stark Bank API and returns the list of created objects.
+    /// Deposits represent passive cash-in received by your account from external transfers
     /// <br/>
     /// Properties:
     /// <list>
@@ -39,7 +37,7 @@ namespace StarkBank
         public string BranchCode { get; }
         public string AccountNumber { get; }
         public string Type { get; }
-        public int Fee { get; }
+        public int? Fee { get; }
         public List<string> TransactionIds { get; }
         public string Status { get; }
         public List<string> Tags { get; }
@@ -73,7 +71,7 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public Deposit(string id, long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
-            string type, int fee, List<string> transactionIds, string status, List<string> tags, DateTime created, DateTime updated) : base(id)
+            string type, int? fee, List<string> transactionIds, string status, List<string> tags, DateTime created, DateTime updated) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -209,11 +207,8 @@ namespace StarkBank
             string branchCode = json.branchCode;
             string accountNumber = json.accountNumber;
             string type = json.type;
-            int fee = json.fee;
-            List<string> transactionIds = new List<string>();
-            if (json.transactionIds != null) {
-                transactionIds = json.transactionIds.ToObject<List<string>>();
-            }
+            int? fee = json.fee;
+            List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
             string status = json.status;
             List<string> tags = json.tags.ToObject<List<string>>();
             string createdString = json.created;
