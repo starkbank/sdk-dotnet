@@ -31,6 +31,8 @@
     <Folder Include="User\" />
     <Folder Include="Transaction\" />
     <Folder Include="Boleto\" />
+    <Folder Include="Invoice\" />
+    <Folder Include="DictKey\" />
     <Folder Include="Transfer\" />
     <Folder Include="Webhook\" />
     <Folder Include="Balance\" />
@@ -40,6 +42,9 @@
     <Folder Include="Settings\" />
     <Folder Include="PaymentRequest\" />
     <Folder Include="BoletoHolmes\" />
+    <Folder Include="Deposit\" />
+    <Folder Include="BrcodePayment\" />
+    <Folder Include="BrcodePreview\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

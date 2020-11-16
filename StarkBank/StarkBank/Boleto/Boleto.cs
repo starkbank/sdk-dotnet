@@ -366,6 +366,9 @@ namespace StarkBank
             List<string> tags = json.tags.ToObject<List<string>>();
             List<Dictionary<string, object>> descriptions = json.descriptions.ToObject<List<Dictionary<string, object>>>();
             List<Dictionary<string, object>> discounts = json.discounts.ToObject<List<Dictionary<string, object>>>();
+            foreach(Dictionary<string, object> discount in discounts) {
+                discount["date"] = Utils.Checks.CheckDateTime((string)discount["date"]);
+            }
             string id = json.id;
             int fee = json.fee;
             string line = json.line;

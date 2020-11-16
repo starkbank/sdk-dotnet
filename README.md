@@ -180,6 +180,265 @@ StarkBank.Balance balance = StarkBank.Balance.Get();
 Console.WriteLine(balance);
 ```
 
+### Get dict key
+
+You can get PIX key's parameters by its id.
+
+```c#
+using System;
+
+StarkBank.DictKey dictKey = DictKey.Get("tony@starkbank.com");
+
+Console.WriteLine(dictKey);
+```
+
+### Query your DICT keys
+
+To take a look at the PIX keys linked to your workspace, just run the following:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.DictKey> dictKeys = StarkBank.DictKey.Query(
+    status: "registered",
+    type: "evp"
+);
+
+foreach(StarkBank.DictKey dictKey in dictKeys) {
+    Console.WriteLine(dictKey);
+}
+```
+
+### Create invoices
+
+You can create dynamic QR Code invoices to charge customers or to receive money from accounts
+you have in other banks.
+
+```c#
+# coding: utf-8
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.Invoice> invoices = StarkBank.Invoice.Create(
+    new List<StarkBank.Invoice> {
+        new StarkBank.Invoice(
+            amount: 248,
+            descriptions: new List<Dictionary<string, object>>() {
+                new Dictionary<string, object> {
+                    {"key", "Arya"},
+                    {"value", "Not today"}
+                }
+            },
+            discounts: new List<Dictionary<string, object>>() {
+                new Dictionary<string, object> {
+                    {"percentage", 10},
+                    {"due", new DateTime(2021, 4, 25, 13, 17, 15)}
+                }
+            },
+            due: new DateTime(2021, 5, 25, 13, 17, 15),
+            expiration: 123456789,
+            fine: 2.5,
+            interest: 1.3,
+            name: "Arya Stark",
+            tags: new List<string> { "New sword", "Invoice #1234" },
+            taxID: "29.176.331/0001-69"
+        )
+    }
+);
+
+foreach(StarkBank.Invoice invoice in invoices) {
+    Console.WriteLine(invoice);
+}
+```
+
+**Note**: Instead of using Invoice objects, you can also pass each invoice element in dictionary format
+
+### Get an invoice
+
+After its creation, information on an invoice may be retrieved by its id.
+Its status indicates whether it's been paid.
+
+```c#
+using System;
+
+StarkBank.Invoice invoice = StarkBank.Invoice.Get("5715709195714560");
+
+Console.WriteLine(invoice);
+```
+
+### Get an invoice QRCode
+
+After its creation, an invoice QRCode may be retrieved by its id.
+
+```c#
+using System;
+
+byte[] png = StarkBank.Invoice.Qrcode("5715709195714560");
+
+System.IO.File.WriteAllBytes("qrcode.png", png);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Get an invoice PDF
+
+After its creation, an invoice PDF may be retrieved by its id.
+
+```c#
+using System;
+
+byte[] pdf = StarkBank.Invoice.Pdf("5715709195714560");
+
+System.IO.File.WriteAllBytes("invoice.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Cancel an invoice
+
+You can also cancel an invoice by its id.
+Note that this is not possible if it has been paid already.
+
+```c#
+using System;
+
+StarkBank.Invoice invoice = StarkBank.Invoice.Update(
+    "6312789471657984",
+    status: "canceled"
+);
+
+Console.WriteLine(invoice);
+```
+
+### Update an invoice
+
+You can update an invoice's amount, due date and expiration by its id.
+Note that this is not possible if it has been paid already.
+
+```c#
+using System;
+
+StarkBank.Invoice invoice = StarkBank.Invoice.Update(
+    "6312789471657984",
+    amount: 99999
+);
+
+Console.WriteLine(invoice);
+```
+
+### Query invoices
+
+You can get a list of created invoices given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Invoice> invoices = StarkBank.Invoice.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Invoice invoice in invoices) {
+    Console.WriteLine(invoice);
+}
+```
+
+### Query invoice logs
+
+Logs are pretty important to understand the life cycle of an invoice.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Invoice.Log> logs = StarkBank.Invoice.Log.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Invoice.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get an invoice log
+
+You can get a single log by its id.
+
+```c#
+using System;
+
+StarkBank.Invoice.Log log = StarkBank.Invoice.Log.Get("4701727546671104");
+
+Console.WriteLine(log);
+```
+
+### Query deposits
+
+You can get a list of created deposits given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Deposit> deposits = StarkBank.Deposit.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Deposit deposit in deposits) {
+    Console.WriteLine(deposit);
+}
+```
+
+### Get a deposit
+
+After its creation, information on a deposit may be retrieved by its id. 
+
+```c#
+using System;
+
+StarkBank.Deposit deposit = StarkBank.Deposit.Get("5715709195714560");
+
+Console.WriteLine(deposit);
+```
+
+### Query deposit logs
+
+Logs are pretty important to understand the life cycle of a deposit.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Deposit.Log> logs = StarkBank.Deposit.Log.Query(
+    after: new DateTime(2019, 4, 1),
+    before: new DateTime(2021, 4, 30)
+);
+
+foreach(StarkBank.Deposit.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get a deposit log
+
+You can get a single log by its id.
+
+```c#
+using System;
+
+StarkBank.Deposit.Log log = StarkBank.Deposit.Log.Get("4701727546671104");
+
+Console.WriteLine(log);
+```
+
 ### Create boletos
 
 You can create boletos to charge customers or to receive money from accounts
@@ -302,7 +561,7 @@ Console.WriteLine(log);
 
 ### Create transfers
 
-You can also create transfers in the SDK (TED/DOC).
+You can also create transfers in the SDK (TED/PIX).
 
 ```c#
 using System;
@@ -312,7 +571,7 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
     new List<StarkBank.Transfer> {
         new StarkBank.Transfer(
             amount: 100,  // R$ 1,00
-            bankCode: "033",
+            bankCode: "260",  // TED
             branchCode: "0001",
             accountNumber: "10000-0",
             taxID: "012.345.678-90",
@@ -321,12 +580,12 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
         ),
         new StarkBank.Transfer(
             amount: 200,  // R$ 2,00
-            bankCode: "341",
+            bankCode: "20018183",  // PIX
             branchCode: "1234",
             accountNumber: "123456-7",
             taxID: "012.345.678-90",
             name: "Jon Snow",
-            scheduled: DateTime.Today.Date.AddDays(1)
+            scheduled: DateTime.Now.AddDays(1)
         )
     }
 );
@@ -542,13 +801,147 @@ StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get("5155165527080
 Console.WriteLine(log);
 ```
 
+### Pay a BR Code
+
+Paying a BR Code is also simple. After extracting the BR Code encoded in the PIX QR Code, you can do the following:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.BrcodePayment> payments = StarkBank.BrcodePayment.Create(
+    new List<StarkBank.BrcodePayment> {
+        new StarkBank.BrcodePayment(
+            brcode: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A",
+            taxID: "012.345.678-90",
+            scheduled: DateTime.Today.Date.AddDays(2),
+            description: "this will be fast",
+            tags: new List<string> { "pix", "qrcode" }
+        )
+    }
+);
+
+foreach(StarkBank.BrcodePayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+**Note**: Instead of using BrcodePayment objects, you can also pass each payment element in dictionary format
+
+### Get boleto payment
+
+To get a single boleto payment by its id, run:
+
+```c#
+using System;
+
+StarkBank.BrcodePayment payment = StarkBank.BrcodePayment.Get("19278361897236187236");
+
+Console.WriteLine(payment);
+```
+
+### Get boleto payment PDF
+
+After its creation, a BR Code payment PDF may be retrieved by passing its id.
+
+```c#
+byte[] pdf = StarkBank.BrcodePayment.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("brcode_payment.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Cancel a BR Code payment
+
+You can cancel a BR Code payment by changing its status to "canceled".
+Note that this is not possible if it has been processed already.
+
+```c#
+using System;
+
+StarkBank.BrcodePayment payment = StarkBank.BrcodePayment.Update(
+    "6312789471657984",
+    status: "canceled"
+);
+
+Console.WriteLine(payment);
+```
+
+
+### Query BR Code payments
+
+You can search for BR Code payments using filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BrcodePayment> payments = StarkBank.BrcodePayment.Query(
+    tags: new List<string> { "company_1", "company_2" }
+);
+
+foreach(StarkBank.BrcodePayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+### Query BR Code payment logs
+
+Searches are also possible with boleto payment logs:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BrcodePayment.Log> logs = StarkBank.BrcodePayment.Log.Query(
+    paymentIds: new List<string> { "5155165527080960", "76551659167801921" }
+);
+
+foreach(StarkBank.BrcodePayment.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+
+### Get a BR Code payment log
+
+You can also get a BR Code payment log by specifying its id.
+
+```c#
+using System;
+
+StarkBank.BrcodePayment.Log log = StarkBank.BrcodePayment.Log.Get("5155165527080960");
+
+Console.WriteLine(log);
+```
+
+### Preview a BR Code payment
+
+You can confirm the information on the BR Code payment before creating it with this preview method:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BrcodePreview> previews = StarkBank.BrcodePreview.Query(
+    tags: new List<string> { "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A" }
+);
+
+foreach(StarkBank.BrcodePreview preview in previews) {
+    Console.WriteLine(preview);
+}
+```
+
 ### Investigate a boleto
 
 You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
 This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
 Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
 happens asynchronously and the most common way to retrieve the results is to register a "boleto-holmes" webhook
-subscription, although polling is also possible. 
+subscription, although polling is also possible.
 
 ```c#
 using System;
@@ -587,7 +980,7 @@ Console.WriteLine(sherlock);
 
 ### Query boleto holmes
 
-You can search for boleto Holmes using filters. 
+You can search for boleto Holmes using filters.
 
 ```c#
 using System;
@@ -815,7 +1208,7 @@ StarkBank.Transaction transaction = StarkBank.Transaction.Get("5155165527080960"
 Console.WriteLine(transaction);
 ```
 
-### Create payment requests to be approved by authorized people in a cost center 
+### Create payment requests to be approved by authorized people in a cost center
 
 You can also request payments that must pass through a specific cost center approval flow to be executed.
 In certain structures, this allows double checks for cash-outs and also gives time to load your account

@@ -17,7 +17,7 @@ namespace StarkBankTests
             Settings.Language = "pt-BR";
             List<Transfer.Log> logs = Transfer.Log.Query(
                 limit: 101,
-                before: DateTime.Now,
+                before: DateTime.Now.Date,
                 types: new List<string> { "failed" }
             ).ToList();
             Assert.Equal(101, logs.Count);

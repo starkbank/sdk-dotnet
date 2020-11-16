@@ -72,7 +72,7 @@ namespace StarkBankTests
         {
             DateTime? scheduled = null;
             if (schedule) {
-                scheduled = DateTime.Today.Date.AddDays(1);
+                scheduled = DateTime.Now.AddDays(1);
             }
             return new Transfer(
                 amount: new Random().Next(1, 1000),

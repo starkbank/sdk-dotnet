@@ -66,6 +66,16 @@ namespace StarkBank.Utils
             ).ByteContent;
         }
 
+        static internal byte[] GetQrcode(string resourceName, Api.ResourceMaker resourceMaker, string id, Dictionary<string, object> options = null, User user = null)
+        {
+            return Request.Fetch(
+                user: user,
+                method: Request.Get,
+                path: $"{Api.Endpoint(resourceName)}/{id}/qrcode",
+                query: options
+            ).ByteContent;
+        }
+
         static internal IEnumerable<Resource> Post(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<Resource> entities, User user)
         {
             List<Dictionary<string, object>> jsons = new List<Dictionary<string, object>>();
