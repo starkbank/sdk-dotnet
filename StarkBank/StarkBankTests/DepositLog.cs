@@ -27,7 +27,7 @@ namespace StarkBankTests
                 Assert.NotNull(log.ID);
                 Assert.Equal("created", log.Type);
             }
-            Invoice.Log getLog = Invoice.Log.Get(id: logs.First().ID);
+            Deposit.Log getLog = Deposit.Log.Get(id: logs.First().ID);
             Assert.Equal(getLog.ID, logs.First().ID);
             TestUtils.Log(getLog);
         }

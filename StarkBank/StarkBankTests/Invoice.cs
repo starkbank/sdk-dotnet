@@ -67,7 +67,7 @@ namespace StarkBankTests
                 Assert.NotNull(invoice.ID);
                 Assert.Equal(expected, invoice.Status);
                 Invoice updatedInvoice = Invoice.Update(id: invoice.ID, due: expectedDue, expiration: expectedExpiration, amount: expectedAmount);
-                Assert.Equal(expectedDue, updatedInvoice.Due);
+                Assert.Equal(expectedDue.Day, ((DateTime)updatedInvoice.Due).Day);
                 Assert.Equal(expectedExpiration, updatedInvoice.Expiration);
                 Assert.Equal(expectedAmount, updatedInvoice.Amount);
             }
