@@ -284,6 +284,8 @@ namespace StarkBank
                 log = Invoice.Log.ResourceMaker(json.log);
             } else if (subscription == "deposit") {
                 log = Deposit.Log.ResourceMaker(json.log);
+            } else if (subscription == "brcode-payment") {
+                log = BrcodePayment.Log.ResourceMaker(json.log);
             } else if (subscription == "boleto") {
                 log = Boleto.Log.ResourceMaker(json.log);
             } else if (subscription == "boleto-payment") {

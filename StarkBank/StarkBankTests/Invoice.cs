@@ -22,11 +22,11 @@ namespace StarkBankTests
             Assert.Equal(getInvoice.ID, invoice.ID);
             byte[] png = Invoice.Qrcode(id: invoice.ID, size: 30);
             Assert.True(png.Length > 0);
-            System.IO.File.WriteAllBytes("qrcode.pdf", png);
+            System.IO.File.WriteAllBytes("qrcode.png", png);
         }
 
         [Fact]
-        public void CreateAndDelete()
+        public void CreateAndCancel()
         {
             List<Invoice> invoices = Invoice.Create(new List<Invoice>() { Example() });
             Invoice invoice = invoices.First();

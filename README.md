@@ -265,7 +265,7 @@ Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
 
-### Get an invoice PDF (COMING SOON)
+### Get an invoice PDF
 
 After its creation, an invoice PDF may be retrieved by its id.
 
@@ -289,12 +289,12 @@ Note that this is not possible if it has been paid already.
 ```c#
 using System;
 
-StarkBank.Invoice invoiceObject = StarkBank.Invoice.Update(
+StarkBank.Invoice invoice = StarkBank.Invoice.Update(
     "6312789471657984",
     status: "canceled"
 );
 
-Console.WriteLine(invoiceObject);
+Console.WriteLine(invoice);
 ```
 
 ### Update an invoice
@@ -543,7 +543,7 @@ Console.WriteLine(log);
 
 ### Create transfers
 
-You can also create transfers in the SDK (TED/DOC).
+You can also create transfers in the SDK (TED/PIX).
 
 ```c#
 using System;
@@ -553,7 +553,7 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
     new List<StarkBank.Transfer> {
         new StarkBank.Transfer(
             amount: 100,  // R$ 1,00
-            bankCode: "260",
+            bankCode: "260",  // TED
             branchCode: "0001",
             accountNumber: "10000-0",
             taxID: "012.345.678-90",
@@ -562,7 +562,7 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
         ),
         new StarkBank.Transfer(
             amount: 200,  // R$ 2,00
-            bankCode: "20018183",
+            bankCode: "20018183",  // PIX
             branchCode: "1234",
             accountNumber: "123456-7",
             taxID: "012.345.678-90",
@@ -779,6 +779,123 @@ You can also get a boleto payment log by specifying its id.
 using System;
 
 StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get("5155165527080960");
+
+Console.WriteLine(log);
+```
+
+### Pay a BR Code
+
+Paying a BR Code is also simple. After extracting the BR Code encoded in the PIX QR Code, you can do the following:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.BrcodePayment> payments = StarkBank.BrcodePayment.Create(
+    new List<StarkBank.BrcodePayment> {
+        new StarkBank.BrcodePayment(
+            brcode: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A",
+            taxID: "012.345.678-90",
+            scheduled: DateTime.Today.Date.AddDays(2),
+            description: "this will be fast",
+            tags: new List<string> { "pix", "qrcode" }
+        )
+    }
+);
+
+foreach(StarkBank.BrcodePayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+**Note**: Instead of using BrcodePayment objects, you can also pass each payment element in dictionary format
+
+### Get boleto payment
+
+To get a single boleto payment by its id, run:
+
+```c#
+using System;
+
+StarkBank.BrcodePayment payment = StarkBank.BrcodePayment.Get("19278361897236187236");
+
+Console.WriteLine(payment);
+```
+
+### Get boleto payment PDF
+
+After its creation, a BR Code payment PDF may be retrieved by passing its id.
+
+```c#
+byte[] pdf = StarkBank.BrcodePayment.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("brcode_payment.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Cancel a BR Code payment
+
+You can cancel a BR Code payment by changing its status to "canceled".
+Note that this is not possible if it has been processed already.
+
+```c#
+using System;
+
+StarkBank.BrcodePayment payment = StarkBank.BrcodePayment.Update(
+    "6312789471657984",
+    status: "canceled"
+);
+
+Console.WriteLine(payment);
+```
+
+
+### Query BR Code payments
+
+You can search for BR Code payments using filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BrcodePayment> payments = StarkBank.BrcodePayment.Query(
+    tags: new List<string> { "company_1", "company_2" }
+);
+
+foreach(StarkBank.BrcodePayment payment in payments) {
+    Console.WriteLine(payment);
+}
+```
+
+### Query BR Code payment logs
+
+Searches are also possible with boleto payment logs:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BrcodePayment.Log> logs = StarkBank.BrcodePayment.Log.Query(
+    paymentIds: new List<string> { "5155165527080960", "76551659167801921" }
+);
+
+foreach(StarkBank.BrcodePayment.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+
+### Get a BR Code payment log
+
+You can also get a BR Code payment log by specifying its id.
+
+```c#
+using System;
+
+StarkBank.BrcodePayment.Log log = StarkBank.BrcodePayment.Log.Get("5155165527080960");
 
 Console.WriteLine(log);
 ```

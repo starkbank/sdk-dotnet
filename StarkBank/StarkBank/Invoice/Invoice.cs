@@ -30,6 +30,7 @@ namespace StarkBank
     ///     <item>InterestAmount [long integer, default null]: Invoice interest value calculated over NominalAmount. ex: 10000</item>
     ///     <item>DiscountAmount [long integer, default null]: Invoice discount value calculated over NominalAmount. ex: 3000</item>
     ///     <item>Brcode [string, default null]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
+    ///     <item>Fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
     ///     <item>Status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
     ///     <item>Created [DateTime, default null]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     ///     <item>Updated [DateTime, default null]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
@@ -52,6 +53,7 @@ namespace StarkBank
         public long? InterestAmount { get; }
         public long? DiscountAmount { get; }
         public string Brcode { get; }
+        public int? Fee { get; }
         public string Status { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
@@ -89,6 +91,7 @@ namespace StarkBank
         ///     <item>discountAmount [long integer, default null]: Invoice discount value calculated over nominalAmount. ex: 3000</item>
         ///     <item>id [string, default null]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
         ///     <item>brcode [string, default null]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
+        ///     <item>fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
         ///     <item>status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
         ///     <item>created [DateTime, default null]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         ///     <item>updated [DateTime, default null]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
@@ -97,7 +100,7 @@ namespace StarkBank
         public Invoice(long amount, string name, string taxID, DateTime? due, long? expiration = null, double? fine = null, double? interest = null,
             List<string> tags = null, List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null,
             long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null,
-            string id = null, string brcode = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
+            string id = null, string brcode = null, int? fee = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -114,6 +117,7 @@ namespace StarkBank
             InterestAmount = interestAmount;
             DiscountAmount = discountAmount;
             Brcode = brcode;
+            Fee = fee;
             Status = status;
             Created = created;
             Updated = updated;
@@ -213,6 +217,37 @@ namespace StarkBank
         }
 
         /// <summary>
+        /// Retrieve a specific Invoice pdf file
+        /// <br/>
+        /// Receive a single Invoice pdf receipt file generated in the Stark Bank API by passing its id.
+        /// <br/>
+        /// Parameters (required):
+        /// <list>
+        ///     <item>id [string]: object unique id. ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>user [Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>Invoice pdf file</item>
+        /// </list>
+        /// </summary>
+        public static byte[] Pdf(string id, User user = null)
+        {
+        (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+        return Utils.Rest.GetPdf(
+            resourceName: resourceName,
+            resourceMaker: resourceMaker,
+            id: id,
+            user: user
+        );
+        }
+
+        /// <summary>
         /// Retrieve Invoices
         /// <br/>
         /// Receive an IEnumerable of Invoice objects previously created in the Stark Bank API
@@ -264,8 +299,8 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>status [string]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
-        ///     <item>amount [long integer]: Nominal amount charge by the invoice. ex: 100 (R$1.00)</item>
+        ///     <item>status [string]: you may cancel the Invoice by passing "canceled" in the status. ex: "canceled"</item>
+        ///     <item>amount [long integer]: nominal amount charged by the Invoice. ex: 100 (R$1.00)</item>
         ///     <item>due [DateTime, default today + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 12, 15)</item>
         ///     <item>expiration [long integer, default null]: time interval in seconds between the due date and the expiration date. ex 123456789</item>
         ///     <item>user [Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
@@ -357,6 +392,7 @@ namespace StarkBank
             long? discountAmount = json.discountAmount;
             string id = json.id;
             string brcode = json.brcode;
+            int fee = json.fee;
             string status = json.status;
             string createdString = json.created;
             string updatedString = json.updated;
@@ -367,7 +403,7 @@ namespace StarkBank
                 amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine,
                 interest: interest, tags: tags, descriptions: descriptions, discounts: discounts, nominalAmount: nominalAmount,
                 fineAmount: fineAmount, interestAmount: interestAmount, discountAmount: discountAmount,
-                id: id, brcode: brcode, status: status, created: created, updated: updated
+                id: id, brcode: brcode, fee: fee, status: status, created: created, updated: updated
             );
         }
     }
