@@ -828,9 +828,9 @@ foreach(StarkBank.BrcodePayment payment in payments) {
 
 **Note**: Instead of using BrcodePayment objects, you can also pass each payment element in dictionary format
 
-### Get boleto payment
+### Get BR Code payment
 
-To get a single boleto payment by its id, run:
+To get a single BR Code payment by its id, run:
 
 ```c#
 using System;
@@ -840,7 +840,7 @@ StarkBank.BrcodePayment payment = StarkBank.BrcodePayment.Get("19278361897236187
 Console.WriteLine(payment);
 ```
 
-### Get boleto payment PDF
+### Get BR Code payment PDF
 
 After its creation, a BR Code payment PDF may be retrieved by passing its id.
 
@@ -890,7 +890,7 @@ foreach(StarkBank.BrcodePayment payment in payments) {
 
 ### Query BR Code payment logs
 
-Searches are also possible with boleto payment logs:
+Searches are also possible with BR Code payment logs:
 
 ```c#
 using System;
