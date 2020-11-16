@@ -20,7 +20,7 @@ namespace StarkBank
         ///     <item>ID [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
         ///     <item>Deposit [Deposit]: Deposit entity to which the log refers to.</item>
         ///     <item>Errors [list of strings]: list of errors linked to this Deposit event</item>
-        ///     <item>Type [string]: type of the Deposit event which triggered the log creation. ex: "created", "paid", "canceled" or "overdue"</item>
+        ///     <item>Type [string]: type of the Deposit event which triggered the log creation. ex: "created" e "credited"</item>
         ///     <item>Created [DateTime]: creation datetime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
@@ -44,7 +44,7 @@ namespace StarkBank
             ///     <item>id [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
             ///     <item>deposit [Deposit]: Deposit entity to which the log refers to.</item>
             ///     <item>errors [list of strings]: list of errors linked to this Deposit event</item>
-            ///     <item>type [string]: type of the Deposit event which triggered the log creation. ex: "created", "paid", "canceled" or "overdue"</item>
+            ///     <item>type [string]: type of the Deposit event which triggered the log creation. ex: "created" e "credited"</item>
             ///     <item>created [DateTime]: creation datetime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
             /// </list>
             /// </summary>
@@ -97,7 +97,7 @@ namespace StarkBank
             ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
             ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
-            ///     <item>types [list of strings, default null]: filter for log event types. ex: "created", "paid", "canceled" or "overdue"</item>
+            ///     <item>types [list of strings, default null]: filter for log event types. ex: "created" e "credited"</item>
             ///     <item>depositIds [list of strings, default null]: list of Deposit ids to filter logs. ex: ["5656565656565656", "4545454545454545"]</item>
             ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
             /// </list>

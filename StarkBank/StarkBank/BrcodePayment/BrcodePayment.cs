@@ -17,7 +17,7 @@ namespace StarkBank
     ///     <item>Brcode [string]: : String loaded directly from the QRCode or copied from the invoice.ex: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"</item>
     ///     <item>TaxID [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
-    ///     <item>Amount [long integer]: If the BRCode does not provide an amount, this parameter is mandatory, else it is optional, but if informed must be a match. ex: 23456 (= R$ 234.56)</item>
+    ///     <item>Amount [long integer]: If the barcode does not provide an amount, this parameter is mandatory, else it is optional, but when it is informed, it must be a match. ex: 23456 (= R$ 234.56)</item>
     ///     <item>Scheduled [DateTime]: payment scheduled datetime. ex: new DateTime(2020, 3, 10)</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
@@ -260,7 +260,7 @@ namespace StarkBank
         ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
-        ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid"</item>
+        ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "success" ou "failed"</item>
         ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
         /// <br/>
