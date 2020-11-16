@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -109,7 +112,47 @@ namespace StarkBank
 				user: user
 			) as DictKey;
 		}
-		
+
+		/// <summary>
+		/// Retrieve DictKeys
+		/// <br/>
+		/// Receive an IEnumerable of DictKey objects associated with your Stark Bank Workspace
+		/// <br/>
+		/// Parameters (optional):
+		/// <list>
+		///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+		///     <item>type [string, default null]: DictKey type.ex: "cpf", "cnpj", "phone", "email" or "evp"<item>
+		///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+		///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+		///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+		///     <item>status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"</item>
+		///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+		/// </list>
+		/// <br/>
+		/// Return:
+		/// <list>
+		///     <item>IEnumerable of DictKey objects with updated attributes</item>
+		/// </list>
+		/// </summary>
+		public static IEnumerable<DictKey> Query(int? limit = null, string type = null, DateTime? after = null,
+			DateTime? before = null, List<string> ids = null, string status = null, User user = null)
+		{
+			(string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+			return Utils.Rest.GetList(
+				resourceName: resourceName,
+				resourceMaker: resourceMaker,
+				query: new Dictionary<string, object> {
+					{ "limit", limit },
+					{ "type", type },
+					{ "after", after },
+					{ "before", before },
+					{ "ids", ids },
+					{ "status", status }
+				},
+				user: user
+			).Cast<DictKey>();
+		}
+
 		internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "DictKey", resourceMaker: ResourceMaker);

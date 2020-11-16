@@ -21,7 +21,7 @@ namespace StarkBankTests
             Assert.True(logs.First().ID != logs.Last().ID);
             foreach (BoletoHolmes.Log log in logs)
             {
-                Console.WriteLine(log);
+                TestUtils.Log(log);
                 Assert.NotNull(log.ID);
                 Assert.Equal("solved", log.Type);
             }

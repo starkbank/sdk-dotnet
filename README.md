@@ -192,6 +192,24 @@ StarkBank.DictKey dictKey = DictKey.Get("tony@starkbank.com");
 Console.WriteLine(dictKey);
 ```
 
+### Query your DICT keys
+
+To take a look at the PIX keys linked to your workspace, just run the following:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.DictKey> dictKeys = StarkBank.DictKey.Query(
+    status: "registered",
+    type: "evp"
+);
+
+foreach(StarkBank.DictKey dictKey in dictKeys) {
+    Console.WriteLine(dictKey);
+}
+```
+
 ### Create invoices
 
 You can create dynamic QR Code invoices to charge customers or to receive money from accounts

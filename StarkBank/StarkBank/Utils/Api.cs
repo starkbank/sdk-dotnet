@@ -96,7 +96,7 @@ namespace StarkBank.Utils
             if (lastName.EndsWith("s")) {
                 return lastName;
             }
-            if (lastName.EndsWith("y"))
+            if (lastName.EndsWith("y") && !lastName.EndsWith("ey"))
             {
                 return $"{lastName.Remove(lastName.Length - 1)}ies";
             }

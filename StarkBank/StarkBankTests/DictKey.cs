@@ -1,5 +1,7 @@
 using Xunit;
 using StarkBank;
+using System.Linq;
+using System.Collections.Generic;
 
 
 namespace StarkBankTests
@@ -16,6 +18,19 @@ namespace StarkBankTests
             Assert.NotNull(dictKey);
             Assert.Equal(dictKey.ID, pixKey);
             TestUtils.Log(dictKey);
+        }
+
+        [Fact]
+        public void Query()
+        {
+            List<DictKey> dictKeys = DictKey.Query(limit: 1, status: "registered", type: "evp").ToList();
+            Assert.Single(dictKeys);
+            foreach (DictKey dictKey in dictKeys)
+            {
+                TestUtils.Log(dictKey);
+                Assert.NotNull(dictKey.ID);
+                TestUtils.Log(dictKey);
+            }
         }
     }
 }
