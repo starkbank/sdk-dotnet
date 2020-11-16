@@ -44,6 +44,7 @@
     <Folder Include="BoletoHolmes\" />
     <Folder Include="Deposit\" />
     <Folder Include="BrcodePayment\" />
+    <Folder Include="BrcodePreview\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

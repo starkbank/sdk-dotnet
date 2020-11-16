@@ -900,6 +900,23 @@ StarkBank.BrcodePayment.Log log = StarkBank.BrcodePayment.Log.Get("5155165527080
 Console.WriteLine(log);
 ```
 
+### Preview a BR Code payment
+
+You can confirm the information on the BR Code payment before creating it with this preview method:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.BrcodePreview> previews = StarkBank.BrcodePreview.Query(
+    tags: new List<string> { "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A" }
+);
+
+foreach(StarkBank.BrcodePreview preview in previews) {
+    Console.WriteLine(preview);
+}
+```
+
 ### Investigate a boleto
 
 You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
