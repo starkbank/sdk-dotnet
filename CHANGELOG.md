@@ -13,7 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
-## [2.2.1] - 2020-11-16
+### Fixed
+- DateTime string timezone bug in some environments
+
+## [2.2.1] - 2020-11-17
 ### Fixed
 - Invoice optional due parameter
 
