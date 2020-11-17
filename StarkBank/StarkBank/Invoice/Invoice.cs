@@ -17,7 +17,7 @@ namespace StarkBank
     ///     <item>ID [string, default null]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
     ///     <item>Name [string]: payer name. ex: "Iron Bank S.A."</item>
     ///     <item>TaxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
-    ///     <item>Due [DateTime, default today + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 12, 15)</item>
+    ///     <item>Due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 12, 15)</item>
     ///     <item>Expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
     ///     <item>Fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
@@ -74,7 +74,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>due [DateTime, default today + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         ///     <item>expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
         ///     <item>fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
         ///     <item>interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
@@ -97,7 +97,7 @@ namespace StarkBank
         ///     <item>updated [DateTime, default null]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public Invoice(long amount, string name, string taxID, DateTime? due, long? expiration = null, double? fine = null, double? interest = null,
+        public Invoice(long amount, string name, string taxID, DateTime? due = null, long? expiration = null, double? fine = null, double? interest = null,
             List<string> tags = null, List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null,
             long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null,
             string id = null, string brcode = null, int? fee = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)

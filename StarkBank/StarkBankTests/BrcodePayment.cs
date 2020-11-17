@@ -58,7 +58,7 @@ namespace StarkBankTests
                 brcode: invoice.Brcode,
                 scheduled: scheduled,
                 description: "loading a random account",
-                taxID: invoice.TaxID
+                taxID: "20.018.183/0001-80"
             );
         }
     }
