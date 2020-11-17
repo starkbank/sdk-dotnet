@@ -32,30 +32,30 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ### 1. Install our SDK
 
-StarkBank`s .NET SDK is available on NuGet as starkbank 2.2.1.
+StarkBank`s .NET SDK is available on NuGet as starkbank 2.2.2.
 
 1.1 To install the Package Manager:
 
 ```sh
-Install-Package starkbank -Version 2.2.1
+Install-Package starkbank -Version 2.2.2
 ```
 
 1.2 To install the .NET CLI:
 
 ```sh
-dotnet add package starkbank --version 2.2.1
+dotnet add package starkbank --version 2.2.2
 ```
 
 1.3 To install by PackageReference:
 
 ```sh
-<PackageReference Include="starkbank" Version="2.2.1" />
+<PackageReference Include="starkbank" Version="2.2.2" />
 ```
 
 1.4 To install with Paket CLI:
 
 ```sh
-paket add starkbank --version 2.2.1
+paket add starkbank --version 2.2.2
 ```
 
 ### 2. Create your Private and Public Keys

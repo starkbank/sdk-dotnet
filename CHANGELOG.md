@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.2.2] - 2020-11-17
 ### Fixed
 - DateTime string timezone bug in some environments
 
