@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+## [2.2.1] - 2020-11-16
+### Fixed
+- Invoice optional due parameter
 
 ## [2.2.0] - 2020-11-16
 ### Added
