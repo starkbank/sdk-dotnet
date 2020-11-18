@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.2.3] - 2020-11-18
 ### Fixes
 - Fixed bad midnight DateTime string conversions
 
