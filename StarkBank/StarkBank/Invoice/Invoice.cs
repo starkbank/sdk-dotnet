@@ -123,6 +123,13 @@ namespace StarkBank
             Updated = updated;
         }
 
+        internal new Dictionary<string, object> ToJson()
+        {
+            Dictionary<string, object> json = base.ToJson();
+            json["Due"] = new Utils.StarkBankDateTime((DateTime) json["Due"]);
+            return json;
+        }
+
         /// <summary>
         /// Create Invoices
         /// <br/>
@@ -277,8 +284,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", after },
-                    { "before", before },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -322,7 +329,7 @@ namespace StarkBank
                     { "amount", amount },
                     { "expiration", expiration },
                     { "status", status },
-                    { "due", due },
+                    { "due", new Utils.StarkBankDateTime(due) },
                 },
                 user: user
             ) as Invoice;

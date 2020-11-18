@@ -289,8 +289,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", after },
-                    { "before", before },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
                     { "transactionIds", transactionIds },
                     { "status", status },
                     { "taxID", taxID },
