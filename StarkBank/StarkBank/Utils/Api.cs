@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,9 +12,7 @@ namespace StarkBank.Utils
 
         internal static Dictionary<string, object> ApiJson(Resource entity)
         {
-            return CastJsonToApiFormat(entity.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(entity)));
+            return CastJsonToApiFormat(entity.ToJson());
         }
 
         internal static Dictionary<string, object> ApiJson(Dictionary<string, object> entity)
@@ -40,10 +37,17 @@ namespace StarkBank.Utils
                 }
 
                 dynamic value = entry.Value;
-                if (value is DateTime)
-                {
+                if (value is DateTime) {
                     DateTime data = value;
                     value = DateToString(data);
+                }
+                if (value is StarkBankDateTime) {
+                    StarkBankDateTime data = value;
+                    value = StarkBankDateTimeToString(data);
+                }
+                if (value is StarkBankDate) {
+                    StarkBankDate data = value;
+                    value = StarkBankDateToString(data);
                 }
                 if (value is IList) {
                     bool nested = false;
@@ -74,9 +78,19 @@ namespace StarkBank.Utils
         internal static object DateToString(DateTime dateTime)
         {
             if (dateTime == dateTime.Date) {
-                return dateTime.ToString("yyyy-MM-dd");
+                return new StarkBankDate(dateTime).ToString();
             }
-            return dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.ffffff") + "+00:00";
+            return new StarkBankDateTime(dateTime).ToString();
+        }
+
+        internal static object StarkBankDateToString(StarkBankDate starkBankDate)
+        {
+            return starkBankDate.ToString();
+        }
+
+        internal static object StarkBankDateTimeToString(StarkBankDateTime starkBankDateTime)
+        {
+            return starkBankDateTime.ToString();
         }
 
         internal static Resource FromApiJson(ResourceMaker resourceMaker, dynamic json)

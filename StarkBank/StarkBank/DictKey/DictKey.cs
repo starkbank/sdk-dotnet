@@ -144,8 +144,8 @@ namespace StarkBank
 				query: new Dictionary<string, object> {
 					{ "limit", limit },
 					{ "type", type },
-					{ "after", after },
-					{ "before", before },
+					{ "after", new Utils.StarkBankDate(after) },
+					{ "before", new Utils.StarkBankDate(before) },
 					{ "ids", ids },
 					{ "status", status }
 				},

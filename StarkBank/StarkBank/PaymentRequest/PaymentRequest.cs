@@ -114,6 +114,13 @@ namespace StarkBank
             throw new Exception("if no type is specified, payment must be either a Transfer, a Transaction, a BoletoPayment or a UtilityPayment");
         }
 
+        internal new Dictionary<string, object> ToJson()
+        {
+            Dictionary<string, object> json = base.ToJson();
+            json["Due"] = new Utils.StarkBankDate((DateTime)json["Due"]);
+            return json;
+        }
+
         /// <summary>
         /// Create PaymentRequests
         /// <br/>
@@ -181,8 +188,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "centerID", centerID },
                     { "limit", limit },
-                    { "after", after },
-                    { "before", before },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
                     { "status", status },
                     { "type", type },
                     { "sort", sort },

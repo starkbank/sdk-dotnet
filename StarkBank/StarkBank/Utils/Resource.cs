@@ -15,6 +15,13 @@ namespace StarkBank.Utils
             ID = id;
         }
 
+        internal Dictionary<string, object> ToJson()
+        {
+            return GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(this));
+        }
+
         public override string ToString()
         {
             Dictionary<string, object> dict = GetType()

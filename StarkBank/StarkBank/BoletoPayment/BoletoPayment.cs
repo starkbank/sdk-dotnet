@@ -90,6 +90,13 @@ namespace StarkBank
             Created = created;
         }
 
+        internal new Dictionary<string, object> ToJson()
+        {
+            Dictionary<string, object> json = base.ToJson();
+            json["Scheduled"] = new Utils.StarkBankDate((DateTime)json["Scheduled"]);
+            return json;
+        }
+
         /// <summary>
         /// Create BoletoPayments
         /// <br/>
@@ -245,8 +252,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", after },
-                    { "before", before },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status }
