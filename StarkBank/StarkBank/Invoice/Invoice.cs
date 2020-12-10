@@ -29,6 +29,7 @@ namespace StarkBank
     ///     <item>FineAmount [long integer, default null]: Invoice fine value calculated over NominalAmount. ex: 20000</item>
     ///     <item>InterestAmount [long integer, default null]: Invoice interest value calculated over NominalAmount. ex: 10000</item>
     ///     <item>DiscountAmount [long integer, default null]: Invoice discount value calculated over NominalAmount. ex: 3000</item>
+    ///     <item>Pdf [string, default null]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
     ///     <item>Brcode [string, default null]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
     ///     <item>Fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
     ///     <item>Status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
@@ -52,6 +53,7 @@ namespace StarkBank
         public long? FineAmount { get; }
         public long? InterestAmount { get; }
         public long? DiscountAmount { get; }
+        public string Pdf { get; }
         public string Brcode { get; }
         public int? Fee { get; }
         public string Status { get; }
@@ -90,6 +92,7 @@ namespace StarkBank
         ///     <item>interestAmount [long integer, default null]: Invoice interest value calculated over nominalAmount. ex: 10000</item>
         ///     <item>discountAmount [long integer, default null]: Invoice discount value calculated over nominalAmount. ex: 3000</item>
         ///     <item>id [string, default null]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
+        ///     <item>pdf [string, default null]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
         ///     <item>brcode [string, default null]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
         ///     <item>fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
         ///     <item>status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
@@ -100,7 +103,7 @@ namespace StarkBank
         public Invoice(long amount, string name, string taxID, DateTime? due = null, long? expiration = null, double? fine = null, double? interest = null,
             List<string> tags = null, List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null,
             long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null,
-            string id = null, string brcode = null, int? fee = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
+            string id = null, string pdf = null, string brcode = null, int? fee = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -116,6 +119,7 @@ namespace StarkBank
             FineAmount = fineAmount;
             InterestAmount = interestAmount;
             DiscountAmount = discountAmount;
+            Pdf = pdf;
             Brcode = brcode;
             Fee = fee;
             Status = status;
@@ -243,7 +247,7 @@ namespace StarkBank
         ///     <item>Invoice pdf file</item>
         /// </list>
         /// </summary>
-        public static byte[] Pdf(string id, User user = null)
+        public static byte[] PdfFile(string id, User user = null)
         {
         (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
         return Utils.Rest.GetPdf(
@@ -353,7 +357,7 @@ namespace StarkBank
         /// <br/>
         /// Return:
         /// <list>
-        ///     <item>Boleto pdf file</item>
+        ///     <item>QR code png file</item>
         /// </list>
         /// </summary>
         public static byte[] Qrcode(string id, int? size = null, User user = null)
@@ -398,6 +402,7 @@ namespace StarkBank
             long? interestAmount = json.interestAmount;
             long? discountAmount = json.discountAmount;
             string id = json.id;
+            string pdf = json.pdf;
             string brcode = json.brcode;
             int fee = json.fee;
             string status = json.status;
@@ -410,7 +415,7 @@ namespace StarkBank
                 amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine,
                 interest: interest, tags: tags, descriptions: descriptions, discounts: discounts, nominalAmount: nominalAmount,
                 fineAmount: fineAmount, interestAmount: interestAmount, discountAmount: discountAmount,
-                id: id, brcode: brcode, fee: fee, status: status, created: created, updated: updated
+                id: id, pdf: pdf, brcode: brcode, fee: fee, status: status, created: created, updated: updated
             );
         }
     }
