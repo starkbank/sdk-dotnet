@@ -168,6 +168,72 @@ for the value to be credited to your account.
 Here are a few examples on how to use the SDK. If you have any doubts, check out
 the function or class docstring to get more info or go straight to our [API docs].
 
+### Create transactions
+
+To send money between Stark Bank accounts, you can create transactions:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.Transaction> transactions = StarkBank.Transaction.Create(
+    new List<StarkBank.Transaction> {
+        new StarkBank.Transaction(
+            amount: 100,  // (R$ 1.00)
+            receiverID: "1029378109327810",
+            description: "Transaction to dear provider",
+            externalID: "12345",  // so we can block anything you send twice by mistake
+            tags: new List<string> { "provider" }
+        ),
+        new StarkBank.Transaction(
+            amount: 234,  // (R$ 2.34)
+            receiverID: "2093029347820947",
+            description: "Transaction to the other provider",
+            externalID: "12346",  // so we can block anything you send twice by mistake
+            tags: new List<string> { "provider" }
+        )
+    }
+);
+
+foreach(StarkBank.Transaction transaction in transactions) {
+    Console.WriteLine(transaction);
+}
+```
+
+**Note**: Instead of using Transaction objects, you can also pass each transaction element in dictionary format
+
+### Query transactions
+
+To understand your balance changes (bank statement), you can query
+transactions. Note that our system creates transactions for you when
+you receive boleto payments, pay a bill or make transfers, for example.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Transaction> transactions = StarkBank.Transaction.Query(
+    after: DateTime.Today.Date.AddDays(-10),
+    before: DateTime.Today.Date.AddDays(-1)
+);
+
+foreach(StarkBank.Transaction transaction in transactions) {
+    Console.WriteLine(transaction);
+}
+```
+
+### Get transaction
+
+You can get a specific transaction by its id:
+
+```c#
+using System;
+
+StarkBank.Transaction transaction = StarkBank.Transaction.Get("5155165527080960");
+
+Console.WriteLine(transaction);
+```
+
 ### Get balance
 
 To know how much money you have in your workspace, run:
@@ -180,34 +246,126 @@ StarkBank.Balance balance = StarkBank.Balance.Get();
 Console.WriteLine(balance);
 ```
 
-### Get dict key
+### Create transfers
 
-You can get PIX key's parameters by its id.
-
-```c#
-using System;
-
-StarkBank.DictKey dictKey = DictKey.Get("tony@starkbank.com");
-
-Console.WriteLine(dictKey);
-```
-
-### Query your DICT keys
-
-To take a look at the PIX keys linked to your workspace, just run the following:
+You can also create transfers in the SDK (TED/PIX).
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-IEnumerable<StarkBank.DictKey> dictKeys = StarkBank.DictKey.Query(
-    status: "registered",
-    type: "evp"
+List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
+    new List<StarkBank.Transfer> {
+        new StarkBank.Transfer(
+            amount: 100,  // R$ 1,00
+            bankCode: "260",  // TED
+            branchCode: "0001",
+            accountNumber: "10000-0",
+            taxID: "012.345.678-90",
+            name: "Tony Stark",
+            tags: new List<string> { "iron", "suit" }
+        ),
+        new StarkBank.Transfer(
+            amount: 200,  // R$ 2,00
+            bankCode: "20018183",  // PIX
+            branchCode: "1234",
+            accountNumber: "123456-7",
+            taxID: "012.345.678-90",
+            name: "Jon Snow",
+            scheduled: DateTime.Now.AddDays(1)
+        )
+    }
 );
 
-foreach(StarkBank.DictKey dictKey in dictKeys) {
-    Console.WriteLine(dictKey);
+foreach(StarkBank.Transfer transfer in transfers) {
+    Console.WriteLine(transfer);
 }
+```
+
+**Note**: Instead of using Transfer objects, you can also pass each transfer element in dictionary format
+
+### Query transfers
+
+You can query multiple transfers according to filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Transfer> transfers = StarkBank.Transfer.Query(
+    after: DateTime.Today.Date.AddDays(-10),
+    before: DateTime.Today.Date.AddDays(-1)
+);
+
+foreach(StarkBank.Transfer transfer in transfers) {
+    Console.WriteLine(transfer.Name);
+}
+```
+
+### Get transfer
+
+To get a single transfer by its id, run:
+
+```c#
+using System;
+
+StarkBank.Transfer transfer = StarkBank.Transfer.Get("5155165527080960");
+
+Console.WriteLine(transfer);
+```
+
+### Cancel a scheduled transfer
+
+To cancel a single scheduled transfer by its id, run:
+
+```c#
+using System;
+
+StarkBank.Transfer transfer = StarkBank.Transfer.Delete("5155165527080960");
+
+Console.WriteLine(transfer);
+```
+
+### Get transfer PDF
+
+A transfer PDF may also be retrieved by passing its id.
+This operation is only valid if the transfer status is "processing" or "success".
+
+```c#
+byte[] pdf = StarkBank.Transfer.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("transfer.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Query transfer logs
+
+You can query transfer logs to better understand transfer life cycles.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Transfer.Log> logs = StarkBank.Transfer.Log.Query(limit: 50);
+
+foreach(StarkBank.Transfer.Log log in logs) {
+    Console.WriteLine(log);
+}
+```
+
+### Get a transfer log
+
+You can also get a specific log by its id.
+
+```c#
+using System;
+
+StarkBank.Transfer.Log log = StarkBank.Transfer.Log.Get("5155165527080960");
+
+Console.WriteLine(log);
 ```
 
 ### Create invoices
@@ -559,246 +717,110 @@ StarkBank.Boleto.Log log = StarkBank.Boleto.Log.Get("5155165527080960");
 Console.WriteLine(log);
 ```
 
-### Create transfers
+### Investigate a boleto
 
-You can also create transfers in the SDK (TED/PIX).
+You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
+This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
+Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
+happens asynchronously and the most common way to retrieve the results is to register a "boleto-holmes" webhook
+subscription, although polling is also possible.
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
-    new List<StarkBank.Transfer> {
-        new StarkBank.Transfer(
-            amount: 100,  // R$ 1,00
-            bankCode: "260",  // TED
-            branchCode: "0001",
-            accountNumber: "10000-0",
-            taxID: "012.345.678-90",
-            name: "Tony Stark",
-            tags: new List<string> { "iron", "suit" }
+List<StarkBank.BoletoHolmes> payments = StarkBank.BoletoHolmes.Create(
+    new List<StarkBank.BoletoHolmes> {
+        new StarkBank.BoletoHolmes(
+            boletoID: "5656565656565656",
         ),
-        new StarkBank.Transfer(
-            amount: 200,  // R$ 2,00
-            bankCode: "20018183",  // PIX
-            branchCode: "1234",
-            accountNumber: "123456-7",
-            taxID: "012.345.678-90",
-            name: "Jon Snow",
-            scheduled: DateTime.Now.AddDays(1)
+        new StarkBank.BoletoHolmes(
+            boletoID: "4848484848484848",
+            tags: new List<string> { "elementary" }
         )
     }
 );
 
-foreach(StarkBank.Transfer transfer in transfers) {
-    Console.WriteLine(transfer);
+foreach(StarkBank.BoletoHolmes sherlock in holmes) {
+    Console.WriteLine(sherlock);
 }
 ```
 
-**Note**: Instead of using Transfer objects, you can also pass each transfer element in dictionary format
+**Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in dictionary format
 
-### Query transfers
+### Get boleto holmes
 
-You can query multiple transfers according to filters.
+To get a single Holmes by its id, run:
+
+```c#
+using System;
+
+StarkBank.BoletoHolmes sherlock = StarkBank.BoletoHolmes.Get("5155165527080960");
+
+Console.WriteLine(sherlock);
+```
+
+### Query boleto holmes
+
+You can search for boleto Holmes using filters.
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-IEnumerable<StarkBank.Transfer> transfers = StarkBank.Transfer.Query(
-    after: DateTime.Today.Date.AddDays(-10),
-    before: DateTime.Today.Date.AddDays(-1)
+IEnumerable<StarkBank.BoletoHolmes> holmes = StarkBank.BoletoHolmes.Query(
+    tags: new List<string> { "elementary" }
 );
 
-foreach(StarkBank.Transfer transfer in transfers) {
-    Console.WriteLine(transfer.Name);
+foreach(StarkBank.BoletoHolmes sherlock in holmes) {
+    Console.WriteLine(sherlock);
 }
 ```
 
-### Get transfer
+### Query boleto holmes logs
 
-To get a single transfer by its id, run:
-
-```c#
-using System;
-
-StarkBank.Transfer transfer = StarkBank.Transfer.Get("5155165527080960");
-
-Console.WriteLine(transfer);
-```
-
-### Cancel a scheduled transfer
-
-To cancel a single scheduled transfer by its id, run:
-
-```c#
-using System;
-
-StarkBank.Transfer transfer = StarkBank.Transfer.Delete("5155165527080960");
-
-Console.WriteLine(transfer);
-```
-
-### Get transfer PDF
-
-A transfer PDF may also be retrieved by passing its id.
-This operation is only valid if the transfer status is "processing" or "success".
-
-```c#
-byte[] pdf = StarkBank.Transfer.Pdf("5155165527080960");
-
-System.IO.File.WriteAllBytes("transfer.pdf", pdf);
-```
-
-Be careful not to accidentally enforce any encoding on the raw pdf content,
-as it may yield abnormal results in the final file, such as missing images
-and strange characters.
-
-### Query transfer logs
-
-You can query transfer logs to better understand transfer life cycles.
+Searches are also possible with boleto holmes logs:
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-IEnumerable<StarkBank.Transfer.Log> logs = StarkBank.Transfer.Log.Query(limit: 50);
+IEnumerable<StarkBank.BoletoHolmes.Log> logs = StarkBank.BoletoHolmes.Log.Query(
+    holmesIds: new List<string> { "5155165527080960", "76551659167801921" }
+);
 
-foreach(StarkBank.Transfer.Log log in logs) {
+foreach(StarkBank.BoletoHolmes.Log log in logs) {
     Console.WriteLine(log);
 }
 ```
 
-### Get a transfer log
+### Get boleto holmes log
 
-You can also get a specific log by its id.
+You can also get a boleto holmes log by specifying its id.
 
 ```c#
 using System;
 
-StarkBank.Transfer.Log log = StarkBank.Transfer.Log.Get("5155165527080960");
+StarkBank.BoletoHolmes.Log log = StarkBank.BoletoHolmes.Log.Get("5155165527080960");
 
 Console.WriteLine(log);
 ```
 
-### Pay a boleto
+### Preview a BR Code payment
 
-Paying a boleto is also simple.
-
-```c#
-using System;
-using System.Collections.Generic;
-
-List<StarkBank.BoletoPayment> payments = StarkBank.BoletoPayment.Create(
-    new List<StarkBank.BoletoPayment> {
-        new StarkBank.BoletoPayment(
-            line: "34191.09008 64694.017308 71444.640008 1 96610000014500",
-            taxID: "012.345.678-90",
-            scheduled: DateTime.Today.Date.AddDays(2),
-            description: "take my money",
-            tags: new List<string> { "take", "my", "money" }
-        ),
-        new StarkBank.BoletoPayment(
-            barCode: "34191972300000289001090064694197307144464000",
-            taxID: "012.345.678-90",
-            scheduled: DateTime.Today.Date.AddDays(1),
-            description: "take my money one more time",
-            tags: new List<string> { "again" }
-        )
-    }
-);
-
-foreach(StarkBank.BoletoPayment payment in payments) {
-    Console.WriteLine(payment);
-}
-```
-
-**Note**: Instead of using BoletoPayment objects, you can also pass each payment element in dictionary format
-
-### Get boleto payment
-
-To get a single boleto payment by its id, run:
-
-```c#
-using System;
-
-StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Get("19278361897236187236");
-
-Console.WriteLine(payment);
-```
-
-### Get boleto payment PDF
-
-After its creation, a boleto payment PDF may be retrieved by passing its id.
-
-```c#
-byte[] pdf = StarkBank.BoletoPayment.Pdf("5155165527080960");
-
-System.IO.File.WriteAllBytes("boleto_payment.pdf", pdf);
-```
-
-Be careful not to accidentally enforce any encoding on the raw pdf content,
-as it may yield abnormal results in the final file, such as missing images
-and strange characters.
-
-### Delete boleto payment
-
-You can also cancel a boleto payment by its id.
-Note that this is not possible if it has been processed already.
-
-```c#
-using System;
-
-StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Delete("5155165527080960");
-
-Console.WriteLine(payment);
-```
-
-### Query boleto payments
-
-You can search for boleto payments using filters.
+You can confirm the information on the BR Code payment before creating it with this preview method:
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-IEnumerable<StarkBank.BoletoPayment> payments = StarkBank.BoletoPayment.Query(
-    tags: new List<string> { "company_1", "company_2" }
+IEnumerable<StarkBank.BrcodePreview> previews = StarkBank.BrcodePreview.Query(
+    tags: new List<string> { "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A" }
 );
 
-foreach(StarkBank.BoletoPayment payment in payments) {
-    Console.WriteLine(payment);
+foreach(StarkBank.BrcodePreview preview in previews) {
+    Console.WriteLine(preview);
 }
-```
-
-### Query boleto payment logs
-
-Searches are also possible with boleto payment logs:
-
-```c#
-using System;
-using System.Collections.Generic;
-
-IEnumerable<StarkBank.BoletoPayment.Log> logs = StarkBank.BoletoPayment.Log.Query(
-    paymentIds: new List<string> { "5155165527080960", "76551659167801921" }
-);
-
-foreach(StarkBank.BoletoPayment.Log log in logs) {
-    Console.WriteLine(log);
-}
-```
-
-
-### Get boleto payment log
-
-You can also get a boleto payment log by specifying its id.
-
-```c#
-using System;
-
-StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get("5155165527080960");
-
-Console.WriteLine(log);
 ```
 
 ### Pay a BR Code
@@ -918,108 +940,122 @@ StarkBank.BrcodePayment.Log log = StarkBank.BrcodePayment.Log.Get("5155165527080
 Console.WriteLine(log);
 ```
 
-### Preview a BR Code payment
 
-You can confirm the information on the BR Code payment before creating it with this preview method:
+### Pay a boleto
 
-```c#
-using System;
-using System.Collections.Generic;
-
-IEnumerable<StarkBank.BrcodePreview> previews = StarkBank.BrcodePreview.Query(
-    brcodes: new List<string> { "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A" }
-);
-
-foreach(StarkBank.BrcodePreview preview in previews) {
-    Console.WriteLine(preview);
-}
-```
-
-### Investigate a boleto
-
-You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
-This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
-Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
-happens asynchronously and the most common way to retrieve the results is to register a "boleto-holmes" webhook
-subscription, although polling is also possible.
+Paying a boleto is also simple.
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-List<StarkBank.BoletoHolmes> payments = StarkBank.BoletoHolmes.Create(
-    new List<StarkBank.BoletoHolmes> {
-        new StarkBank.BoletoHolmes(
-            boletoID: "5656565656565656",
+List<StarkBank.BoletoPayment> payments = StarkBank.BoletoPayment.Create(
+    new List<StarkBank.BoletoPayment> {
+        new StarkBank.BoletoPayment(
+            line: "34191.09008 64694.017308 71444.640008 1 96610000014500",
+            taxID: "012.345.678-90",
+            scheduled: DateTime.Today.Date.AddDays(2),
+            description: "take my money",
+            tags: new List<string> { "take", "my", "money" }
         ),
-        new StarkBank.BoletoHolmes(
-            boletoID: "4848484848484848",
-            tags: new List<string> { "elementary" }
+        new StarkBank.BoletoPayment(
+            barCode: "34191972300000289001090064694197307144464000",
+            taxID: "012.345.678-90",
+            scheduled: DateTime.Today.Date.AddDays(1),
+            description: "take my money one more time",
+            tags: new List<string> { "again" }
         )
     }
 );
 
-foreach(StarkBank.BoletoHolmes sherlock in holmes) {
-    Console.WriteLine(sherlock);
+foreach(StarkBank.BoletoPayment payment in payments) {
+    Console.WriteLine(payment);
 }
 ```
 
-**Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in dictionary format
+**Note**: Instead of using BoletoPayment objects, you can also pass each payment element in dictionary format
 
-### Get boleto holmes
+### Get boleto payment
 
-To get a single Holmes by its id, run:
+To get a single boleto payment by its id, run:
 
 ```c#
 using System;
 
-StarkBank.BoletoHolmes sherlock = StarkBank.BoletoHolmes.Get("5155165527080960");
+StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Get("19278361897236187236");
 
-Console.WriteLine(sherlock);
+Console.WriteLine(payment);
 ```
 
-### Query boleto holmes
+### Get boleto payment PDF
 
-You can search for boleto Holmes using filters.
+After its creation, a boleto payment PDF may be retrieved by passing its id.
+
+```c#
+byte[] pdf = StarkBank.BoletoPayment.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("boleto_payment.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Delete boleto payment
+
+You can also cancel a boleto payment by its id.
+Note that this is not possible if it has been processed already.
+
+```c#
+using System;
+
+StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Delete("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
+### Query boleto payments
+
+You can search for boleto payments using filters.
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-IEnumerable<StarkBank.BoletoHolmes> holmes = StarkBank.BoletoHolmes.Query(
-    tags: new List<string> { "elementary" }
+IEnumerable<StarkBank.BoletoPayment> payments = StarkBank.BoletoPayment.Query(
+    tags: new List<string> { "company_1", "company_2" }
 );
 
-foreach(StarkBank.BoletoHolmes sherlock in holmes) {
-    Console.WriteLine(sherlock);
+foreach(StarkBank.BoletoPayment payment in payments) {
+    Console.WriteLine(payment);
 }
 ```
 
-### Query boleto holmes logs
+### Query boleto payment logs
 
-Searches are also possible with boleto holmes logs:
+Searches are also possible with boleto payment logs:
 
 ```c#
 using System;
 using System.Collections.Generic;
 
-IEnumerable<StarkBank.BoletoHolmes.Log> logs = StarkBank.BoletoHolmes.Log.Query(
-    holmesIds: new List<string> { "5155165527080960", "76551659167801921" }
+IEnumerable<StarkBank.BoletoPayment.Log> logs = StarkBank.BoletoPayment.Log.Query(
+    paymentIds: new List<string> { "5155165527080960", "76551659167801921" }
 );
 
-foreach(StarkBank.BoletoHolmes.Log log in logs) {
+foreach(StarkBank.BoletoPayment.Log log in logs) {
     Console.WriteLine(log);
 }
 ```
 
-### Get boleto holmes log
+### Get boleto payment log
 
-You can also get a boleto holmes log by specifying its id.
+You can also get a boleto payment log by specifying its id.
 
 ```c#
 using System;
 
-StarkBank.BoletoHolmes.Log log = StarkBank.BoletoHolmes.Log.Get("5155165527080960");
+StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get("5155165527080960");
 
 Console.WriteLine(log);
 ```
@@ -1112,7 +1148,7 @@ StarkBank.UtilityPayment payment = StarkBank.UtilityPayment.Delete("515516552708
 Console.WriteLine(payment);
 ```
 
-### Query utility bill payment logs
+### Query utility payment logs
 
 You can search for payments by specifying filters. Use this to understand the
 bills life cycles.
@@ -1130,7 +1166,7 @@ foreach(StarkBank.UtilityPayment.Log log in logs) {
 }
 ```
 
-### Get utility bill payment log
+### Get utility payment log
 
 If you want to get a specific payment log by its id, just run:
 
@@ -1140,72 +1176,6 @@ using System;
 StarkBank.UtilityPayment.Log log = StarkBank.UtilityPayment.Log.Get("1902837198237992");
 
 Console.WriteLine(log);
-```
-
-### Create transactions
-
-To send money between Stark Bank accounts, you can create transactions:
-
-```c#
-using System;
-using System.Collections.Generic;
-
-List<StarkBank.Transaction> transactions = StarkBank.Transaction.Create(
-    new List<StarkBank.Transaction> {
-        new StarkBank.Transaction(
-            amount: 100,  // (R$ 1.00)
-            receiverID: "1029378109327810",
-            description: "Transaction to dear provider",
-            externalID: "12345",  // so we can block anything you send twice by mistake
-            tags: new List<string> { "provider" }
-        ),
-        new StarkBank.Transaction(
-            amount: 234,  // (R$ 2.34)
-            receiverID: "2093029347820947",
-            description: "Transaction to the other provider",
-            externalID: "12346",  // so we can block anything you send twice by mistake
-            tags: new List<string> { "provider" }
-        )
-    }
-);
-
-foreach(StarkBank.Transaction transaction in transactions) {
-    Console.WriteLine(transaction);
-}
-```
-
-**Note**: Instead of using Transaction objects, you can also pass each transaction element in dictionary format
-
-### Query transactions
-
-To understand your balance changes (bank statement), you can query
-transactions. Note that our system creates transactions for you when
-you receive boleto payments, pay a bill or make transfers, for example.
-
-```c#
-using System;
-using System.Collections.Generic;
-
-IEnumerable<StarkBank.Transaction> transactions = StarkBank.Transaction.Query(
-    after: DateTime.Today.Date.AddDays(-10),
-    before: DateTime.Today.Date.AddDays(-1)
-);
-
-foreach(StarkBank.Transaction transaction in transactions) {
-    Console.WriteLine(transaction);
-}
-```
-
-### Get transaction
-
-You can get a specific transaction by its id:
-
-```c#
-using System;
-
-StarkBank.Transaction transaction = StarkBank.Transaction.Get("5155165527080960");
-
-Console.WriteLine(transaction);
 ```
 
 ### Create payment requests to be approved by authorized people in a cost center
@@ -1417,6 +1387,36 @@ using System;
 StarkBank.Event eventObject = StarkBank.Event.Update("129837198237192", isDelivered: true);
 
 Console.WriteLine(eventObject);
+```
+
+### Get dict key
+
+You can get PIX key's parameters by its id.
+
+```c#
+using System;
+
+StarkBank.DictKey dictKey = DictKey.Get("tony@starkbank.com");
+
+Console.WriteLine(dictKey);
+```
+
+### Query your DICT keys
+
+To take a look at the PIX keys linked to your workspace, just run the following:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.DictKey> dictKeys = StarkBank.DictKey.Query(
+    status: "registered",
+    type: "evp"
+);
+
+foreach(StarkBank.DictKey dictKey in dictKeys) {
+    Console.WriteLine(dictKey);
+}
 ```
 
 ## Handling errors
