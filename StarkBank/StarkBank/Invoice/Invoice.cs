@@ -325,16 +325,25 @@ namespace StarkBank
         public static Invoice Update(string id, string status = null, long? amount = null, DateTime? due = null, long? expiration = null, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+
+            var payload = new Dictionary<string, object>();
+
+            if (status != null)
+            {
+                payload["status"] = status;
+            }
+            else
+            {
+                payload["amount"] = amount;
+                payload["due"] = due;
+                payload["expiration"] = expiration;
+            }
+
             return Utils.Rest.PatchId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
-                payload: new Dictionary<string, object> {
-                    { "amount", amount },
-                    { "expiration", expiration },
-                    { "status", status },
-                    { "due", new Utils.StarkBankDateTime(due) },
-                },
+                payload: payload,
                 user: user
             ) as Invoice;
         }
