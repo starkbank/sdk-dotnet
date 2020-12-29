@@ -1254,7 +1254,7 @@ using System;
 
 StarkBank.Webhook webhook = StarkBank.Webhook.Create(
     url: "https://webhook.site/dd784f26-1d6a-4ca6-81cb-fda0267761ec",
-    subscriptions: new List<string> { "transfer", "boleto", "boleto-payment", "utility-payment" }
+    subscriptions: new List<string> { "transfer", "invoice", "brcode-payment", "utility-payment" }
 );
 
 Console.WriteLine(webhook);
@@ -1319,12 +1319,12 @@ if (parsedEvent.Subscription == "transfer") {
     StarkBank.Transfer.Log log = parsedEvent.Log as StarkBank.Transfer.Log;
     Console.WriteLine(log.Transfer);
 }
-else if (parsedEvent.Subscription == "boleto") {
-    StarkBank.Boleto.Log log = parsedEvent.Log as StarkBank.Boleto.Log;
-    Console.WriteLine(log.Boleto);
+else if (parsedEvent.Subscription == "invoice") {
+    StarkBank.Invoice.Log log = parsedEvent.Log as StarkBank.Invoice.Log;
+    Console.WriteLine(log.Invoice);
 }
-else if (parsedEvent.Subscription == "boleto-payment") {
-    StarkBank.BoletoPayment.Log log = parsedEvent.Log as StarkBank.BoletoPayment.Log;
+else if (parsedEvent.Subscription == "brcode-payment") {
+    StarkBank.BrcodePayment.Log log = parsedEvent.Log as StarkBank.BrcodePayment.Log;
     Console.WriteLine(log.Payment);
 }
 else if (parsedEvent.Subscription == "utility-payment") {
