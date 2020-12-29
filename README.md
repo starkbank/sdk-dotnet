@@ -476,14 +476,15 @@ Console.WriteLine(invoice);
 ### Update an invoice
 
 You can update an invoice's amount, due date and expiration by its id.
-Note that this is not possible if it has been paid already.
+If the invoice has been paid already, you can reverse it by lowering its amount.
+To fully reverse the invoice, pass amount: 0.
 
 ```c#
 using System;
 
 StarkBank.Invoice invoice = StarkBank.Invoice.Update(
     "6312789471657984",
-    amount: 99999
+    amount: 0
 );
 
 Console.WriteLine(invoice);

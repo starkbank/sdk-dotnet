@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- Invoice.PdfUrl property
 ### Fixed
 - Invoice reversal with Invoice.Update(amount: 0)
 - BrcodePreview.query cursor issue
