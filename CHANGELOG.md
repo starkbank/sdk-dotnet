@@ -13,6 +13,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+## [2.2.4] - 2020-12-29
 ### Added
 - Invoice.PdfUrl property
 ### Fixed
