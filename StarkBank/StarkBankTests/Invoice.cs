@@ -52,6 +52,18 @@ namespace StarkBankTests
         }
 
         [Fact]
+        public void Reverse()
+        {
+            List<Invoice> invoices = Invoice.Query(limit: 1, status: "paid").ToList();
+            foreach (Invoice invoice in invoices)
+            {
+                Invoice updatedInvoice = Invoice.Update(id: invoice.ID, amount: 0);
+                Assert.Equal(0, updatedInvoice.Amount);
+                TestUtils.Log(updatedInvoice);
+            }
+        }
+
+        [Fact]
         public void Update()
         {
             List<Invoice> invoices = Invoice.Query(limit: 2, status: "created").ToList();

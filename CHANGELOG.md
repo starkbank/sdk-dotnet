@@ -13,10 +13,13 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- Invoice reversal with Invoice.Update(amount: 0)
+- BrcodePreview.query cursor issue
 
 ## [2.2.3] - 2020-11-18
-### Fixes
-- Fixed bad midnight DateTime string conversions
+### Fixed
+- Bad midnight DateTime string conversions
 
 ## [2.2.2] - 2020-11-17
 ### Fixed
