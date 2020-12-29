@@ -56,8 +56,8 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public BrcodePreview(string status, string name, string taxID, string bankCode, string branchCode,
-            string accountNumber, string accountType, string allowChange, long amount, string reconciliationID
-            ) : base(null)
+            string accountNumber, string accountType, string allowChange, long amount, string reconciliationID, string id
+            ) : base(id)
         {
             Status = status;
             Name = name;
@@ -108,19 +108,20 @@ namespace StarkBank
 
         internal static Utils.Resource ResourceMaker(dynamic json)
         {
+            string id = json.id;
             string status = json.status;
             string name = json.name;
-            string taxID = json.taxID;
+            string taxID = json.taxId;
             string bankCode = json.bankCode;
             string branchCode = json.branchCode;
             string accountNumber = json.accountNumber;
             string accountType = json.accountType;
             string allowChange = json.allowChange;
             long amount = json.amount;
-            string reconciliationID = json.reconciliationID;
+            string reconciliationID = json.reconciliationId;
 
             return new BrcodePreview(
-                status: status, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
+                id: id, status: status, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
                 accountNumber: accountNumber, accountType: accountType, allowChange: allowChange,
                 amount: amount, reconciliationID: reconciliationID
             );

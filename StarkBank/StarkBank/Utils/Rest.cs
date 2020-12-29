@@ -43,7 +43,7 @@ namespace StarkBank.Utils
 
                 cursor = json["cursor"];
                 query["cursor"] = cursor;
-            } while (cursor != null && (!limited || limit > 0));
+            } while (cursor != null && cursor.Length > 0 && (!limited || limit > 0));
         }
 
         static internal Resource GetId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
