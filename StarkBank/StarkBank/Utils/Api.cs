@@ -25,8 +25,7 @@ namespace StarkBank.Utils
             Dictionary<string, object> apiJson = new Dictionary<string, object>();
             foreach (KeyValuePair<string, object> entry in json)
             {
-                if (entry.Value == null)
-                {
+                if (entry.Value == null) {
                     continue;
                 }
 
@@ -65,6 +64,10 @@ namespace StarkBank.Utils
                 }
                 if (value is Resource) {
                     value = ApiJson(value);
+                }
+
+                if (value == null) {
+                    continue;
                 }
 
                 apiJson.Add(
