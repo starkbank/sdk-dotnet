@@ -9,7 +9,7 @@ namespace StarkBank
     /// PaymentRequest object
     /// <br/>
     /// A PaymentRequest is an indirect request to access a specific cash-out service
-    /// (such as Transfers, BoletoPayments, etc.) which goes through the cost center
+    /// (such as Transfers, BrcodePayments, etc.) which goes through the cost center
     /// approval flow on our website. To emit a PaymentRequest, you must direct it to
     /// a specific cost center by its ID, which can be retrieved on our website at the
     /// cost center page.
@@ -17,8 +17,8 @@ namespace StarkBank
     /// Properties:
     /// <list>
     ///     <item>CenterID [string]: target cost center ID. ex: "5656565656565656"</item>
-    ///     <item>Payment [Transfer, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.</item>
-    ///     <item>Type [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "boleto-payment"</item>
+    ///     <item>Payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.</item>
+    ///     <item>Type [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
     ///     <item>Due [DateTime]: Payment target date in ISO format. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ID [string, default null]: unique id returned when PaymentRequest is created. ex: "5656565656565656"</item>
@@ -46,7 +46,7 @@ namespace StarkBank
         /// PaymentRequest object
         /// <br/>
         /// A PaymentRequest is an indirect request to access a specific cash-out service
-        /// (such as Transfers, BoletoPayments, etc.) which goes through the cost center
+        /// (such as Transfers, BrcodePayments, etc.) which goes through the cost center
         /// approval flow on our website. To emit a PaymentRequest, you must direct it to
         /// a specific cost center by its ID, which can be retrieved on our website at the
         /// cost center page.
@@ -54,12 +54,12 @@ namespace StarkBank
         /// Parameters (required):
         /// <list>
         ///     <item>centerID [string]: target cost center ID. ex: "5656565656565656"</item>
-        ///     <item>payment [Transfer, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.</item>
+        ///     <item>payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.</item>
         /// </list>
         /// <br/>
         /// Parameters (conditionally required):
         /// <list>
-        ///     <item>type [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "boleto-payment"</item>
+        ///     <item>type [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
@@ -104,6 +104,9 @@ namespace StarkBank
             }
             if (payment.GetType() == typeof(Transaction)) {
                 return "transaction";
+            }
+            if (payment.GetType() == typeof(BrcodePayment)) {
+                return "brcode-payment";
             }
             if (payment.GetType() == typeof(BoletoPayment)) {
                 return "boleto-payment";
@@ -168,7 +171,7 @@ namespace StarkBank
         ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "success", "failed"</item>
-        ///     <item>type [string, default null]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "boleto-payment"</item>
+        ///     <item>type [string, default null]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
         ///     <item>sort [string, default "-created"]: sort order considered in response. Valid options are "-created" or "-due".
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
@@ -235,6 +238,9 @@ namespace StarkBank
             }
             if (type == "transaction") {
                 return Transaction.ResourceMaker(json);
+            }
+            if (type == "brcode-payment") {
+                return BrcodePayment.ResourceMaker(json);
             }
             if (type == "boleto-payment") {
                 return BoletoPayment.ResourceMaker(json);

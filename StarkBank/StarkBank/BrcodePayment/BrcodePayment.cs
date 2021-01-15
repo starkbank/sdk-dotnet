@@ -301,15 +301,18 @@ namespace StarkBank
             string description = json.description;
             long? amount = json.amount;
             string scheduledString = json.scheduled;
-            DateTime scheduled = Utils.Checks.CheckDateTime(scheduledString);
-            List<string> tags = json.tags.ToObject<List<string>>();
+            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
+            List<string> tags = new List<string>();
+            if (json.tags != null) {
+                tags = json.tags.ToObject<List<string>>();
+            }
             string status = json.status;
             string type = json.type;
             int? fee = json.fee;
             string createdString = json.created;
-            DateTime created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
-            DateTime updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime? updated = Utils.Checks.CheckNullableDateTime(updatedString);
 
             return new BrcodePayment(
                 id: id, brcode: brcode, taxID: taxID, description: description, amount: amount, scheduled: scheduled, tags: tags, status: status,
