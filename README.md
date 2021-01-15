@@ -1309,7 +1309,7 @@ the event.
 ```c#
 using System;
 
-Response response = listen();  // this is the method you made to get the events posted to your webhook
+Response response = listen();  // this is the method you made to get the events posted to your webhook endpoint
 
 StarkBank.Event parsedEvent = StarkBank.Event.Parse(
     content: response.Content,
@@ -1324,8 +1324,16 @@ else if (parsedEvent.Subscription == "invoice") {
     StarkBank.Invoice.Log log = parsedEvent.Log as StarkBank.Invoice.Log;
     Console.WriteLine(log.Invoice);
 }
+else if (parsedEvent.Subscription == "deposit") {
+    StarkBank.Deposit.Log log = parsedEvent.Log as StarkBank.Deposit.Log;
+    Console.WriteLine(log.Deposit);
+}
 else if (parsedEvent.Subscription == "brcode-payment") {
     StarkBank.BrcodePayment.Log log = parsedEvent.Log as StarkBank.BrcodePayment.Log;
+    Console.WriteLine(log.Payment);
+}
+else if (parsedEvent.Subscription == "boleto-payment") {
+    StarkBank.BoletoPayment.Log log = parsedEvent.Log as StarkBank.BoletoPayment.Log;
     Console.WriteLine(log.Payment);
 }
 else if (parsedEvent.Subscription == "utility-payment") {

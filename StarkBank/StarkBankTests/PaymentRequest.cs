@@ -69,6 +69,9 @@ namespace StarkBankTests
             if (choice == 3) {
                 return UtilityPaymentTest.Example(schedule: false);
             }
+            if (choice == 4) {
+                return BrcodePaymentTest.Example(schedule: false);
+            }
             throw new Exception("bad switch");
         }
     }
