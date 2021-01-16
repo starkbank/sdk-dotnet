@@ -136,7 +136,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>user [Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
         /// </list>
         /// <br/>
         /// Return:
@@ -175,7 +175,7 @@ namespace StarkBank
         ///     <item>sort [string, default "-created"]: sort order considered in response. Valid options are "-created" or "-due".
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
-        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
         /// </list>
         /// <br/>
         /// Return:

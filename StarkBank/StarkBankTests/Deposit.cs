@@ -8,7 +8,7 @@ namespace StarkBankTests
 {
     public class DepositTest
     {
-        public readonly User user = TestUser.SetDefault();
+        public readonly User user = TestUser.SetDefaultProject();
 
         [Fact]
         public void QueryAndGet()

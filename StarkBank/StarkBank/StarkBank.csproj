@@ -45,6 +45,7 @@
     <Folder Include="Deposit\" />
     <Folder Include="BrcodePayment\" />
     <Folder Include="BrcodePreview\" />
+    <Folder Include="Workspace\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

@@ -13,6 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- Organization user
+- Workspace resource
+
 ## [2.2.4] - 2020-12-29
 ### Added
 - Invoice.PdfUrl property

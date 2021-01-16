@@ -7,7 +7,7 @@ namespace StarkBankTests
 {
     public class BrcodePaymentLogTest
     {
-        public readonly User user = TestUser.SetDefault();
+        public readonly User user = TestUser.SetDefaultProject();
 
         [Fact]
         public void QueryAndGet()
