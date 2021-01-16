@@ -89,7 +89,7 @@ You can interact directly with our API using two types of users: Projects and Or
 - **Projects** are workspace-specific users, that is, they are bound to the workspaces they are created in.
 One workspace can have multiple Projects.
 - **Organizations** are general users that control your entire organization.
-They can control all your Workspaces and even create new ones. The Organization is bound to your company's tax-ID only.
+They can control all your Workspaces and even create new ones. The Organization is bound to your company's tax ID only.
 Since this user is unique in your entire organization, only one credential can be linked to it.
 
 
@@ -117,7 +117,7 @@ StarkBank.Project project = new StarkBank.Project(
 );
 ```
 
-3.2 While this feature is in beta, to register your Organization's public key, a legal representative of your organization must send an e-mail with the desired public key to developers@starkbank.com. Don`t worry, this flow will soon be integrated with our website. Here is an example on how to handle your Organization in the SDK:
+3.2 To register your Organization's public key, a legal representative of your organization must send an e-mail with the desired public key to developers@starkbank.com. This flow will soon be integrated with our website, where you'll be able to do the entire process quicker and independently. Here is an example on how to handle your Organization in the SDK:
 
 ```c#
 // Get your private key from an environment variable or an encrypted database.
@@ -132,8 +132,8 @@ StarkBank.Organization organization = new StarkBank.Organization(
 );
 
 // To dynamically use your organization credentials in a specific workspaceID,
-// you can use the Organization.WithWorkspace() method:
-StarkBank.Balance.Get(user: organization.WithWorkspace("4848484848484848"));
+// you can use the Organization.Replace() method:
+StarkBank.Balance.Get(user: Organization.Replace(organization, "4848484848484848"));
 ```
 
 NOTE 1: Never hard-code your private key. Get it from an environment variable or an encrypted database.
@@ -147,26 +147,26 @@ NOTE 3: The credentials you registered in `sandbox` do not exist in `production`
 
 There are two kinds of users that can access our API: **Project** and **Member**.
 
+- `Project` and `Organization` are designed for integrations and are the ones meant for our SDKs.
 - `Member` is the one you use when you log into our webpage with your e-mail.
-- `Project` is designed for integrations and is the one meant for our SDK.
 
 There are two ways to inform the user to the SDK:
 
 4.1 Passing the user as argument in all functions:
 
 ```c#
-StarkBank.Balance balance = StarkBank.Balance.Get(user: project);
+StarkBank.Balance balance = StarkBank.Balance.Get(user: project); //or organization
 ```
 
 4.2 Set it as a default user in the SDK:
 
 ```c#
-StarkBank.Settings.User = project;
+StarkBank.Settings.User = project; //or organization
 
 StarkBank.Balance balance = StarkBank.Balance.Get();
 ```
 
-Just select the way of passing the project user that is more convenient to you.
+Just select the way of passing the user that is more convenient to you.
 On all following examples we will assume a default user has been set.
 
 ### 5. Setting up the error language
@@ -181,14 +181,14 @@ Language options are "en-US" for english and "pt-BR" for brazilian portuguese. E
 
 ## Testing in Sandbox
 
-Your initial balance is zero. For many operations in Stark Bank, you"ll need funds
-in your account, which can be added to your balance by creating a Boleto.
+Your initial balance is zero. For many operations in Stark Bank, you'll need funds
+in your account, which can be added to your balance by creating an Invoice or a Boleto. 
 
-In the Sandbox environment, 90% of the created Boletos will be automatically paid,
-so there"s nothing else you need to do to add funds to your account. Just create
-a few and wait around a bit.
+In the Sandbox environment, most of the created Invoices and Boletos will be automatically paid,
+so there's nothing else you need to do to add funds to your account. Just create
+a few Invoices and wait around a bit.
 
-In Production, you (or one of your clients) will need to actually pay this Boleto
+In Production, you (or one of your clients) will need to actually pay this Invoice or Boleto
 for the value to be credited to your account.
 
 ## Usage
@@ -250,7 +250,7 @@ foreach(StarkBank.Transaction transaction in transactions) {
 }
 ```
 
-### Get transaction
+### Get a transaction
 
 You can get a specific transaction by its id:
 
@@ -276,7 +276,7 @@ Console.WriteLine(balance);
 
 ### Create transfers
 
-You can also create transfers in the SDK (TED/PIX).
+You can also create transfers in the SDK (TED/Pix).
 
 ```c#
 using System;
@@ -295,7 +295,7 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
         ),
         new StarkBank.Transfer(
             amount: 200,  // R$ 2,00
-            bankCode: "20018183",  // PIX
+            bankCode: "20018183",  // Pix
             branchCode: "1234",
             accountNumber: "123456-7",
             taxID: "012.345.678-90",
@@ -330,7 +330,7 @@ foreach(StarkBank.Transfer transfer in transfers) {
 }
 ```
 
-### Get transfer
+### Get a transfer
 
 To get a single transfer by its id, run:
 
@@ -354,7 +354,7 @@ StarkBank.Transfer transfer = StarkBank.Transfer.Delete("5155165527080960");
 Console.WriteLine(transfer);
 ```
 
-### Get transfer PDF
+### Get a transfer PDF
 
 A transfer PDF may also be retrieved by passing its id.
 This operation is only valid if the transfer status is "processing" or "success".
@@ -661,7 +661,7 @@ foreach (StarkBank.Boleto boleto in boletos) {
 
 **Note**: Instead of using Boleto objects, you can also pass each boleto element in dictionary format
 
-### Get boleto
+### Get a boleto
 
 After its creation, information on a boleto may be retrieved by passing its id.
 Its status indicates whether it's been paid.
@@ -674,7 +674,7 @@ StarkBank.Boleto boleto = StarkBank.Boleto.Get("5155165527080960");
 Console.WriteLine(boleto);
 ```
 
-### Get boleto PDF
+### Get a boleto PDF
 
 After its creation, a boleto PDF may be retrieved by passing its id.
 
@@ -688,7 +688,7 @@ Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
 
-### Delete boleto
+### Delete a boleto
 
 You can also cancel a boleto by its id.
 Note that this is not possible if it has been processed already.
@@ -777,7 +777,7 @@ foreach(StarkBank.BoletoHolmes sherlock in holmes) {
 
 **Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in dictionary format
 
-### Get boleto holmes
+### Get a boleto holmes
 
 To get a single Holmes by its id, run:
 
@@ -823,7 +823,7 @@ foreach(StarkBank.BoletoHolmes.Log log in logs) {
 }
 ```
 
-### Get boleto holmes log
+### Get a boleto holmes log
 
 You can also get a boleto holmes log by specifying its id.
 
@@ -854,7 +854,7 @@ foreach(StarkBank.BrcodePreview preview in previews) {
 
 ### Pay a BR Code
 
-Paying a BR Code is also simple. After extracting the BR Code encoded in the PIX QR Code, you can do the following:
+Paying a BR Code is also simple. After extracting the BR Code encoded in the Pix QR Code, you can do the following:
 
 ```c#
 using System;
@@ -879,7 +879,7 @@ foreach(StarkBank.BrcodePayment payment in payments) {
 
 **Note**: Instead of using BrcodePayment objects, you can also pass each payment element in dictionary format
 
-### Get BR Code payment
+### Get a BR Code payment
 
 To get a single BR Code payment by its id, run:
 
@@ -891,7 +891,7 @@ StarkBank.BrcodePayment payment = StarkBank.BrcodePayment.Get("19278361897236187
 Console.WriteLine(payment);
 ```
 
-### Get BR Code payment PDF
+### Get a BR Code payment PDF
 
 After its creation, a BR Code payment PDF may be retrieved by passing its id.
 
@@ -1004,7 +1004,7 @@ foreach(StarkBank.BoletoPayment payment in payments) {
 
 **Note**: Instead of using BoletoPayment objects, you can also pass each payment element in dictionary format
 
-### Get boleto payment
+### Get a boleto payment
 
 To get a single boleto payment by its id, run:
 
@@ -1016,7 +1016,7 @@ StarkBank.BoletoPayment payment = StarkBank.BoletoPayment.Get("19278361897236187
 Console.WriteLine(payment);
 ```
 
-### Get boleto payment PDF
+### Get a boleto payment PDF
 
 After its creation, a boleto payment PDF may be retrieved by passing its id.
 
@@ -1030,7 +1030,7 @@ Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
 
-### Delete boleto payment
+### Delete a boleto payment
 
 You can also cancel a boleto payment by its id.
 Note that this is not possible if it has been processed already.
@@ -1077,7 +1077,7 @@ foreach(StarkBank.BoletoPayment.Log log in logs) {
 }
 ```
 
-### Get boleto payment log
+### Get a boleto payment log
 
 You can also get a boleto payment log by specifying its id.
 
@@ -1089,7 +1089,7 @@ StarkBank.BoletoPayment.Log log = StarkBank.BoletoPayment.Log.Get("5155165527080
 Console.WriteLine(log);
 ```
 
-### Create utility payment
+### Create a utility payment
 
 It"s also simple to pay utility bills (such as electricity and water bills) in the SDK.
 
@@ -1138,7 +1138,7 @@ foreach(StarkBank.UtilityPayment payment in payments) {
 }
 ```
 
-### Get utility payment
+### Get a utility payment
 
 You can get a specific bill by its id:
 
@@ -1150,7 +1150,7 @@ StarkBank.UtilityPayment payment = StarkBank.UtilityPayment.Get("515516552708096
 Console.WriteLine(payment);
 ```
 
-### Get utility payment PDF
+### Get a utility payment PDF
 
 After its creation, a utility payment PDF may also be retrieved by passing its id.
 
@@ -1164,7 +1164,7 @@ Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
 
-### Delete utility payment
+### Delete a utility payment
 
 You can also cancel a utility payment by its id.
 Note that this is not possible if it has been processed already.
@@ -1195,7 +1195,7 @@ foreach(StarkBank.UtilityPayment.Log log in logs) {
 }
 ```
 
-### Get utility payment log
+### Get a utility payment log
 
 If you want to get a specific payment log by its id, just run:
 
@@ -1274,7 +1274,7 @@ foreach(StarkBank.PaymentRequest request in requests) {
 }
 ```
 
-### Create webhook subscription
+### Create a webhook subscription
 
 To create a webhook subscription and be notified whenever an event occurs, run:
 
@@ -1316,7 +1316,7 @@ StarkBank.Webhook webhook = StarkBank.Webhook.Get("10827361982368179");
 Console.WriteLine(webhook);
 ```
 
-### Delete webhook
+### Delete a webhook
 
 You can also delete a specific webhook by its id.
 
@@ -1388,7 +1388,7 @@ foreach(StarkBank.Event eventObject in events) {
 }
 ```
 
-### Get webhook event
+### Get a webhook event
 
 You can get a specific webhook event by its id.
 
@@ -1400,7 +1400,7 @@ StarkBank.Event eventObject = StarkBank.Event.Get("10827361982368179");
 Console.WriteLine(eventObject);
 ```
 
-### Delete webhook event
+### Delete a webhook event
 
 You can also delete a specific webhook event by its id.
 
@@ -1426,9 +1426,9 @@ StarkBank.Event eventObject = StarkBank.Event.Update("129837198237192", isDelive
 Console.WriteLine(eventObject);
 ```
 
-### Get dict key
+### Get a dict key
 
-You can get PIX key's parameters by its id.
+You can get Pix key's parameters by its id.
 
 ```c#
 using System;
@@ -1440,7 +1440,7 @@ Console.WriteLine(dictKey);
 
 ### Query your DICT keys
 
-To take a look at the PIX keys linked to your workspace, just run the following:
+To take a look at the Pix keys linked to your workspace, just run the following:
 
 ```c#
 using System;
@@ -1456,7 +1456,7 @@ foreach(StarkBank.DictKey dictKey in dictKeys) {
 }
 ```
 
-### Create new Workspaces
+### Create a Workspace
 
 The Organization user allows you to create new Workspaces (bank accounts) under your organization.
 Workspaces have independent balances, statements, operations and users.

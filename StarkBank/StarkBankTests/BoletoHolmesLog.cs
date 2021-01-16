@@ -8,7 +8,7 @@ namespace StarkBankTests
 {
     public class BoletoHolmesLogTest
     {
-        public readonly User user = TestUser.SetDefault();
+        public readonly User user = TestUser.SetDefaultProject();
 
         [Fact]
         public void QueryAndGet()

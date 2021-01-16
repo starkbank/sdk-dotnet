@@ -8,7 +8,7 @@ namespace StarkBankTests
 {
     public class DictKeyTest
     {
-        public readonly User use = TestUser.SetDefault();
+        public readonly User use = TestUser.SetDefaultProject();
         
         [Fact]
         public void Get()
