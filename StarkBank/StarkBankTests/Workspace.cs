@@ -9,12 +9,12 @@ namespace StarkBankTests
 {
     public class WorkspaceTest
     {
-        public readonly Organization organization = TestUser.SetDefaultOrganization();
+        public readonly Organization organization = TestUser.GetOrganization();
 
         [Fact]
         public void QueryAndGet()
         {
-            List<Workspace> workspaces = Workspace.Query().ToList();
+            List<Workspace> workspaces = Workspace.Query(user: organization).ToList();
             foreach (Workspace workspace in workspaces)
             {
                 Console.WriteLine(workspace);
@@ -30,7 +30,7 @@ namespace StarkBankTests
         public void Create()
         {
             Workspace workspace = Example();
-            workspace = Workspace.Create(username: workspace.Username, name: workspace.Name);
+            workspace = Workspace.Create(username: workspace.Username, name: workspace.Name, user: organization);
             Assert.NotNull(workspace.ID);
             Assert.NotNull(workspace.Username);
             Assert.NotNull(workspace.Name);
