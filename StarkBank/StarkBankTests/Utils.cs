@@ -7,7 +7,7 @@ namespace StarkBankTests
     {
         internal static void Log(object log)
         {
-            Console.WriteLine(log);
+            //Console.WriteLine(log);
         }
     }
 }

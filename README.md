@@ -298,6 +298,8 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
             bankCode: "20018183",  // Pix
             branchCode: "1234",
             accountNumber: "123456-7",
+            accountType: "salary",
+            externalID: "my-internal-id-12345"
             taxID: "012.345.678-90",
             name: "Jon Snow",
             scheduled: DateTime.Now.AddDays(1)
