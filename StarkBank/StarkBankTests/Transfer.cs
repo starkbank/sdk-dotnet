@@ -78,9 +78,11 @@ namespace StarkBankTests
                 amount: new Random().Next(1, 1000),
                 name: "João",
                 taxID: "01234567890",
-                bankCode: "01",
+                bankCode: "18236120",
                 branchCode: "0001",
                 accountNumber: "10000-0",
+                accountType: "checking",
+                externalID: Guid.NewGuid().ToString(),
                 scheduled: scheduled
             );
         }

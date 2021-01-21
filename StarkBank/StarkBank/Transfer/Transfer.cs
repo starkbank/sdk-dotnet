@@ -20,6 +20,8 @@ namespace StarkBank
     ///     <item>BankCode [string]: code of the receiver bank institution in Brazil. If an ISPB (8 digits) is informed, a PIX transfer will be created, else a TED will be issued. ex: "20018183" or "341"</item>
     ///     <item>BranchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
+    ///     <item>AccountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings" or "salary"</item>
+    ///     <item>ExternalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated external_ids will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
     ///     <item>Scheduled [DateTime, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
     ///     <item>Tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
     ///     <item>ID [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
@@ -38,6 +40,8 @@ namespace StarkBank
         public string BankCode { get; }
         public string BranchCode { get; }
         public string AccountNumber { get; }
+        public string AccountType { get; }
+        public string ExternalID { get; }
         public DateTime? Scheduled { get; }
         public List<string> TransactionIds { get; }
         public int? Fee { get; }
@@ -60,13 +64,15 @@ namespace StarkBank
         ///     <item>taxID [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
         ///     <item>bankCode [string]: 1 to 3 digits code of the bank institution in Brazil. ex: "200" or "341"</item>
         ///     <item>branchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
-        ///     <item>accountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
+        ///     <item>accountNumber [string]: Receiver bank account number. Use '-' before the verifier digit. ex: "876543-2"</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
+        ///     <item>accountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings" or "salary"</item>
+        ///     <item>externalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated external_ids will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
         ///     <item>scheduled [DateTime, default now]: datetime when the transfer will be processed.May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
+        ///     <item>tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
@@ -80,8 +86,8 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public Transfer(long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
-            DateTime? scheduled = null, string id = null, List<string> transactionIds = null, int? fee = null,
-            List<string> tags = null, string status = null, DateTime? created = null, DateTime? updated = null
+            string accountType = null, string externalID = null, DateTime? scheduled = null, string id = null, List<string> transactionIds = null,
+            int? fee = null, List<string> tags = null, string status = null, DateTime? created = null, DateTime? updated = null
             ) : base(id)
         {
             Amount = amount;
@@ -90,6 +96,8 @@ namespace StarkBank
             BankCode = bankCode;
             BranchCode = branchCode;
             AccountNumber = accountNumber;
+            AccountType = accountType;
+            ExternalID = externalID;
             Scheduled = scheduled;
             TransactionIds = transactionIds;
             Fee = fee;
@@ -316,6 +324,8 @@ namespace StarkBank
             string bankCode = json.bankCode;
             string branchCode = json.branchCode;
             string accountNumber = json.accountNumber;
+            string accountType = json.accountType;
+            string externalID = json.externalId;
             string scheduledString = json.scheduled;
             DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
             List<string> transactionIds = new List<string>();
@@ -335,7 +345,8 @@ namespace StarkBank
 
             return new Transfer(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
-                accountNumber: accountNumber, scheduled: scheduled, transactionIds: transactionIds, fee: fee, tags: tags, status: status,
+                accountNumber: accountNumber, accountType: accountType, externalID: externalID,
+                scheduled: scheduled, transactionIds: transactionIds, fee: fee, tags: tags, status: status,
                 created: created, updated: updated
             );
         }
