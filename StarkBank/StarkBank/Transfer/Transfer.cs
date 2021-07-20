@@ -20,7 +20,7 @@ namespace StarkBank
     ///     <item>BankCode [string]: code of the receiver bank institution in Brazil. If an ISPB (8 digits) is informed, a PIX transfer will be created, else a TED will be issued. ex: "20018183" or "341"</item>
     ///     <item>BranchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
-    ///     <item>AccountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings" or "salary"</item>
+    ///     <item>AccountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings", "salary" or "payment"</item>
     ///     <item>ExternalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated external_ids will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
     ///     <item>Scheduled [DateTime, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
     ///     <item>Tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>

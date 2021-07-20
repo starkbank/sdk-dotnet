@@ -13,6 +13,11 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- "payment" account type for Pix related resources
+
+### Fixed
+- special characters in BrcodePreview query
 
 ## [2.4.0] - 2021-01-21
 ### Added
