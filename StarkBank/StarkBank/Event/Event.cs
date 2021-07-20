@@ -29,6 +29,7 @@ namespace StarkBank
         public bool? IsDelivered { get; }
         public string Subscription { get; }
         public DateTime? Created { get; }
+        public string WorkspaceId { get; }
 
         /// <summary>
         /// Webhook Event object
@@ -44,13 +45,15 @@ namespace StarkBank
         ///     <item>created [DateTime]: creation datetime for the notification event. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         ///     <item>isDelivered [bool]: true if the Event has been successfully delivered to the user url. ex: False</item>
         ///     <item>subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"</item>
+        ///     <item>workspaceId [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: "4545454545454545"</item>
         /// </list>
         /// </summary>
-        public Event(string id, Utils.Resource log, bool? isDelivered, string subscription, DateTime? created = null) : base(id)
+        public Event(string id, Utils.Resource log, bool? isDelivered, string subscription, string workspaceId, DateTime? created = null) : base(id)
         {
             Log = log;
             IsDelivered = isDelivered;
             Subscription = subscription;
+            WorkspaceId = workspaceId;
             Created = created;
         }
 
@@ -275,6 +278,7 @@ namespace StarkBank
             bool? isDelivered = json.isDelivered;
             string subscription = json.subscription;
             string createdString = json.created;
+            string workspaceId = json.workspaceId;
             DateTime? created = Utils.Checks.CheckDateTime(createdString);
 
             Utils.Resource log = null;
@@ -297,7 +301,7 @@ namespace StarkBank
             }
 
             return new Event(
-                id: id, isDelivered: isDelivered, subscription: subscription, created: created, log: log
+                id: id, isDelivered: isDelivered, subscription: subscription, created: created, log: log, workspaceId: workspaceId
             );
         }
     }
