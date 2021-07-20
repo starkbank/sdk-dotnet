@@ -13,7 +13,7 @@ namespace StarkBankTests
         [Fact]
         public void Get()
         {
-            string pixKey = "tony@starkbank.com";
+            string pixKey = "valid@sandbox.com";
             DictKey dictKey = DictKey.Get(pixKey);
             Assert.NotNull(dictKey);
             Assert.Equal(dictKey.ID, pixKey);

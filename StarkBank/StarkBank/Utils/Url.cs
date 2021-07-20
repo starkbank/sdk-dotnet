@@ -27,7 +27,7 @@ namespace StarkBank.Utils
                     value = entry.Value.ToString();
                 }
 
-                queryStringList.Add(entry.Key + "=" + value);
+                queryStringList.Add(entry.Key + "=" + System.Web.HttpUtility.UrlEncode(value));
             }
 
             if (queryStringList.Count > 0)
