@@ -19,7 +19,7 @@ namespace StarkBank
 	///     <item> Ispb [string, default null]: ISPB code used for transactions. ex: "20018183"
 	///     <item> BranchCode [string, default null]: bank account branch code associated with the DICT key. ex: "9585"
 	///     <item> AccountNumber [string, default null]: bank account number associated with the DICT key. ex: "9828282578010513"
-	///     <item> AccountType [string, default null]: bank account type associated with the DICT key. ex: "checking", "saving" e "salary"
+	///     <item> AccountType [string, default null]: bank account type associated with the DICT key. ex: "checking", "saving", "salary" or "payment"
 	///     <item> Status [string, default null]: current DICT key status. ex: "created", "registered", "canceled" or "failed"
 	///     <item> AccountCreated [string, default null]: creation datetime of the bank account associated with the DICT key. ex: "2020-11-05T14:55:08.812665+00:00"
 	///     <item> Owned [string, default null]: datetime since when the current owner hold this DICT key. ex : "2020-11-05T14:55:08.812665+00:00"     
