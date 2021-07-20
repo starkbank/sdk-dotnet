@@ -36,7 +36,7 @@ namespace StarkBank
         ///     <item>subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ["transfer", "boleto-payment"]</item>
         /// </list>
         /// <br/>
-        /// Attributes:
+        /// Attributes (return-only):
         /// <list>
         ///     <item>id [string, default null]: unique id returned when the Webhook is created. ex: "5656565656565656"</item>
         /// </list>

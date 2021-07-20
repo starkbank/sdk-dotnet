@@ -38,7 +38,7 @@ namespace StarkBank
         /// Events cannot be created, but may be retrieved from the Stark Bank API to
         /// list all generated updates on entities.
         /// <br/>
-        /// Attributes:
+        /// Attributes (return-only):
         /// <list>
         ///     <item>id [string]: unique id returned when the Event is created. ex: "5656565656565656"</item>
         ///     <item>log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)</item>

@@ -37,7 +37,7 @@ namespace StarkBank
             /// user, but it can be retrieved to check additional information
             /// on the BoletoHolmes.
             /// <br/>
-            /// Attributes:
+            /// Attributes (return-only):
             /// <list>
             ///     <item>id [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
             ///     <item>payment [BoletoHolmes]: BoletoHolmes entity to which the log refers to.</item>

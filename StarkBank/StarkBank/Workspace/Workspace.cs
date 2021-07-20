@@ -13,15 +13,11 @@ namespace StarkBank
     /// <br/>
     /// Properties:
     /// <list>
+    ///     <item>ID [string, default null]: unique id returned when the Workspace is created. ex: "5656565656565656"</item>
     ///     <item>Username [string]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: "starkbank-workspace".</item>
     ///     <item>Name [string]: Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Ex: "Stark Bank Workspace"</item>
     ///     <item>AllowedTaxIds [list of strings]: list of tax IDs that will be allowed to send Deposits to this Workspace. ex: ["012.345.678-90", "20.018.183/0001-80"]</item>
     /// </list>
-    /// Attributes:
-    /// <list>
-    ///     <item>ID [string, default null]: unique id returned when the Workspace is created. ex: "5656565656565656"</item>
-    /// </list>
-
     /// </summary>
     public partial class Workspace : Utils.Resource
     {
@@ -46,7 +42,7 @@ namespace StarkBank
         ///     <item>allowedTaxIds [list of strings, default null]: list of tax IDs that will be allowed to send Deposits to this Workspace. ex: ["012.345.678-90", "20.018.183/0001-80"]</item>
         /// </list>
         /// <br/>
-        /// Attributes:
+        /// Attributes (return-only):
         /// <list>
         ///     <item>id [string, default null]: unique id returned when the Workspace is created. ex: "5656565656565656"</item>
         /// </list>
