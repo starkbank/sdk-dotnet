@@ -15,6 +15,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [Unreleased]
 ### Added
 - "payment" account type for Pix related resources
+- Event.WorkspaceId property to allow multiple Workspace Webhook identification
 
 ### Fixed
 - special characters in BrcodePreview query
