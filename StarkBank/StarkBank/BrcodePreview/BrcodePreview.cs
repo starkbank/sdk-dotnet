@@ -71,23 +71,23 @@ namespace StarkBank
             ReconciliationID = reconciliationID;
         }
 
-    /// <summary>
-    /// Retrieve BrcodePreviews
-    /// <br/>
-    /// Receive an IEnumerable of BrcodePreview objects previously created in the Stark Bank API
-    /// <br/>
-    /// Parameters (optional):
-    /// <list>
-    ///     <item>brcodes [list of strings]: List of brcodes to preview. ex: ["00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"]</item>
-    ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
-    /// </list>
-    /// <br/>
-    /// Return:
-    /// <list>
-    ///     <item>IEnumerable of BrcodePreview objects with updated attributes</item>
-    /// </list>
-    /// </summary>
-    public static IEnumerable<BrcodePreview> Query(List<string> brcodes = null, User user = null)
+        /// <summary>
+        /// Retrieve BrcodePreviews
+        /// <br/>
+        /// Receive an IEnumerable of BrcodePreview objects previously created in the Stark Bank API
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>brcodes [list of strings]: List of brcodes to preview. ex: ["00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"]</item>
+        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>IEnumerable of BrcodePreview objects with updated attributes</item>
+        /// </list>
+        /// </summary>
+        public static IEnumerable<BrcodePreview> Query(List<string> brcodes = null, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
