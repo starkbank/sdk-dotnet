@@ -1522,6 +1522,23 @@ StarkBank.Workspace workspace = StarkBank.Workspace.Get("10827361982368179");
 Console.WriteLine(workspace);
 ```
 
+### Update a Workspace
+
+You can update a specific Workspace by its id.
+
+```c#
+using System;
+
+Workspace updatedWorkspace = Workspace.Update(
+    id: workspace.ID,
+    name: "Updated workspace test",
+    username: "new-username-test",
+    allowedTaxIds: new List<string>(new string[] { "359.536.680-82", "20.018.183/0001-80" }),
+);
+
+Console.WriteLine(updatedWorkspace);
+```
+
 ## Handling errors
 
 The SDK may raise one of four types of errors: __InputErrors__, __InternalServerError__, __UnknownError__, __InvalidSignatureError__
