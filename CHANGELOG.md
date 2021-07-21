@@ -20,6 +20,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - AllowedTaxIds property to Workspace resource
 - Invoice.Link property to allow easy access to invoice webpage
 - Transfer.Description property to allow control over corresponding Transaction descriptions
+- Base exception class
 
 ### Fixed
 - special characters in BrcodePreview query
