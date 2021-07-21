@@ -23,6 +23,7 @@ namespace StarkBank
     ///     <item>AccountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings", "salary" or "payment"</item>
     ///     <item>ExternalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated external_ids will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
     ///     <item>Scheduled [DateTime, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
+    ///     <item>Description [string, default null]: optional description to override default description to be shown in the bank statement. ex: "Payment for service #1234"</item>
     ///     <item>Tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
     ///     <item>ID [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
     ///     <item>Fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
@@ -43,6 +44,7 @@ namespace StarkBank
         public string AccountType { get; }
         public string ExternalID { get; }
         public DateTime? Scheduled { get; }
+        public string Description { get; }
         public List<string> TransactionIds { get; }
         public int? Fee { get; }
         public List<string> Tags { get; }
@@ -72,6 +74,7 @@ namespace StarkBank
         ///     <item>accountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings" or "salary"</item>
         ///     <item>externalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated external_ids will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
         ///     <item>scheduled [DateTime, default now]: datetime when the transfer will be processed.May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
+        ///     <item>description [string, default null]: optional description to override default description to be shown in the bank statement. ex: "Payment for service #1234"</item>
         ///     <item>tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
         /// </list>
         /// <br/>
@@ -86,8 +89,9 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public Transfer(long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
-            string accountType = null, string externalID = null, DateTime? scheduled = null, string id = null, List<string> transactionIds = null,
-            int? fee = null, List<string> tags = null, string status = null, DateTime? created = null, DateTime? updated = null
+            string accountType = null, string externalID = null, DateTime? scheduled = null, string description = null,
+            string id = null, List<string> transactionIds = null, int? fee = null, List<string> tags = null,
+            string status = null, DateTime? created = null, DateTime? updated = null
             ) : base(id)
         {
             Amount = amount;
@@ -99,6 +103,7 @@ namespace StarkBank
             AccountType = accountType;
             ExternalID = externalID;
             Scheduled = scheduled;
+            Description = description;
             TransactionIds = transactionIds;
             Fee = fee;
             Tags = tags;
@@ -328,6 +333,7 @@ namespace StarkBank
             string externalID = json.externalId;
             string scheduledString = json.scheduled;
             DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
+            string description = json.description;
             List<string> transactionIds = new List<string>();
             if (json.transactionIds != null) {
                 transactionIds = json.transactionIds.ToObject<List<string>>();
@@ -346,7 +352,7 @@ namespace StarkBank
             return new Transfer(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
                 accountNumber: accountNumber, accountType: accountType, externalID: externalID,
-                scheduled: scheduled, transactionIds: transactionIds, fee: fee, tags: tags, status: status,
+                scheduled: scheduled, description: description, transactionIds: transactionIds, fee: fee, tags: tags, status: status,
                 created: created, updated: updated
             );
         }
