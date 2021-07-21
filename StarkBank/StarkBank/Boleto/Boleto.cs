@@ -36,8 +36,10 @@ namespace StarkBank
     ///     <item>Fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
     ///     <item>Line [string, default null]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
     ///     <item>BarCode [string, default null]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
+    ///     <item>TransactionIds [list of strings, null]: ledger transaction ids linked to this boleto. ex: ["19827356981273"]</item>
     ///     <item>Status [string, default null]: current Boleto status. ex: "registered" or "paid"</item>
     ///     <item>Created [DateTime, default null]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>OurNumber [string, default null]: Reference number registered at the settlement bank. ex:"10131474"</item>
     /// </list>
     /// </summary>
     public partial class Boleto : Utils.Resource
@@ -64,7 +66,9 @@ namespace StarkBank
         public string Line { get; }
         public string BarCode { get; }
         public string Status { get; }
+        public List<string> TransactionIds { get; }
         public DateTime? Created { get; }
+        public string OurNumber { get; }
 
         /// <summary>
         /// Boleto object
@@ -105,15 +109,17 @@ namespace StarkBank
         ///     <item>fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
         ///     <item>line [string, default null]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
         ///     <item>barCode [string, default null]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
+        ///     <item>transactionIds [list of strings, null]: ledger transaction ids linked to this boleto. ex: ["19827356981273"]</item>
         ///     <item>status [string, default null]: current Boleto status. ex: "registered" or "paid"</item>
         ///     <item>created [DateTime, default null]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>ourNumber [string, default null]: Reference number registered at the settlement bank. ex:"10131474"</item>
         /// </list>
         /// </summary>
         public Boleto(long amount, string name, string taxID, string streetLine1, string streetLine2, string district,
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
             int? overdueLimit = null, string receiverName = null, string receiverTaxID = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
             List<Dictionary<string, object>> discounts = null, string id = null, int? fee = null, string line = null,
-            string barCode = null, string status = null, DateTime? created = null) : base(id)
+            string barCode = null, string status = null, List<string> transactionIds = null, DateTime? created = null, string ourNumber = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -137,6 +143,7 @@ namespace StarkBank
             Line = line;
             BarCode = barCode;
             Status = status;
+            TransactionIds = transactionIds;
             Created = created;
         }
 
@@ -382,14 +389,16 @@ namespace StarkBank
             string barCode = json.barCode;
             string status = json.status;
             string createdString = json.created;
+            List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
             DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            string ourNumber = json.ourNumber;
 
             return new Boleto(
                 amount: amount, name: name, taxID: taxID, streetLine1: streetLine1, streetLine2: streetLine2,
                 district: district, city: city, stateCode: stateCode, zipCode: zipCode, due: due, fine: fine,
                 interest: interest, overdueLimit: overdueLimit, receiverName: receiverName, receiverTaxID: receiverTaxID,
                 tags: tags, descriptions: descriptions, discounts: discounts, id: id, fee: fee, line: line,
-                barCode: barCode, status: status, created: created
+                barCode: barCode, status: status, transactionIds: transactionIds, created: created, ourNumber: ourNumber
             );
         }
     }

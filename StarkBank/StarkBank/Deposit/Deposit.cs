@@ -19,6 +19,7 @@ namespace StarkBank
     ///     <item>BankCode [string]: payer bank code in Brazil. ex: "20018183" or "341"</item>
     ///     <item>BranchCode [string]: payer bank account branch. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: payer bank account number. ex: "876543-2"</item>
+    ///     <item>AccountType [string]: payer bank account type. ex: "checking"</item>
     ///     <item>Type [string]: Type of settlement that originated the deposit.ex: "pix" or "ted"</item>
     ///     <item>Fee [integer, default null]: fee charged for this Deposit. ex: 50 (= R$ 0.50)</item>
     ///     <item>TransactionIds [list of strings, default null]: ledger Transaction ids linked to this Deposit (if there are more than one, all but first are reversals)</item>
@@ -36,6 +37,7 @@ namespace StarkBank
         public string BankCode { get; }
         public string BranchCode { get; }
         public string AccountNumber { get; }
+        public string AccountType { get; }
         public string Type { get; }
         public int? Fee { get; }
         public List<string> TransactionIds { get; }
@@ -61,6 +63,7 @@ namespace StarkBank
         ///     <item>bankCode [string]: payer bank code in Brazil. ex: "20018183" or "341"</item>
         ///     <item>branchCode [string]: payer bank account branch. ex: "1357-9"</item>
         ///     <item>accountNumber [string]: payer bank account number. ex: "876543-2"</item>
+        ///     <item>accountType [string]: payer bank account type. ex: "checking"</item>
         ///     <item>type [string]: Type of settlement that originated the deposit.ex: "pix" or "ted"</item>
         ///     <item>fee [integer, default null]: fee charged for this Deposit. ex: 50 (= R$ 0.50)</item>
         ///     <item>transactionIds [list of strings, default null]: ledger Transaction ids linked to this Deposit (if there are more than one, all but first are reversals)</item>
@@ -70,7 +73,7 @@ namespace StarkBank
         ///     <item>updated [DateTime, default null]: latest update datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public Deposit(string id, long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
+        public Deposit(string id, long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber, string accountType,
             string type, int? fee, List<string> transactionIds, string status, List<string> tags, DateTime created, DateTime updated) : base(id)
         {
             Amount = amount;
@@ -79,6 +82,7 @@ namespace StarkBank
             BankCode = bankCode;
             BranchCode = branchCode;
             AccountNumber = accountNumber;
+            AccountType = accountType;
             Type = type;
             Fee = fee;
             TransactionIds = transactionIds;
@@ -206,6 +210,7 @@ namespace StarkBank
             string bankCode = json.bankCode;
             string branchCode = json.branchCode;
             string accountNumber = json.accountNumber;
+            string accountType = json.accountType;
             string type = json.type;
             int? fee = json.fee;
             List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
@@ -218,8 +223,8 @@ namespace StarkBank
 
             return new Deposit(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
-                accountNumber: accountNumber, type: type, fee: fee, transactionIds: transactionIds, status: status, tags: tags,
-                created: created, updated: updated
+                accountNumber: accountNumber, accountType: accountType, type: type, fee: fee, transactionIds: transactionIds,
+                status: status, tags: tags, created: created, updated: updated
             );
         }
     }
