@@ -33,6 +33,7 @@ namespace StarkBank
     ///     <item>PdfUrl [string]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
     ///     <item>Fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
     ///     <item>Status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
+    ///     <item>TransactionIds [list of strings, default null]: ledger transaction ids linked to this Invoice (if there are more than one, all but the first are reversals or failed reversal chargebacks). ex: ["19827356981273"]</item>
     ///     <item>Created [DateTime, default null]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     ///     <item>Updated [DateTime, default null]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
@@ -58,6 +59,7 @@ namespace StarkBank
         public string PdfUrl { get; }
         public string Link { get; }
         public string Status { get; }
+        public List<string> TransactionIds { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
 
@@ -97,6 +99,7 @@ namespace StarkBank
         ///     <item>brcode [string, default null]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
         ///     <item>fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
         ///     <item>status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
+        ///     <item>transactionIds [list of strings, default null]: ledger transaction ids linked to this Invoice (if there are more than one, all but the first are reversals or failed reversal chargebacks). ex: ["19827356981273"]</item>
         ///     <item>created [DateTime, default null]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         ///     <item>updated [DateTime, default null]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
@@ -104,7 +107,7 @@ namespace StarkBank
         public Invoice(long amount, string name, string taxID, DateTime? due = null, long? expiration = null, double? fine = null, double? interest = null,
             List<string> tags = null, List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null,
             long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null,
-            string id = null, string brcode = null, string pdfUrl = null, string link = null, int? fee = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
+            string id = null, string brcode = null, string pdfUrl = null, string link = null, int? fee = null, string status = null, List<string> transactionIds = null, DateTime? created = null, DateTime? updated = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -125,6 +128,7 @@ namespace StarkBank
             PdfUrl = pdfUrl;
             Link = link;
             Status = status;
+            TransactionIds = transactionIds;
             Created = created;
             Updated = updated;
         }
@@ -410,14 +414,15 @@ namespace StarkBank
             string status = json.status;
             string createdString = json.created;
             string updatedString = json.updated;
+            List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
             DateTime? created = Utils.Checks.CheckDateTime(createdString);
             DateTime? updated = Utils.Checks.CheckDateTime(updatedString);
 
             return new Invoice(
-                amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine,
-                interest: interest, tags: tags, descriptions: descriptions, discounts: discounts, nominalAmount: nominalAmount,
-                fineAmount: fineAmount, interestAmount: interestAmount, discountAmount: discountAmount,
-                id: id, brcode: brcode, pdfUrl: pdf, link: link, fee: fee, status: status, created: created, updated: updated
+                amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine, interest: interest,
+                tags: tags, descriptions: descriptions, discounts: discounts, nominalAmount: nominalAmount, fineAmount: fineAmount,
+                interestAmount: interestAmount, discountAmount: discountAmount, id: id, brcode: brcode, pdfUrl: pdf, link: link,
+                fee: fee, status: status, transactionIds: transactionIds, created: created, updated: updated
             );
         }
     }

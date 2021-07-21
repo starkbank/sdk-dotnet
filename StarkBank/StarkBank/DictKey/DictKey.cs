@@ -11,19 +11,20 @@ namespace StarkBank
 	/// <br/>
 	/// Properties:
 	/// <list>
-	///     <item> ID [string]: DictKey object unique id and DICT key itself. ex: "tony@starkbank.com", "722.461.430-04", "20.018.183/0001-80", "+5511988887777", "b6295ee1-f054-47d1-9e90-ee57b74f60d9"
-	///     <item> Type [string, default null]: DICT key type. ex: "email", "cpf", "cnpj", "phone" or "evp"
-	///     <item> Name [string, default null]: account owner full name. ex: "Tony Stark"
-	///     <item> TaxId [string, default null]: tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
-	///     <item> OwnerType [string, default null]: DICT key owner type. ex "naturalPerson" or "legalPerson"
-	///     <item> Ispb [string, default null]: ISPB code used for transactions. ex: "20018183"
-	///     <item> BranchCode [string, default null]: bank account branch code associated with the DICT key. ex: "9585"
-	///     <item> AccountNumber [string, default null]: bank account number associated with the DICT key. ex: "9828282578010513"
-	///     <item> AccountType [string, default null]: bank account type associated with the DICT key. ex: "checking", "saving", "salary" or "payment"
-	///     <item> Status [string, default null]: current DICT key status. ex: "created", "registered", "canceled" or "failed"
-	///     <item> AccountCreated [string, default null]: creation datetime of the bank account associated with the DICT key. ex: "2020-11-05T14:55:08.812665+00:00"
-	///     <item> Owned [string, default null]: datetime since when the current owner hold this DICT key. ex : "2020-11-05T14:55:08.812665+00:00"     
-	///     <item> Created [string, default null]: creation datetime for the DICT key. ex: "2020-03-10 10:30:00.000"
+	///     <item> ID [string]: DictKey object unique id and DICT key itself. ex: "tony@starkbank.com", "722.461.430-04", "20.018.183/0001-80", "+5511988887777", "b6295ee1-f054-47d1-9e90-ee57b74f60d9"</item>
+	///     <item> Type [string, default null]: DICT key type. ex: "email", "cpf", "cnpj", "phone" or "evp"</item>
+	///     <item> Name [string, default null]: account owner full name. ex: "Tony Stark"</item>
+	///     <item> TaxId [string, default null]: tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+	///     <item> OwnerType [string, default null]: DICT key owner type. ex "naturalPerson" or "legalPerson"</item>
+	///     <item> BankName [string, default null]: bank name associated with the DICT key. ex: "Stark Bank"</item>
+	///     <item> Ispb [string, default null]: ISPB code used for transactions. ex: "20018183"</item>
+	///     <item> BranchCode [string, default null]: bank account branch code associated with the DICT key. ex: "9585"</item>
+	///     <item> AccountNumber [string, default null]: bank account number associated with the DICT key. ex: "9828282578010513"</item>
+	///     <item> AccountType [string, default null]: bank account type associated with the DICT key. ex: "checking", "saving", "salary" or "payment"</item>
+	///     <item> Status [string, default null]: current DICT key status. ex: "created", "registered", "canceled" or "failed"</item>
+	///     <item> AccountCreated [string, default null]: creation datetime of the bank account associated with the DICT key. ex: "2020-11-05T14:55:08.812665+00:00"</item>
+	///     <item> Owned [string, default null]: datetime since when the current owner hold this DICT key. ex : "2020-11-05T14:55:08.812665+00:00"</item>
+	///     <item> Created [string, default null]: creation datetime for the DICT key. ex: "2020-03-10 10:30:00.000"</item>
 	/// </list>
 	/// </summary>
 	public partial class DictKey : Utils.Resource
@@ -32,6 +33,7 @@ namespace StarkBank
 		public string Name { get; }
 		public string TaxId { get; }
 		public string OwnerType { get; }
+		public string BankName { get; }
 		public string Ispb { get; }
 		public string BranchCode { get; }
 		public string AccountNumber { get; }
@@ -40,6 +42,7 @@ namespace StarkBank
 		public string AccountCreated { get; }
 		public string Owned { get; }
 		public string Created { get; }
+
 		/// <summary>
 		/// DictKey object
 		/// <br/>
@@ -47,31 +50,33 @@ namespace StarkBank
 		/// <br/>
 		/// Parameters (optional):
 		/// <list>
-		///     <item> id [string]: DictKey object unique id and PIX key itself. ex: "tony@starkbank.com", "722.461.430-04", "20.018.183/0001-80", "+5511988887777", "b6295ee1-f054-47d1-9e90-ee57b74f60d9"
+		///     <item> id [string]: DictKey object unique id and PIX key itself. ex: "tony@starkbank.com", "722.461.430-04", "20.018.183/0001-80", "+5511988887777", "b6295ee1-f054-47d1-9e90-ee57b74f60d9"</item>
 		/// Attributes (return-only):
 		/// <list>
-		///     <item> Type [string, default null]: PIX key type. ex: "email", "cpf", "cnpj", "phone" or "evp"
-		///     <item> Name [string, default null]: account owner full name. ex: "Tony Stark"
-		///     <item> TaxId [string, default null]: tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
-		///     <item> OwnerType [string, default null]: PIX key owner type. ex "naturalPerson" or "legalPerson"
-		///     <item> Ispb [string, default null]: ISPB code used for transactions. ex: "20018183"
-		///     <item> BranchCode [string, default null]: bank account branch code associated with the PIX key. ex: "9585"
-		///     <item> AccountNumber [string, default null]: bank account number associated with the PIX key. ex: "9828282578010513"
-		///     <item> AccountType [string, default null]: bank account type associated with the PIX key. ex: "checking", "saving" e "salary"
-		///     <item> Status [string, default null]: current PIX key status. ex: "created", "registered", "canceled" or "failed"
-		///     <item> AccountCreated [DateTime, default null]: creation datetime of the bank account associated with the PIX key. ex: "2020-11-05T14:55:08.812665+00:00"
-		///     <item> Owned [DateTime, default null]: datetime since when the current owner hold this PIX key. ex : "2020-11-05T14:55:08.812665+00:00"     
-		///     <item> Created [DateTime, default null]: creation datetime for the PIX key. ex: "2020-03-10 10:30:00.000"
+		///     <item> type [string, default null]: PIX key type. ex: "email", "cpf", "cnpj", "phone" or "evp"</item>
+		///     <item> name [string, default null]: account owner full name. ex: "Tony Stark"</item>
+		///     <item> taxId [string, default null]: tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+		///     <item> ownerType [string, default null]: PIX key owner type. ex "naturalPerson" or "legalPerson"</item>
+		///     <item> bankName [string, default null]: bank name associated with the DICT key. ex: "Stark Bank"</item>
+		///     <item> ispb [string, default null]: ISPB code used for transactions. ex: "20018183"</item>
+		///     <item> branchCode [string, default null]: bank account branch code associated with the PIX key. ex: "9585"</item>
+		///     <item> accountNumber [string, default null]: bank account number associated with the PIX key. ex: "9828282578010513"</item>
+		///     <item> accountType [string, default null]: bank account type associated with the PIX key. ex: "checking", "saving" e "salary"</item>
+		///     <item> status [string, default null]: current PIX key status. ex: "created", "registered", "canceled" or "failed"</item>
+		///     <item> accountCreated [DateTime, default null]: creation datetime of the bank account associated with the PIX key. ex: "2020-11-05T14:55:08.812665+00:00"</item>
+		///     <item> owned [DateTime, default null]: datetime since when the current owner hold this PIX key. ex : "2020-11-05T14:55:08.812665+00:00"</item>
+		///     <item> created [DateTime, default null]: creation datetime for the PIX key. ex: "2020-03-10 10:30:00.000"</item>
 		/// </list>
 		/// </summary>
-		public DictKey(string id = null, string type = null, string name = null, string taxId = null, string ownerType = null, string ispb = null,
-					string branchCode = null, string accountNumber = null, string accountType = null, string status = null,
+		public DictKey(string id = null, string type = null, string name = null, string taxId = null, string ownerType = null, string bankName = null,
+					string ispb = null, string branchCode = null, string accountNumber = null, string accountType = null, string status = null,
 					string accountCreated = null, string owned = null, string created = null) : base(id)
 		{
 			Type = type;
 			Name = name;
 			TaxId = taxId;
 			OwnerType = ownerType;
+			BankName = bankName;
 			Ispb = ispb;
 			BranchCode = branchCode;
 			AccountNumber = accountNumber;
@@ -165,6 +170,7 @@ namespace StarkBank
 			string name = json.name;
 			string taxId = json.taxId;
 			string ownerType = json.ownerType;
+			string bankName = json.bankName;
 			string ispb = json.ispb;
 			string branchCode = json.branchCode;
 			string accountNumber = json.accountNumber;
@@ -176,8 +182,8 @@ namespace StarkBank
 
             return new DictKey(
                 id: id, type: type, accountCreated: accountCreated, accountType: accountType, name: name,
-				taxId: taxId, ownerType: ownerType, ispb: ispb, branchCode: branchCode, accountNumber: accountNumber,
-				status: status, owned: owned, created: created
+				taxId: taxId, ownerType: ownerType, bankName: bankName, ispb: ispb, branchCode: branchCode,
+				accountNumber: accountNumber, status: status, owned: owned, created: created
             );
         }
 	}
