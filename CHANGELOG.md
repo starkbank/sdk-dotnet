@@ -18,6 +18,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Event.WorkspaceId property to allow multiple Workspace Webhook identification
 - Workspace.Update() to allow parameter updates
 - AllowedTaxIds property to Workspace resource
+- Invoice.Link property to allow easy access to invoice webpage
 
 ### Fixed
 - special characters in BrcodePreview query

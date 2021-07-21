@@ -56,6 +56,7 @@ namespace StarkBank
         public string Brcode { get; }
         public int? Fee { get; }
         public string PdfUrl { get; }
+        public string Link { get; }
         public string Status { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
@@ -103,7 +104,7 @@ namespace StarkBank
         public Invoice(long amount, string name, string taxID, DateTime? due = null, long? expiration = null, double? fine = null, double? interest = null,
             List<string> tags = null, List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null,
             long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null,
-            string id = null, string brcode = null, string pdfUrl = null, int? fee = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
+            string id = null, string brcode = null, string pdfUrl = null, string link = null, int? fee = null, string status = null, DateTime? created = null, DateTime? updated = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -122,6 +123,7 @@ namespace StarkBank
             Brcode = brcode;
             Fee = fee;
             PdfUrl = pdfUrl;
+            Link = link;
             Status = status;
             Created = created;
             Updated = updated;
@@ -402,7 +404,8 @@ namespace StarkBank
             long? discountAmount = json.discountAmount;
             string id = json.id;
             string brcode = json.brcode;
-            string pdf= json.pdf;
+            string pdf = json.pdf;
+            string link = json.link;
             int fee = json.fee;
             string status = json.status;
             string createdString = json.created;
@@ -414,7 +417,7 @@ namespace StarkBank
                 amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine,
                 interest: interest, tags: tags, descriptions: descriptions, discounts: discounts, nominalAmount: nominalAmount,
                 fineAmount: fineAmount, interestAmount: interestAmount, discountAmount: discountAmount,
-                id: id, brcode: brcode, pdfUrl: pdf, fee: fee, status: status, created: created, updated: updated
+                id: id, brcode: brcode, pdfUrl: pdf, link: link, fee: fee, status: status, created: created, updated: updated
             );
         }
     }
