@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 namespace StarkBank.Error
 {
-    public class ErrorElement : Exception
+    public class StarkBankError : Exception {
+        public StarkBankError(string message) : base(message) { }
+    }
+
+    public class ErrorElement : StarkBankError
     {
         public readonly string Code;
         new public readonly string Message;
@@ -16,7 +20,7 @@ namespace StarkBank.Error
         }
     }
 
-    public class InputErrors : Exception
+    public class InputErrors : StarkBankError
     {
         public readonly List<ErrorElement> Errors;
 
@@ -37,21 +41,21 @@ namespace StarkBank.Error
         }
     }
 
-    public class InternalServerError : Exception
+    public class InternalServerError : StarkBankError
     {
         public InternalServerError(string message = "Houston, we have a problem.") : base(message)
         {
         }
     }
 
-    public class UnknownError : Exception
+    public class UnknownError : StarkBankError
     {
         public UnknownError(string message) : base("Unknown exception encountered: " + message)
         {
         }
     }
 
-    public class InvalidSignatureError : Exception
+    public class InvalidSignatureError : StarkBankError
     {
         public InvalidSignatureError(string message) : base(message)
         {
