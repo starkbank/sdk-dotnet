@@ -83,7 +83,8 @@ namespace StarkBankTests
                 accountNumber: "10000-0",
                 accountType: "checking",
                 externalID: Guid.NewGuid().ToString(),
-                scheduled: scheduled
+                scheduled: scheduled,
+                description: "Good description"
             );
         }
     }

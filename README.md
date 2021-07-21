@@ -316,7 +316,8 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
             externalID: "my-internal-id-12345"
             taxID: "012.345.678-90",
             name: "Jon Snow",
-            scheduled: DateTime.Now.AddDays(1)
+            scheduled: DateTime.Now.AddDays(1),
+            description: "Sword"
         )
     }
 );
