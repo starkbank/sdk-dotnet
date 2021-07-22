@@ -1455,6 +1455,32 @@ StarkBank.Event eventObject = StarkBank.Event.Update("129837198237192", isDelive
 Console.WriteLine(eventObject);
 ```
 
+### Query failed webhook event delivery attempts information
+
+You can also get information on failed webhook event delivery attempts.
+
+```c#
+using System;
+
+List<StarkBank.Event.Attempt> attempts = StarkBank.Event.Attempt.Query(after: "2020-03-20").ToList();
+
+foreach(StarkBank.Event.Attempt attempt in attempts) {
+    Console.WriteLine(attempt);
+}
+```
+
+### Get a failed webhook event delivery attempt information
+
+To retrieve information on a single attempt, use the following function:
+
+```c#
+using System;
+
+StarkBank.Event.Attempt attempt = Starkbank.Event.Attempt.Get("1616161616161616");
+
+Console.WriteLine(attempt);
+```
+
 ### Get a dict key
 
 You can get Pix key's parameters by its id.

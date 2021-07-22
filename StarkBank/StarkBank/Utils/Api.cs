@@ -104,7 +104,8 @@ namespace StarkBank.Utils
         internal static string Endpoint(string resourceName)
         {
             string kebab = Case.CamelOrPascalToKebab(resourceName);
-            return kebab.Replace("-log", "/log");
+            return kebab.Replace("-log", "/log")
+                        .Replace("-attempt", "/attempt");
         }
 
         internal static string LastNamePlural(string resourceName)

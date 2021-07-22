@@ -38,6 +38,22 @@ namespace StarkBankTests
         }
 
         [Fact]
+        public void QueryAndAttempt()
+        {
+            List<Event> events = Event.Query(limit: 2, isDelivered: false).ToList();
+            Assert.Equal(2, events.Count);
+            foreach (Event eventObject in events)
+            {
+                List<Event.Attempt> attempts = Event.Attempt.Query(limit: 1, eventIds: new List<string> { eventObject.ID }).ToList();
+                foreach (Event.Attempt attempt in attempts)
+                {
+                    Event.Attempt attemptGet = Event.Attempt.Get(attempt.ID);
+                    Assert.Equal(attempt.ID, attemptGet.ID);
+                }
+            }
+        }
+
+        [Fact]
         public void ParseWithRightSignature()
         {
             Event parsedEvent = Event.Parse(Content, GoodSignature);

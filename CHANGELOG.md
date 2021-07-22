@@ -23,6 +23,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Base exception class
 - missing parameters to Boleto, BrcodePayment, Deposit, DictKey and Invoice resources
 - InvoicePayment sub-resource to allow retrieval of invoice payment information
+- Event.Attempt sub-resource to allow retrieval of information on failed webhook event delivery attempts
 
 ### Fixed
 - special characters in BrcodePreview query
