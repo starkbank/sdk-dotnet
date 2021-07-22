@@ -583,6 +583,18 @@ StarkBank.Invoice.Log log = StarkBank.Invoice.Log.Get("4701727546671104");
 Console.WriteLine(log);
 ```
 
+### Get an invoice payment information
+
+Once an invoice has been paid, you can get the payment information using the InvoicePayment sub-resource:
+
+```c#
+using System;
+
+StarkBank.InvoicePayment payment = Invoice.Payment("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
 ### Query deposits
 
 You can get a list of created deposits given some filters.

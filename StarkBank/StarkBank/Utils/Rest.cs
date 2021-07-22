@@ -149,5 +149,17 @@ namespace StarkBank.Utils
             ).Json()[Api.LastName(resourceName)];
             return Api.FromApiJson(resourceMaker, json);
         }
+
+        static internal SubResource GetSubResource(string resourceName, Api.ResourceMaker subResourceMaker, string subResourceName,
+                                                   string id, User user, Dictionary<string, object> payload = null)
+        {
+            dynamic json = Request.Fetch(
+                user: user,
+                method: Request.Get,
+                path: $"{Api.Endpoint(resourceName)}/{id}/{Api.Endpoint(subResourceName)}",
+                payload: payload
+            ).Json()[Api.LastName(subResourceName)];
+            return Api.FromApiJson(subResourceMaker, json);
+        }
     }
 }

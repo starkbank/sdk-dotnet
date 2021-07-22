@@ -85,6 +85,18 @@ namespace StarkBankTests
             }
         }
 
+        [Fact]
+        public void Payment()
+        {
+            List<Invoice> invoices = Invoice.Query(limit: 2, status: "paid").ToList();
+            Assert.Equal(2, invoices.Count);
+            foreach (Invoice invoice in invoices)
+            {
+                InvoicePayment payment = Invoice.Payment(invoice.ID);
+                Assert.NotNull(payment.Name);
+            }
+        }
+
         internal static Invoice Example()
         {
             return new Invoice(
