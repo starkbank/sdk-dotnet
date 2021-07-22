@@ -8,7 +8,7 @@ namespace StarkBank.Utils
 {
     internal static class Api
     {
-        internal delegate Resource ResourceMaker(dynamic json);
+        internal delegate SubResource ResourceMaker(dynamic json);
 
         internal static Dictionary<string, object> ApiJson(Resource entity)
         {
@@ -96,7 +96,7 @@ namespace StarkBank.Utils
             return starkBankDateTime.ToString();
         }
 
-        internal static Resource FromApiJson(ResourceMaker resourceMaker, dynamic json)
+        internal static SubResource FromApiJson(ResourceMaker resourceMaker, dynamic json)
         {
             return resourceMaker(json);
         }

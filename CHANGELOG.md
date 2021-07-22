@@ -22,6 +22,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Transfer.Description property to allow control over corresponding Transaction descriptions
 - Base exception class
 - missing parameters to Boleto, BrcodePayment, Deposit, DictKey and Invoice resources
+- InvoicePayment sub-resource to allow retrieval of invoice payment information
 
 ### Fixed
 - special characters in BrcodePreview query

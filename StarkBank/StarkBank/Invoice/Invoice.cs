@@ -381,6 +381,41 @@ namespace StarkBank
             );
         }
 
+        /// <summary>
+        /// Retrieve a specific Invoice payment information
+        /// <br/>
+        /// Receive the InvoicePayment sub-resource associated with a paid Invoice.
+        /// <br/>
+        /// <list>
+        /// Parameters(required):
+        ///     <item>id[string]: object unique id. ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
+        /// Parameters(optional) :
+        /// <list>
+        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>Invoice Payment sub-resource</item>
+        /// </list>
+        /// </summary>
+        public static InvoicePayment Payment(string id, Dictionary<string, object> payload = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string subResourceName, Utils.Api.ResourceMaker subResourceMaker) = InvoicePayment.SubResource();
+
+            return Utils.Rest.GetSubResource(
+                resourceName: resourceName,
+                subResourceMaker: subResourceMaker,
+                subResourceName: subResourceName,
+                id: id,
+                payload: payload,
+                user: user
+            ) as InvoicePayment;
+        }
+
         internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Invoice", resourceMaker: ResourceMaker);
