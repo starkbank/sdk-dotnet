@@ -210,9 +210,10 @@ namespace StarkBank
         public static byte[] Pdf(string id, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetPdf(
+            return Utils.Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
+                subResourceName: "pdf",
                 id: id,
                 user: user
             );

@@ -255,10 +255,11 @@ namespace StarkBank
         /// </summary>
         public static byte[] Pdf(string id, User user = null)
         {
-        (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetPdf(
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
+                subResourceName: "pdf",
                 id: id,
                 user: user
             );
@@ -370,9 +371,10 @@ namespace StarkBank
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
 
-            return Utils.Rest.GetQrcode(
+            return Utils.Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
+                subResourceName: "qrcode",
                 id: id,
                 options: new Dictionary<string, object> {
                     { "size", size }
