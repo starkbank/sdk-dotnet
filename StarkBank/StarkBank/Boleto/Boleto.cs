@@ -272,9 +272,10 @@ namespace StarkBank
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
 
-            return Utils.Rest.GetPdf(
+            return Utils.Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
+                subResourceName: "pdf",
                 id: id,
                 options: new Dictionary<string, object> {
                     { "layout", layout }

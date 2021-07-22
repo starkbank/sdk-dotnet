@@ -56,22 +56,13 @@ namespace StarkBank.Utils
             return Api.FromApiJson(resourceMaker, json);
         }
 
-        static internal byte[] GetPdf(string resourceName, Api.ResourceMaker resourceMaker, string id, Dictionary<string, object> options = null, User user = null)
+        static internal byte[] GetContent(string resourceName, Api.ResourceMaker resourceMaker, string id,
+                                          Dictionary<string, object> options = null, string subResourceName = null, User user = null)
         {
             return Request.Fetch(
                 user: user,
                 method: Request.Get,
-                path: $"{Api.Endpoint(resourceName)}/{id}/pdf",
-                query: options
-            ).ByteContent;
-        }
-
-        static internal byte[] GetQrcode(string resourceName, Api.ResourceMaker resourceMaker, string id, Dictionary<string, object> options = null, User user = null)
-        {
-            return Request.Fetch(
-                user: user,
-                method: Request.Get,
-                path: $"{Api.Endpoint(resourceName)}/{id}/qrcode",
+                path: $"{Api.Endpoint(resourceName)}/{id}/{subResourceName}",
                 query: options
             ).ByteContent;
         }
