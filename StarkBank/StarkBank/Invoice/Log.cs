@@ -125,6 +125,37 @@ namespace StarkBank
                 ).Cast<Log>();
             }
 
+            /// <summary>
+            /// Retrieve a reversed Invoice.Log pdf file
+            /// <br/>
+            /// Receive a reversed Invoice.Log pdf receipt file generated in the Stark Bank API by its id.
+            /// <br/>
+            /// Parameters (required):
+            /// <list>
+            ///     <item>id [string]: object unique id. ex: "5656565656565656"</item>
+            /// </list>
+            /// <br/>
+            /// Parameters (optional):
+            /// <list>
+            ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+            /// </list>
+            /// <br/>
+            /// Return:
+            /// <list>
+            ///     <item>Invoice.Log pdf file</item>
+            /// </list>
+            /// </summary>
+            public static byte[] Pdf(string id, User user = null)
+            {
+                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+                return Utils.Rest.GetPdf(
+                    resourceName: resourceName,
+                    resourceMaker: resourceMaker,
+                    id: id,
+                    user: user
+                );
+            }
+
             internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "InvoiceLog", resourceMaker: ResourceMaker);

@@ -583,6 +583,23 @@ StarkBank.Invoice.Log log = StarkBank.Invoice.Log.Get("4701727546671104");
 Console.WriteLine(log);
 ```
 
+### Get a reversed invoice log PDF
+
+Whenever an Invoice is successfully reversed, a reversed log will be created.
+To retrieve a specific reversal receipt, you can request the corresponding log PDF:
+
+```c#
+using System;
+
+byte[] pdf = StarkBank.Invoice.Log.Pdf("4701727546671104");
+System.IO.File.WriteAllBytes("invoice-log.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+
 ### Get an invoice payment information
 
 Once an invoice has been paid, you can get the payment information using the InvoicePayment sub-resource:

@@ -31,5 +31,21 @@ namespace StarkBankTests
             Assert.Equal(getLog.ID, logs.First().ID);
             TestUtils.Log(getLog);
         }
+
+        [Fact]
+        public void Pdf()
+        {
+            List<Invoice.Log> logs = Invoice.Log.Query(
+                limit: 1,
+                before: DateTime.Now.Date,
+                types: new List<string> { "reversed" }
+            ).ToList();
+            foreach (Invoice.Log log in logs)
+            {
+                byte[] pdf = Invoice.Log.Pdf(id: log.ID);
+                Assert.True(pdf.Length > 0);
+                System.IO.File.WriteAllBytes("invoice-log.pdf", pdf);
+            }
+        }
     }
 }
