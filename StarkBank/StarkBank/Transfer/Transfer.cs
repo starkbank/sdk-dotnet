@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using StarkBank.Utils;
 
 
 namespace StarkBank
@@ -314,6 +315,62 @@ namespace StarkBank
                 },
                 user: user
             ).Cast<Transfer>();
+        }
+
+        /// <summary>
+        /// Retrieve paged Transfers
+        /// <br/>
+        /// Receive a list of up to 100 Transfer objects previously created in the Stark Bank API and the cursor to the next page.
+        /// Use this function instead of query if you want to manually page your requests.
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>after [DateTime, default null] date filter for objects created or updated only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created or updated only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>transactionIds [list of strings, default null]: list of transaction IDs linked to the desired transfers. ex: ["5656565656565656", "4545454545454545"]</item>
+        ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
+        ///     <item>taxID [string, default null]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"</item>
+        ///     <item>sort [string, default "-created"]: sort order considered in the response. Options are: "created", "-created", "updated" and "-updated". "-" means descending order.</item>
+        ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
+        ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of Transfer objects with updated attributes and cursor to retrieve the next page of Transfer objects</item>
+        /// </list>
+        /// </summary>
+        public static (List<Transfer> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
+            DateTime? before = null, List<string> transactionIds = null, string status = null, string taxID = null, string sort = null,
+            List<string> tags = null, List<string> ids = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
+                    { "transactionIds", transactionIds },
+                    { "status", status },
+                    { "taxID", taxID },
+                    { "sort", sort },
+                    { "tags", tags },
+                    { "ids", ids }
+                },
+                user: user
+            );
+            List<Transfer> transactions = new List<Transfer>();
+            foreach (SubResource subResource in page)
+            {
+                transactions.Add(subResource as Transfer);
+            }
+            return (transactions, pageCursor);
         }
 
         internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()

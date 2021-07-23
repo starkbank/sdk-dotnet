@@ -6,6 +6,23 @@ namespace StarkBank.Utils
 {
     static internal class Rest
     {
+        static internal (List<SubResource> entities, string cursor) GetPage(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> query, User user)
+        {
+            dynamic json = Request.Fetch(
+                user: user,
+                method: Request.Get,
+                path: Api.Endpoint(resourceName),
+                query: query
+            ).Json();
+            List<SubResource> entities = new List<SubResource>();
+            foreach (dynamic entityJson in json[Api.LastNamePlural(resourceName)])
+            {
+                entities.Add(Api.FromApiJson(resourceMaker, entityJson));
+            }
+            string cursor = json["cursor"];
+            return (entities, cursor);
+        }
+
         internal static IEnumerable<Resource> GetList(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> query, User user)
         {
             query.TryGetValue("limit", out object rawLimit);

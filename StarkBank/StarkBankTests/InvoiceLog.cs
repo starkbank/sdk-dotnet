@@ -33,6 +33,28 @@ namespace StarkBankTests
         }
 
         [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<Invoice.Log> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = Invoice.Log.Page(limit: 5, cursor: cursor);
+                foreach (Invoice.Log entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
+
+        [Fact]
         public void Pdf()
         {
             List<Invoice.Log> logs = Invoice.Log.Query(

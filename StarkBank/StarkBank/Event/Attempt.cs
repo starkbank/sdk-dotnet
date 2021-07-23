@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StarkBank.Utils;
 
 namespace StarkBank
 {
@@ -122,6 +123,53 @@ namespace StarkBank
                     },
                     user: user
                 ).Cast<Attempt>();
+            }
+
+            /// <summary>
+            /// Retrieve paged Event.Attempts
+            /// <br/>
+            /// Receive a list of up to 100 Event.Attempt objects previously created in the Stark Bank API and the cursor to the next page.
+            /// Use this function instead of query if you want to manually page your requests.
+            /// <br/>
+            /// Parameters (optional):
+            /// <list>
+            ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+            ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>eventIds [list of strings, default null]: list of Event ids to filter attempts. ex: ["5656565656565656", "4545454545454545"]</item>
+            ///     <item>webhookIds [list of strings, default None]: list of Webhook ids to filter attempts. ex: ["5656565656565656", "4545454545454545"]</item>
+            ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+            /// </list>
+            /// <br/>
+            /// Return:
+            /// <list>
+            ///     <item>list of Event.Attempt objects with updated attributes and cursor to retrieve the next page of Event.Attempt objects</item>
+            /// </list>
+            /// </summary>
+            public static (List<Attempt> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
+                DateTime? before = null, List<string> eventIds = null, List<string> webhookIds = null, User user = null)
+            {
+                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                    resourceName: resourceName,
+                    resourceMaker: resourceMaker,
+                    query: new Dictionary<string, object> {
+                        { "cursor", cursor },
+                        { "limit", limit },
+                        { "after", new Utils.StarkBankDate(after) },
+                        { "before", new Utils.StarkBankDate(before) },
+                        { "eventIds", eventIds },
+                        { "webhookIds", webhookIds }
+                    },
+                    user: user
+                );
+                List<Attempt> attempts = new List<Attempt>();
+                foreach (SubResource subResource in page)
+                {
+                    attempts.Add(subResource as Attempt);
+                }
+                return (attempts, pageCursor);
             }
 
             internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()

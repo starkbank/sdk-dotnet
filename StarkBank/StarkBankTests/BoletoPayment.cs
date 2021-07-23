@@ -48,6 +48,29 @@ namespace StarkBankTests
             }
         }
 
+        [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<BoletoPayment> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = BoletoPayment.Page(limit: 5, cursor: cursor);
+                foreach (BoletoPayment entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Console.WriteLine(ids);
+            Assert.True(ids.Count == 10);
+        }
+
         internal static BoletoPayment Example(bool schedule = true)
         {
             DateTime? scheduled = null;

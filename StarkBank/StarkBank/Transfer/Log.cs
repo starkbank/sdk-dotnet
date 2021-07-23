@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using StarkBank.Utils;
 
 
 namespace StarkBank
@@ -121,6 +122,53 @@ namespace StarkBank
                     },
                     user: user
                 ).Cast<Log>();
+            }
+
+            /// <summary>
+            /// Retrieve paged Logs
+            /// <br/>
+            /// Receive a list of up to 100 Log objects previously created in the Stark Bank API and the cursor to the next page.
+            /// Use this function instead of query if you want to manually page your requests.
+            /// <br/>
+            /// Parameters (optional):
+            /// <list>
+            ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+            ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>types [list of strings, default null]: filter retrieved objects by types. ex: "success" or "failed"</item>
+            ///     <item>transferIds [list of strings, default null]: list of Transfer ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+            ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+            /// </list>
+            /// <br/>
+            /// Return:
+            /// <list>
+            ///     <item>list of Log objects with updated attributes and cursor to retrieve the next page of Log objects</item>
+            /// </list>
+            /// </summary>
+            public static (List<Log> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
+                DateTime? before = null, List<string> types = null, List<string> transferIds = null, User user = null)
+            {
+                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                    resourceName: resourceName,
+                    resourceMaker: resourceMaker,
+                    query: new Dictionary<string, object> {
+                        { "cursor", cursor },
+                        { "limit", limit },
+                        { "after", new Utils.StarkBankDate(after) },
+                        { "before", new Utils.StarkBankDate(before) },
+                        { "types", types },
+                        { "transferIds", transferIds }
+                    },
+                    user: user
+                );
+                List<Log> logs = new List<Log>();
+                foreach (SubResource subResource in page)
+                {
+                    logs.Add(subResource as Log);
+                }
+                return (logs, pageCursor);
             }
 
             internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()

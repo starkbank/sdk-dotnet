@@ -36,6 +36,28 @@ namespace StarkBankTests
         }
 
         [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<Transaction> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = Transaction.Page(limit: 5, cursor: cursor);
+                foreach (Transaction entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
+
+        [Fact]
         public void QueryIds()
         {
             List<Transaction> transactions = Transaction.Query(limit: 10).ToList();

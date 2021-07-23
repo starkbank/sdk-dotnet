@@ -30,5 +30,27 @@ namespace StarkBankTests
             Assert.Equal(getLog.ID, logs.First().ID);
             TestUtils.Log(getLog);
         }
+
+        [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<UtilityPayment.Log> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = UtilityPayment.Log.Page(limit: 5, cursor: cursor);
+                foreach (UtilityPayment.Log entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace StarkBankTests
         [Fact]
         public void QueryAndGet()
         {
-            List<Workspace> workspaces = Workspace.Query(user: organization).ToList();
+            List<Workspace> workspaces = Workspace.Query(limit: 2, user: organization).ToList();
             foreach (Workspace workspace in workspaces)
             {
                 Console.WriteLine(workspace);
@@ -24,6 +24,28 @@ namespace StarkBankTests
                 Workspace getWorkspace = Workspace.Get(workspace.ID, user: Organization.Replace(organization, workspace.ID));
                 Assert.Equal(workspace.ID, getWorkspace.ID);
             }
+        }
+
+        [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<Workspace> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = Workspace.Page(limit: 2, cursor: cursor, user: organization);
+                foreach (Workspace entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 4);
         }
 
         [Fact]

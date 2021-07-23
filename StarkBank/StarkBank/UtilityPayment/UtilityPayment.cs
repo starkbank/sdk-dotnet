@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using StarkBank.Utils;
 
 
 namespace StarkBank
@@ -257,6 +258,55 @@ namespace StarkBank
                 },
                 user: user
             ).Cast<UtilityPayment>();
+        }
+
+        /// <summary>
+        /// Retrieve paged UtilityPayments
+        /// <br/>
+        /// Receive a list of up to 100 UtilityPayment objects previously created in the Stark Bank API and the cursor to the next page.
+        /// Use this function instead of query if you want to manually page your requests.
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
+        ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+        ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid"</item>
+        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of UtilityPayment objects with updated attributes and cursor to retrieve the next page of UtilityPayment objects</item>
+        /// </list>
+        /// </summary>
+        public static (List<UtilityPayment> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
+            DateTime? before = null, List<string> tags = null, List<string> ids = null, string status = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
+                    { "tags", tags },
+                    { "ids", ids },
+                    { "status", status }
+                },
+                user: user
+            );
+            List<UtilityPayment> utilityPayments = new List<UtilityPayment>();
+            foreach (SubResource subResource in page)
+            {
+                utilityPayments.Add(subResource as UtilityPayment);
+            }
+            return (utilityPayments, pageCursor);
         }
 
         /// <summary>
