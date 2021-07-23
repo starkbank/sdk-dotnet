@@ -193,6 +193,56 @@ StarkBank.Settings.Language = "en-US";
 
 Language options are "en-US" for english and "pt-BR" for brazilian portuguese. English is default.
 
+### 6. Resource listing and manual pagination
+
+Almost all SDK resources provide a `Query` and a `Page` function.
+
+- The `Query` function provides a straight forward way to efficiently iterate through all results that match the filters you inform,
+seamlessly retrieving the next batch of elements from the API only when you reach the end of the current batch.
+If you are not worried about data volume or processing time, this is the way to go.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.Transaction> transactions = StarkBank.Transaction.Query(
+    after: DateTime.Today.Date.AddDays(-10),
+    before: DateTime.Today.Date.AddDays(-1)
+);
+
+foreach(StarkBank.Transaction transaction in transactions) {
+    Console.WriteLine(transaction);
+}
+```
+
+- The `Page` function gives you full control over the API pagination. With each function call, you receive up to
+100 results and the cursor to retrieve the next batch of elements. This allows you to stop your queries and
+pick up from where you left off whenever it is convenient. When there are no more elements to be retrieved, the returned cursor will be `null`.
+
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<Transaction> page;
+string cursor = null;
+
+while (true)
+{
+    (page, cursor) = StarkBank.Transaction.Page(cursor: cursor);
+    foreach (Transaction entity in page)
+    {
+        Console.WriteLine(entity);
+    }
+    if (cursor == null)
+    {
+        break;
+    }
+}
+```
+
+To simplify the following SDK examples, we will only use the `Query` function, but feel free to use `Page` instead.
+
 ## Testing in Sandbox
 
 Your initial balance is zero. For many operations in Stark Bank, you'll need funds

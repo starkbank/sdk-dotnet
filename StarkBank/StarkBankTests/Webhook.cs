@@ -38,6 +38,28 @@ namespace StarkBankTests
             }
         }
 
+        [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<Webhook> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = Webhook.Page(limit: 2, cursor: cursor);
+                foreach (Webhook entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count <= 4);
+        }
+
         internal static Webhook Example()
         {
             return new Webhook(

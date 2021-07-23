@@ -23,5 +23,27 @@ namespace StarkBankTests
                 TestUtils.Log(deposit);
             }
         }
+
+        [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<Deposit> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = Deposit.Page(limit: 5, cursor: cursor);
+                foreach (Deposit entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
     }
 }

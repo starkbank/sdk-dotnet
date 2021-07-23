@@ -54,6 +54,28 @@ namespace StarkBankTests
         }
 
         [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<Event> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = Event.Page(limit: 5, cursor: cursor);
+                foreach (Event entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
+
+        [Fact]
         public void ParseWithRightSignature()
         {
             Event parsedEvent = Event.Parse(Content, GoodSignature);

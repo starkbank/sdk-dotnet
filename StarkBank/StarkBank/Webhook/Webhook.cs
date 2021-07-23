@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using StarkBank.Utils;
+using System;
 
 
 namespace StarkBank
@@ -137,6 +139,44 @@ namespace StarkBank
                 },
                 user: user
             ).Cast<Webhook>();
+        }
+
+        /// <summary>
+        /// Retrieve paged Webhook subcriptions
+        /// <br/>
+        /// Receive a list of up to 100 Webhook objects previously created in the Stark Bank API and the cursor to the next page.
+        /// Use this function instead of query if you want to manually page your requests.
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of Webhook objects with updated attributes and cursor to retrieve the next page of Transfer objects</item>
+        /// </list>
+        /// </summary>
+        public static (List<Webhook> page, string pageCursor) Page(string cursor = null, int? limit = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit }
+                },
+                user: user
+            );
+            List<Webhook> webhooks = new List<Webhook>();
+            foreach (SubResource subResource in page)
+            {
+                webhooks.Add(subResource as Webhook);
+            }
+            return (webhooks, pageCursor);
         }
 
         /// <summary>

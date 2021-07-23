@@ -36,6 +36,28 @@ namespace StarkBankTests
             }
         }
 
+        [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<BoletoHolmes> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = BoletoHolmes.Page(limit: 5, cursor: cursor);
+                foreach (BoletoHolmes entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
+
         private static BoletoHolmes Example()
         {
             Boleto boleto = BoletoTest.Example();

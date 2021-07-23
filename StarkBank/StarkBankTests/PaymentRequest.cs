@@ -38,6 +38,28 @@ namespace StarkBankTests
             }
         }
 
+        [Fact]
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<PaymentRequest> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = PaymentRequest.Page(limit: 5, cursor: cursor, centerID: Environment.GetEnvironmentVariable("SANDBOX_CENTER_ID"));
+                foreach (PaymentRequest entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
+
         internal static PaymentRequest Example()
         {
             Random random = new Random();

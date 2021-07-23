@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using StarkBank.Utils;
 
 
 namespace StarkBank
@@ -201,6 +202,63 @@ namespace StarkBank
                 },
                 user: user
             ).Cast<PaymentRequest>();
+        }
+
+        /// <summary>
+        /// Retrieve paged PaymentRequests
+        /// <br/>
+        /// Receive a list of up to 100 PaymentRequest objects previously created in the Stark Bank API and the cursor to the next page.
+        /// Use this function instead of query if you want to manually page your requests.
+        /// <br/>
+        /// Parameters (required):
+        /// <list>
+        ///     <item>centerID [string]: target cost center ID. ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "success", "failed"</item>
+        ///     <item>type [string, default null]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
+        ///     <item>sort [string, default "-created"]: sort order considered in response. Valid options are "-created" or "-due".
+        ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
+        ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        ///     <item>list of PaymentRequest objects with updated attributes and cursor to retrieve the next page of PaymentRequest objects</item>
+        /// </summary>
+        public static (List<PaymentRequest> page, string pageCursor) Page(string centerID, string cursor = null, int? limit = null, DateTime? after = null,
+            DateTime? before = null, string status = null, string type = null, string sort = null, List<string> tags = null, List<string> ids = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "centerID", centerID },
+                    { "limit", limit },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
+                    { "status", status },
+                    { "type", type },
+                    { "sort", sort },
+                    { "tags", tags },
+                    { "ids", ids }
+                },
+                user: user
+            );
+            List<PaymentRequest> paymentRequests = new List<PaymentRequest>();
+            foreach (SubResource subResource in page)
+            {
+                paymentRequests.Add(subResource as PaymentRequest);
+            }
+            return (paymentRequests, pageCursor);
         }
 
         internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()

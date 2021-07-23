@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System;
+using StarkBank.Utils;
 
 
 namespace StarkBank
@@ -67,7 +69,7 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>allowedTaxIds [list of strings, default null]: list of tax IDs that will be allowed to send Deposits to this Workspace. ex: ["012.345.678-90", "20.018.183/0001-80"]</item>
-        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        ///     <item>user [Organization/Project object, default null]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
         /// </list>
         /// <br/>
         /// Return:
@@ -98,7 +100,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        ///     <item>user [Organization/Project object, default null]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
         /// </list>
         /// <br/>
         /// Return:
@@ -125,9 +127,9 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>username [string]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: "starkbank-workspace".</item>
+        ///     <item>username [string, default null]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: "starkbank-workspace".</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
-        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        ///     <item>user [Organization/Project object, default null]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
         /// </list>
         /// <br/>
         /// Return:
@@ -151,6 +153,49 @@ namespace StarkBank
         }
 
         /// <summary>
+        /// Retrieve paged Workspaces
+        /// <br/>
+        /// Receive a list of up to 100 Workspace objects previously created in the Stark Bank API and the cursor to the next page.
+        /// Use this function instead of query if you want to manually page your requests.
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>username [string, default null]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: "starkbank-workspace".</item>
+        ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
+        ///     <item>user [Organization/Project object, default null]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of Workspace objects with updated attributes and cursor to retrieve the next page of Workspace objects</item>
+        /// </list>
+        /// </summary>
+        public static (List<Workspace> page, string pageCursor) Page(string cursor = null, int? limit = null,
+            string username = null, List<string> ids = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit },
+                    { "username", username },
+                    { "ids", ids }
+                },
+                user: user
+            );
+            List<Workspace> workspaces = new List<Workspace>();
+            foreach (SubResource subResource in page)
+            {
+                workspaces.Add(subResource as Workspace);
+            }
+            return (workspaces, pageCursor);
+        }
+
+        /// <summary>
         /// Update Workspace
         /// <br/>
         /// Update a Workspace by passing its ID.
@@ -161,10 +206,10 @@ namespace StarkBank
         /// </list>
         /// Parameters (optional):
         /// <list>
-        ///     <item>name [string]: Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Ex: "Stark Bank Workspace"</item>
-        ///     <item>username [string]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: "starkbank-workspace".</item>
+        ///     <item>name [string, default null]: Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Ex: "Stark Bank Workspace"</item>
+        ///     <item>username [string, default null]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: "starkbank-workspace".</item>
         ///     <item>allowedTaxIds [list of strings, default null]: list of tax IDs that will be allowed to send Deposits to this Workspace. If empty, all are allowed. ex: ["012.345.678-90", "20.018.183/0001-80"]</item>
-        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        ///     <item>user [Organization/Project object, default null]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
         /// </list>
         /// <br/>
         /// Return:

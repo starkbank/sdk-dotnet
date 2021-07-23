@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using EllipticCurve;
+using StarkBank.Utils;
 
 
 namespace StarkBank
@@ -122,6 +123,51 @@ namespace StarkBank
                 },
                 user: user
             ).Cast<Event>();
+        }
+
+        /// <summary>
+        /// Retrieve paged notification Events
+        /// <br/>
+        /// Receive a list of up to 100 Event objects previously created in the Stark Bank API and the cursor to the next page.
+        /// Use this function instead of query if you want to manually page your requests.
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>isDelivered [bool, default null]: bool to filter successfully delivered events. ex: True or False</item>
+        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of Event objects with updated attributes and cursor to retrieve the next page of Event objects</item>
+        /// </list>
+        /// </summary>
+        public static (List<Event> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
+            DateTime? before = null, bool? isDelivered = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
+                    { "isDelivered", isDelivered }
+                },
+                user: user
+            );
+            List<Event> events = new List<Event>();
+            foreach (SubResource subResource in page)
+            {
+                events.Add(subResource as Event);
+            }
+            return (events, pageCursor);
         }
 
         /// <summary>

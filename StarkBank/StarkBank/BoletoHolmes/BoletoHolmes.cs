@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using StarkBank.Utils;
 
 namespace StarkBank
 {
@@ -25,7 +25,7 @@ namespace StarkBank
     /// </summary>
     public partial class BoletoHolmes : Utils.Resource
     {
-        public string BoletoID{ get; }
+        public string BoletoID { get; }
         public List<string> Tags { get; }
         public string Status { get; }
         public string Result { get; }
@@ -203,6 +203,58 @@ namespace StarkBank
                 user: user
             ).Cast<BoletoHolmes>();
         }
+
+        /// <summary>
+        /// Retrieve paged BoletoHolmes
+        /// <br/>
+        /// Receive a list of up to 100 BoletoHolmes objects previously created in the Stark Bank API and the cursor to the next page.
+        /// Use this function instead of query if you want to manually page your requests.
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
+        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
+        ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
+        ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "solved"</item>
+        ///     <item>boletoID [string, default null]: filter for holmes that investigate a specific boleto by its ID. ex: "5656565656565656"</item>
+        ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>list of BoletoHolmes objects with updated attributes and cursor to retrieve the next page of BoletoHolmes objects</item>
+        /// </list>
+        /// </summary>
+        public static (List<BoletoHolmes> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
+            DateTime? before = null, List<string> tags = null, List<string> ids = null, string status = null, string boletoID = null, User user = null)
+        {
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit },
+                    { "after", new Utils.StarkBankDate(after) },
+                    { "before", new Utils.StarkBankDate(before) },
+                    { "tags", tags },
+                    { "ids", ids},
+                    { "status", status },
+                    { "boletoID", boletoID }
+                },
+                user: user
+            );
+            List<BoletoHolmes> boletoHolmes = new List<BoletoHolmes>();
+            foreach (SubResource subResource in page)
+            {
+                boletoHolmes.Add(subResource as BoletoHolmes);
+            }
+            return (boletoHolmes, pageCursor);
+        }
+
 
         internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
         {
