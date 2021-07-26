@@ -26,6 +26,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Event.Attempt sub-resource to allow retrieval of information on failed webhook event delivery attempts
 - pdf method for retrieving PDF receipts from reversed invoice logs
 - page functions as a manual-pagination alternative to queries
+- Institution resource to allow query of institutions recognized by the Brazilian Central Bank for Pix and TED transactions
 
 ### Fixed
 - special characters in BrcodePreview query

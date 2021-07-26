@@ -463,6 +463,21 @@ StarkBank.Transfer.Log log = StarkBank.Transfer.Log.Get("5155165527080960");
 Console.WriteLine(log);
 ```
 
+### Query Bacen institutions
+
+You can query institutions registered by the Brazilian Central Bank for Pix and TED transactions.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.Institution> institutions = StarkBank.Institution.Query(search: "stark");
+
+foreach(StarkBank.Institution.Log institution in institutions) {
+    Console.WriteLine(institution);
+}
+```
+
 ### Create invoices
 
 You can create dynamic QR Code invoices to charge customers or to receive money from accounts

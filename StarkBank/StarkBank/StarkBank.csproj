@@ -46,6 +46,7 @@
     <Folder Include="BrcodePayment\" />
     <Folder Include="BrcodePreview\" />
     <Folder Include="Workspace\" />
+    <Folder Include="Institution\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
