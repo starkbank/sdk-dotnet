@@ -115,6 +115,9 @@ namespace StarkBank
             if (payment.GetType() == typeof(UtilityPayment)) {
                 return "utility-payment";
             }
+            if (payment.GetType() == typeof(TaxPayment)) {
+                return "tax-payment";
+            }
             throw new Exception("if no type is specified, payment must be either a Transfer, a Transaction, a BoletoPayment or a UtilityPayment");
         }
 
@@ -305,6 +308,9 @@ namespace StarkBank
             }
             if (type == "utility-payment") {
                 return UtilityPayment.ResourceMaker(json);
+            }
+            if (type == "tax-payment") {
+                return TaxPayment.ResourceMaker(json);
             }
             return null;
         }
