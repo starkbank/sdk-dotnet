@@ -48,6 +48,7 @@
     <Folder Include="Workspace\" />
     <Folder Include="Institution\" />
     <Folder Include="TaxPayment\" />
+    <Folder Include="DarfPayment\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

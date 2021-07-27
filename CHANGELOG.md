@@ -28,6 +28,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - page functions as a manual-pagination alternative to queries
 - Institution resource to allow query of institutions recognized by the Brazilian Central Bank for Pix and TED transactions
 - TaxPayment resource
+- DarfPayment resource to allow DARF tax payment without bar code
 
 ### Fixed
 - special characters in BrcodePreview query
