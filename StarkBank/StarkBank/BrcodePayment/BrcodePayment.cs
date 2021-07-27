@@ -369,7 +369,10 @@ namespace StarkBank
             }
             string status = json.status;
             string type = json.type;
-            List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
+            List<string> transactionIds = new List<string>();
+            if (json.transactionIds != null) {
+                transactionIds = json.transactionIds.ToObject<List<string>>();
+            }
             int? fee = json.fee;
             string createdString = json.created;
             DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);

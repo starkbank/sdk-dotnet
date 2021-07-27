@@ -1318,6 +1318,125 @@ StarkBank.UtilityPayment.Log log = StarkBank.UtilityPayment.Log.Get("19028371982
 Console.WriteLine(log);
 ```
 
+### Create tax payments
+
+It is also simple to pay taxes (such as ISS and DAS) using this SDK.
+
+```c#
+using System;
+
+List<StarkBank.TaxPayment> payments = StarkBank.TaxPayment.Create(new List<StarkBank.TaxPayment>() { 
+    new StarkBank.TaxPayment(
+        barCode: "85660000001549403280074119002551100010601813",
+        description: "fix the road",
+        tags: new List<string> { "take", "my", "money" },
+        scheduled: "2020-08-13"
+    ),
+    new StarkBank.TaxPayment(
+        line: "85800000003 0 28960328203 1 56072020190 5 22109674804 0",
+        description: "build the hospital, hopefully",
+        tags: new List<string> { "expensive" },
+        scheduled: "2020-08-13"
+    )
+ });
+
+foreach (StarkBank.TaxPayment payment in payments)
+{
+    Console.WriteLine(payment);
+}
+```
+
+ **Note**: Instead of using TaxPayment objects, you can also pass each payment element in dictionary format
+
+### Query tax payments
+
+To search for tax payments using filters, run:
+
+```c#
+using System;
+
+List<StarkBank.TaxPayment> payments = StarkBank.TaxPayment.Query(limit: 5).ToList();
+
+foreach (StarkBank.TaxPayment payment in payments)
+{
+    Console.WriteLine(payment);
+}
+```
+
+### Get tax payment
+
+You can get a specific tax payment by its id:
+
+```c#
+using System;
+
+StarkBank.TaxPayment taxPayment = StarkBank.TaxPayment.Get("5155165527080960");
+
+Console.WriteLine(taxPayment);
+```
+
+### Get tax payment PDF
+
+After its creation, a tax payment PDF may also be retrieved by its id.
+
+```c#
+using System;
+
+byte[] pdf = StarkBank.TaxPayment.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("taxPayment.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Delete tax payment
+
+You can also cancel a tax payment by its id.
+Note that this is not possible if it has been processed already.
+
+```c#
+using System;
+
+StarkBank.TaxPayment taxPayment = StarkBank.TaxPayment.Delete("5155165527080960");
+
+Console.WriteLine(taxPayment);
+```
+
+### Query tax payment logs
+
+You can search for payment logs by specifying filters. Use this to understand each payment life cycle.
+
+```c#
+using System;
+
+List<StarkBank.TaxPayment.Log> logs = StarkBank.TaxPayment.Log.Query(
+    limit: 5
+).ToList();
+
+foreach (StarkBank.TaxPayment.Log log in logs)
+{
+    Console.WriteLine(log);
+}
+```
+
+### Get tax payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```c#
+using System;
+
+StarkBank.TaxPayment.Log log = StarkBank.TaxPayment.Log.Get("1902837198237992");
+
+Console.WriteLine(log);
+```
+
+**Note**: Some taxes can't be payed with bar codes. Since they have specific parameters, each one of them has its own
+resource and routes, which are all analogous to the TaxPayment resource. The ones we currently support are:
+- DarfPayment, for DARFs
+
 ### Create payment requests to be approved by authorized people in a cost center
 
 You can also request payments that must pass through a specific cost center approval flow to be executed.
@@ -1394,7 +1513,7 @@ using System;
 
 StarkBank.Webhook webhook = StarkBank.Webhook.Create(
     url: "https://webhook.site/dd784f26-1d6a-4ca6-81cb-fda0267761ec",
-    subscriptions: new List<string> { "transfer", "invoice", "brcode-payment", "utility-payment" }
+    subscriptions: new List<string> { "transfer", "invoice", "deposit", "brcode-payment", "boleto", "boleto-payment", "utility-payment", "tax-payment" }
 );
 
 Console.WriteLine(webhook);
