@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <ReleaseVersion>2.4.0</ReleaseVersion>
-    <PackageVersion>2.4.0</PackageVersion>
+    <ReleaseVersion>2.5.0</ReleaseVersion>
+    <PackageVersion>2.5.0</PackageVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Owners>Stark Bank</Owners>
     <PackageProjectUrl>https://github.com/starkbank/sdk-dotnet</PackageProjectUrl>
@@ -16,6 +16,7 @@
     <PackageId>starkbank</PackageId>
     <PackageIconUrl>https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/135476/logo-white-1.png</PackageIconUrl>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

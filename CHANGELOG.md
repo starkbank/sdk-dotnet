@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.5.0] - 2021-07-27
 ### Added
 - "payment" account type for Pix related resources
 - Event.WorkspaceId property to allow multiple Workspace Webhook identification
@@ -29,7 +31,6 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Institution resource to allow query of institutions recognized by the Brazilian Central Bank for Pix and TED transactions
 - TaxPayment resource
 - DarfPayment resource to allow DARF tax payment without bar code
-
 ### Fixed
 - special characters in BrcodePreview query
 
