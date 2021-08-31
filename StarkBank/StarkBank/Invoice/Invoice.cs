@@ -12,13 +12,15 @@ namespace StarkBank
     /// When you initialize an Invoice, the entity will not be automatically
     /// sent to the Stark Bank API. The 'create' function sends the objects
     /// to the Stark Bank API and returns the list of created objects.
+    /// To create scheduled Invoices, which will display the discount, interest, etc. on the final users banking interface,
+    /// use dates instead of datetimes on the "due" and "discounts" fields.
     /// <br/>
     /// Properties:
     /// <list>
     ///     <item>ID [string, default null]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
     ///     <item>Name [string]: payer name. ex: "Iron Bank S.A."</item>
     ///     <item>TaxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
-    ///     <item>Due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 12, 15)</item>
+    ///     <item>Due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0) for immediate invoices and DateTime(2020, 3, 10) for scheduled invoices</item>
     ///     <item>Expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
     ///     <item>Fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
@@ -70,6 +72,8 @@ namespace StarkBank
         /// When you initialize an Invoice, the entity will not be automatically
         /// sent to the Stark Bank API. The 'create' function sends the objects
         /// to the Stark Bank API and returns the list of created objects.
+        /// To create scheduled Invoices, which will display the discount, interest, etc. on the final users banking interface,
+        /// use dates instead of datetimes on the "due" and "discounts" fields.
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -80,7 +84,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0) for immediate invoices and DateTime(2020, 3, 10) for scheduled invoices</item>
         ///     <item>expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
         ///     <item>fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
         ///     <item>interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
