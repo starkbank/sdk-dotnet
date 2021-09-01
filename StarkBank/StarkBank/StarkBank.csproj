@@ -50,6 +50,7 @@
     <Folder Include="Institution\" />
     <Folder Include="TaxPayment\" />
     <Folder Include="DarfPayment\" />
+    <Folder Include="PaymentPreview\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
