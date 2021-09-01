@@ -6,7 +6,7 @@ namespace StarkBank.Utils
     {
         internal static string PascalToCamel(string pascal)
         {
-            return char.ToLowerInvariant(pascal[0]) + pascal.Substring(1);
+            return pascal.Equals("ID") ? "id" : char.ToLowerInvariant(pascal[0]) + pascal.Substring(1);
         }
 
         internal static string CamelToPascal(string camel)

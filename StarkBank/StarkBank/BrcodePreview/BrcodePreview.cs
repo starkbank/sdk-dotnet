@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-
+using System;
 
 namespace StarkBank
 {
@@ -87,6 +87,7 @@ namespace StarkBank
         ///     <item>IEnumerable of BrcodePreview objects with updated attributes</item>
         /// </list>
         /// </summary>
+        [Obsolete("BrcodePreview is deprecated, please use PaymentPreview instead.")]
         public static IEnumerable<BrcodePreview> Query(List<string> brcodes = null, User user = null)
         {
             (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
