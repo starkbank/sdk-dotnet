@@ -1,5 +1,4 @@
-﻿using System;
-namespace StarkBank
+﻿namespace StarkBank
 {
     public partial class PaymentPreview
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StarkBank.Utils;
 
 namespace StarkBank
 {
@@ -18,7 +19,7 @@ namespace StarkBank
     ///     <item>payment [BrcodePreview, BoletoPreview, UtilityPreview or TaxPreview]: Information preview of the informed payment.</item>
     /// </list>
     /// </summary>
-    public partial class PaymentPreview : Utils.Resource
+    public partial class PaymentPreview : Resource
     {
 
         public DateTime? Scheduled { get; }
@@ -54,17 +55,17 @@ namespace StarkBank
             Type = type;
             Payment = payment;
 
-            var subResourceByType = new Dictionary<string, Utils.Api.ResourceMaker>()
+            var subResourceByType = new Dictionary<string, Api.ResourceMaker>()
             {
-                { "brcode-payment",  PaymentPreview.BrcodePreview.ResourceMaker},
-                { "boleto-payment",  PaymentPreview.BoletoPreview.ResourceMaker},
-                { "tax-payment",  PaymentPreview.TaxPreview.ResourceMaker},
-                { "utility-payment",  PaymentPreview.UtilityPreview.ResourceMaker}
+                { "brcode-payment",  BrcodePreview.ResourceMaker},
+                { "boleto-payment",  BoletoPreview.ResourceMaker},
+                { "tax-payment",  TaxPreview.ResourceMaker},
+                { "utility-payment",  UtilityPreview.ResourceMaker}
             };
 
             if (Type != null && subResourceByType.ContainsKey(Type))
             {
-                Payment = Utils.Api.FromApiJson(subResourceByType[Type], Payment);
+                Payment = Api.FromApiJson(subResourceByType[Type], Payment);
             }
         }
 
@@ -90,8 +91,8 @@ namespace StarkBank
         /// </summary>
         public static List<PaymentPreview> Create(List<PaymentPreview> previews, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: previews,
@@ -121,8 +122,8 @@ namespace StarkBank
         /// </summary>
         public static List<PaymentPreview> Create(List<Dictionary<string, object>> previews, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: previews,
@@ -130,20 +131,21 @@ namespace StarkBank
             ).ToList().ConvertAll(o => (PaymentPreview)o);
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "PaymentPreview", resourceMaker: ResourceMaker);
         }
 
-        public static Utils.SubResource ResourceMaker(dynamic json)
+        public static SubResource ResourceMaker(dynamic json)
         {
+            string id = json.id;
             string scheduledString = json.scheduled;
-            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
+            DateTime? scheduled = Checks.CheckNullableDateTime(scheduledString);
             string type = json.type;
             object payment = json.payment;
 
             return new PaymentPreview(
-                scheduled: scheduled, type: type, payment: payment
+                id: id, scheduled: scheduled, type: type, payment: payment
             );
         }
     }
