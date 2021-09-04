@@ -138,13 +138,14 @@ namespace StarkBank
 
         public static SubResource ResourceMaker(dynamic json)
         {
+            string id = json.id;
             string scheduledString = json.scheduled;
             DateTime? scheduled = Checks.CheckNullableDateTime(scheduledString);
             string type = json.type;
             object payment = json.payment;
 
             return new PaymentPreview(
-                scheduled: scheduled, type: type, payment: payment
+                id: id, scheduled: scheduled, type: type, payment: payment
             );
         }
     }

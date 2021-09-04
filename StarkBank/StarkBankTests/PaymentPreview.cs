@@ -18,7 +18,7 @@ namespace StarkBankTests
             UtilityPayment utilityPayment = UtilityPaymentTest.Example(false);
             List<PaymentPreview> previews = PaymentPreview.Create(new List<PaymentPreview>
             {
-                new PaymentPreview(id: brcodePayment.Brcode),
+                new PaymentPreview(id: brcodePayment.Brcode, scheduled: DateTime.Today.Date.AddDays(2)),
                 new PaymentPreview(id: boletoPayment.Line),
                 new PaymentPreview(id: taxPayment.BarCode),
                 new PaymentPreview(id: utilityPayment.BarCode)
@@ -26,6 +26,7 @@ namespace StarkBankTests
 
             foreach (PaymentPreview preview in previews)
             {
+                TestUtils.Log(preview);
                 Assert.NotNull(preview);
                 Assert.IsType(new PaymentPreview().GetType(), preview);
             }
