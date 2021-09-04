@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using StarkBank;
+using System;
 using Xunit;
 
 namespace StarkBankTests

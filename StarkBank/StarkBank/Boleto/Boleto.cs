@@ -43,7 +43,7 @@ namespace StarkBank
     ///     <item>OurNumber [string, default null]: Reference number registered at the settlement bank. ex:"10131474"</item>
     /// </list>
     /// </summary>
-    public partial class Boleto : Utils.Resource
+    public partial class Boleto : Resource
     {
         public long Amount { get; }
         public string Name { get; }
@@ -151,7 +151,7 @@ namespace StarkBank
         internal new Dictionary<string, object> ToJson()
         {
             Dictionary<string, object> json = base.ToJson();
-            json["Due"] = new Utils.StarkBankDate((DateTime)json["Due"]);
+            json["Due"] = new StarkBankDate((DateTime)json["Due"]);
             return json;
         }
 
@@ -177,8 +177,8 @@ namespace StarkBank
         /// </summary>
         public static List<Boleto> Create(List<Boleto> boletos, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: boletos,
@@ -208,8 +208,8 @@ namespace StarkBank
         /// </summary>
         public static List<Boleto> Create(List<Dictionary<string, object>> boletos, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: boletos,
@@ -239,8 +239,8 @@ namespace StarkBank
         /// </summary>
         public static Boleto Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -271,9 +271,9 @@ namespace StarkBank
         /// </summary>
         public static byte[] Pdf(string id, string layout = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
 
-            return Utils.Rest.GetContent(
+            return Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 subResourceName: "pdf",
@@ -309,14 +309,14 @@ namespace StarkBank
         public static IEnumerable<Boleto> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             string status = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new StarkBankDate(after) },
+                    { "before", new StarkBankDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -351,15 +351,15 @@ namespace StarkBank
         public static (List<Boleto> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (List<SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new StarkBankDate(after) },
+                    { "before", new StarkBankDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -396,8 +396,8 @@ namespace StarkBank
         /// </summary>
         public static Boleto Delete(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.DeleteId(
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -405,12 +405,12 @@ namespace StarkBank
             ) as Boleto;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Boleto", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             long amount = json.amount;
             string name = json.name;
@@ -422,7 +422,7 @@ namespace StarkBank
             string stateCode = json.stateCode;
             string zipCode = json.zipCode;
             string dueString = json.due;
-            DateTime? due = Utils.Checks.CheckNullableDateTime(dueString);
+            DateTime? due = Checks.CheckNullableDateTime(dueString);
             double fine = json.fine;
             double interest = json.interest;
             int overdueLimit = json.overdueLimit;
@@ -432,7 +432,7 @@ namespace StarkBank
             List<Dictionary<string, object>> descriptions = json.descriptions.ToObject<List<Dictionary<string, object>>>();
             List<Dictionary<string, object>> discounts = json.discounts.ToObject<List<Dictionary<string, object>>>();
             foreach(Dictionary<string, object> discount in discounts) {
-                discount["date"] = Utils.Checks.CheckDateTime((string)discount["date"]);
+                discount["date"] = Checks.CheckDateTime((string)discount["date"]);
             }
             string id = json.id;
             int fee = json.fee;
@@ -441,7 +441,7 @@ namespace StarkBank
             string status = json.status;
             string createdString = json.created;
             List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Checks.CheckDateTime(createdString);
             string ourNumber = json.ourNumber;
 
             return new Boleto(
