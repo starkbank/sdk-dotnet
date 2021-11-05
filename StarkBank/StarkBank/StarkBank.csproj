@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <ReleaseVersion>2.6.0</ReleaseVersion>
-    <PackageVersion>2.6.0</PackageVersion>
+    <ReleaseVersion>2.6.1</ReleaseVersion>
+    <PackageVersion>2.6.1</PackageVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Owners>Stark Bank</Owners>
     <PackageProjectUrl>https://github.com/starkbank/sdk-dotnet</PackageProjectUrl>
