@@ -1,21 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Title>StarkBank SDK</Title>
+    <Authors>Stark Bank</Authors>
+    <Owners>Stark Bank</Owners>
+    <Description>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Description>
+    <Summary>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Summary>
+    <AssemblyTitle>StarkBank</AssemblyTitle>
+    <AssemblyName>StarkBank</AssemblyName>
+    <VersionPrefix>2.6.1</VersionPrefix>
+    <Version>2.6.1</Version>
     <ReleaseVersion>2.6.1</ReleaseVersion>
     <PackageVersion>2.6.1</PackageVersion>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <Owners>Stark Bank</Owners>
-    <PackageProjectUrl>https://github.com/starkbank/sdk-dotnet</PackageProjectUrl>
-    <Summary>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Summary>
-    <PackageTags>starkbank, stark, bank, openbanking, open, banking</PackageTags>
-    <Title>StarkBank SDK</Title>
-    <Description>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Description>
-    <PackOnBuild>true</PackOnBuild>
-    <Authors>Stark Bank</Authors>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <PackageId>starkbank</PackageId>
+    <PackageTags>starkbank;stark;bank;openbanking;open-banking</PackageTags>
     <PackageIconUrl>https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/135476/logo-white-1.png</PackageIconUrl>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <!-- <PackageIconUrl>http://starkbank.com/logo.png</PackageIconUrl> -->
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+    <PackageProjectUrl>https://github.com/starkbank/sdk-dotnet</PackageProjectUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackOnBuild>true</PackOnBuild>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
@@ -55,6 +62,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Payment\Boleto\.DS_Store" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <!-- <None Include="icon.png" Pack="true" Visible="false" PackagePath="" /> -->
   </ItemGroup>
 </Project>
