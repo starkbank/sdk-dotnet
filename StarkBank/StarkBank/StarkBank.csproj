@@ -8,15 +8,14 @@
     <Summary>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Summary>
     <AssemblyTitle>StarkBank</AssemblyTitle>
     <AssemblyName>StarkBank</AssemblyName>
-    <VersionPrefix>2.6.1</VersionPrefix>
-    <Version>2.6.1</Version>
-    <ReleaseVersion>2.6.1</ReleaseVersion>
-    <PackageVersion>2.6.1</PackageVersion>
+    <VersionPrefix>2.6.2</VersionPrefix>
+    <Version>2.6.2</Version>
+    <ReleaseVersion>2.6.2</ReleaseVersion>
+    <PackageVersion>2.6.2</PackageVersion>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <PackageId>starkbank</PackageId>
     <PackageTags>starkbank;stark;bank;openbanking;open-banking</PackageTags>
     <PackageIconUrl>https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/135476/logo-white-1.png</PackageIconUrl>
-    <!-- <PackageIconUrl>http://starkbank.com/logo.png</PackageIconUrl> -->
     <!-- <PackageIcon>icon.png</PackageIcon> -->
     <PackageProjectUrl>https://github.com/starkbank/sdk-dotnet</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
