@@ -675,8 +675,8 @@ Console.WriteLine(invoice);
 ## Update an invoice
 
 You can update an invoice's amount, due date and expiration by its id.
-If the invoice has been paid already, you can reverse it by lowering its amount.
-To fully reverse the invoice, pass amount: 0.
+If the invoice has already been paid, the amount can still be decreased, reversing the payment.
+To fully reverse the invoice, pass `amount: 0`.
 
 ```c#
 using System;
