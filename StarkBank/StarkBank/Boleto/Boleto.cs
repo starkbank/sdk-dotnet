@@ -145,6 +145,7 @@ namespace StarkBank
             BarCode = barCode;
             Status = status;
             TransactionIds = transactionIds;
+            OurNumber = ourNumber;
             Created = created;
         }
 
