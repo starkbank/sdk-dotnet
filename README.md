@@ -70,30 +70,30 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## 1. Install our SDK
 
-StarkBank`s .NET SDK is available on NuGet as starkbank 2.6.2.
+StarkBank`s .NET SDK is available on NuGet as starkbank 2.6.3.
 
 1.1 To install the Package Manager:
 
 ```sh
-Install-Package starkbank -Version 2.6.2
+Install-Package starkbank -Version 2.6.3
 ```
 
 1.2 To install the .NET CLI:
 
 ```sh
-dotnet add package starkbank --version 2.6.2
+dotnet add package starkbank --version 2.6.3
 ```
 
 1.3 To install by PackageReference:
 
 ```sh
-<PackageReference Include="starkbank" Version="2.6.2" />
+<PackageReference Include="starkbank" Version="2.6.3" />
 ```
 
 1.4 To install with Paket CLI:
 
 ```sh
-paket add starkbank --version 2.6.2
+paket add starkbank --version 2.6.3
 ```
 
 ## 2. Create your Private and Public Keys
@@ -675,7 +675,7 @@ Console.WriteLine(invoice);
 ## Update an invoice
 
 You can update an invoice's amount, due date and expiration by its id.
-If the invoice has already been paid, the amount can still be decreased, reversing the payment.
+If the invoice has already been paid, the amount can still be decreased, causing the payment to be reversed to the payer.
 To fully reverse the invoice, pass `amount: 0`.
 
 ```c#

@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.6.3] - 2022-05-05
 ### Added
 - OurNumber parameter to Boleto resource
 
