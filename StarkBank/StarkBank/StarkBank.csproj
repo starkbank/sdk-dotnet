@@ -8,10 +8,10 @@
     <Summary>SDK to facilitate C# (.NET) integrations with the Stark Bank API</Summary>
     <AssemblyTitle>StarkBank</AssemblyTitle>
     <AssemblyName>StarkBank</AssemblyName>
-    <VersionPrefix>2.6.3</VersionPrefix>
-    <Version>2.6.3</Version>
-    <ReleaseVersion>2.6.3</ReleaseVersion>
-    <PackageVersion>2.6.3</PackageVersion>
+    <VersionPrefix>2.6.4</VersionPrefix>
+    <Version>2.6.4</Version>
+    <ReleaseVersion>2.6.4</ReleaseVersion>
+    <PackageVersion>2.6.4</PackageVersion>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <PackageId>starkbank</PackageId>
     <PackageTags>starkbank;stark;bank;openbanking;open-banking</PackageTags>
