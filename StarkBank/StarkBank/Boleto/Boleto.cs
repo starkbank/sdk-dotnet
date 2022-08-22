@@ -308,7 +308,7 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public static IEnumerable<Boleto> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+            string status = null, List<string> tags = null, List<string> ids = null, String customerId = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
@@ -320,7 +320,8 @@ namespace StarkBank
                     { "before", new StarkBankDate(before) },
                     { "status", status },
                     { "tags", tags },
-                    { "ids", ids }
+                    { "ids", ids },
+                    { "customerId", customerId }
                 },
                 user: user
             ).Cast<Boleto>();
