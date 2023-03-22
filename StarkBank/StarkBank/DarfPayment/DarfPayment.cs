@@ -18,20 +18,21 @@ namespace StarkBank
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
     ///     <item>RevenueCode [string]: 4-digit tax code assigned by Federal Revenue. ex: "5948"</item>
     ///     <item>TaxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
-    ///     <item>Competence [DateTime, default null]: competence month of the service. ex: datetime.date(2021, 4, 30)</item>
+    ///     <item>Competence [DateTime]: competence month of the service. ex: datetime.date(2021, 4, 30)</item>
     ///     <item>NominalAmount [int]: amount due in cents without fee or interest. ex: 23456 (= R$ 234.56)</item>
     ///     <item>FineAmount [int]: fixed amount due in cents for fines. ex: 234 (= R$ 2.34)</item>
     ///     <item>InterestAmount [int]: amount due in cents for interest. ex: 456 (= R$ 4.56)</item>
-    ///     <item>Due [DateTime, default null]: due date for payment. ex: datetime.date(2021, 5, 17)</item>
+    ///     <item>Due [DateTime]: due date for payment. ex: datetime.date(2021, 5, 17)</item>
     ///     <item>ReferenceNumber [string, null]: number assigned to the region of the tax. ex: "08.1.17.00-4"</item>
     ///     <item>Scheduled [DateTime or string, default today]: payment scheduled date. ex: DateTime(2020, 3, 10)</item>
-    ///     <item>Tags [list of strings]: list of strings for tagging</item>
-    ///     <item>ID [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
-    ///     <item>Status [string, default null]: current payment status. ex: "success" or "failed"</item>
-    ///     <item>Amount [int, default null]: Total amount due calculated from other amounts. ex: 24146 (= R$ 241.46)</item>
-    ///     <item>Fee [integer, default null]: fee charged when the DarfPayment is processed. ex: 0 (= R$ 0.00)</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
+    ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
+    ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
+    ///     <item>Amount [int]: Total amount due calculated from other amounts. ex: 24146 (= R$ 241.46)</item>
+    ///     <item>Fee [integer]: fee charged when the DarfPayment is processed. ex: 0 (= R$ 0.00)</item>
+    ///     <item>TransactionIds [list of strings]: ledger transaction ids linked to this DarfPayment. ex: ["19827356981273"]</item>
+    ///     <item>Updated [DateTime]: latest update datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class DarfPayment : Utils.Resource
@@ -50,6 +51,7 @@ namespace StarkBank
         public string Status { get; }
         public long? Amount { get; }
         public string Fee { get; }
+        public List<string> TransactionIds { get; }
         public DateTime? Updated { get; }
         public DateTime? Created { get; }
 
@@ -79,18 +81,20 @@ namespace StarkBank
         /// </list>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
-        ///     <item>status [string, default null]: current payment status. ex: "success" or "failed"</item>
-        ///     <item>amount [int, default null]: Total amount due calculated from other amounts. ex: 24146 (= R$ 241.46)</item>
-        ///     <item>fee [integer, default null]: fee charged when the DarfPayment is processed. ex: 0 (= R$ 0.00)</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>id [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
+        ///     <item>status [string]: current payment status. ex: "success" or "failed"</item>
+        ///     <item>amount [int]: Total amount due calculated from other amounts. ex: 24146 (= R$ 241.46)</item>
+        ///     <item>fee [integer]: fee charged when the DarfPayment is processed. ex: 0 (= R$ 0.00)</item>
+        ///     <item>transactionIds [list of strings]: ledger transaction ids linked to this DarfPayment. ex: ["19827356981273"]</item>
+        ///     <item>updated [DateTime]: latest update datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public DarfPayment(string description, string revenueCode, string taxID, DateTime competence, long fineAmount,
             long nominalAmount, long interestAmount, DateTime due, string id = null, string referenceNumber = null,
             DateTime? scheduled = null, List<string> tags = null, string status = null, long? amount = null,
-            string fee = null, DateTime? updated = null, DateTime? created = null) : base(id)
+            string fee = null, List<string> transactionIds = null, DateTime? updated = null, DateTime? created = null
+        ) : base(id)
         {
             Description = description;
             RevenueCode = revenueCode;
@@ -106,6 +110,7 @@ namespace StarkBank
             Status = status;
             Amount = amount;
             Fee = fee;
+            TransactionIds = transactionIds;
             Updated = updated;
             Created = created;
         }
@@ -244,8 +249,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid"</item>
@@ -266,8 +271,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids },
                     { "status", status }
@@ -286,8 +291,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid"</item>
@@ -309,8 +314,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids },
                     { "status", status }

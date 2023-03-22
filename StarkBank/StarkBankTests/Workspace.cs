@@ -3,6 +3,7 @@ using StarkBank;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 
 namespace StarkBankTests
@@ -71,6 +72,36 @@ namespace StarkBankTests
             Assert.Equal(name, updatedWorkspace.Name);
             Assert.Equal(username, updatedWorkspace.Username);
             Assert.Equal(allowedTaxIds, updatedWorkspace.AllowedTaxIds);
+        }
+
+        [Fact]
+        public void UpdateStatus()
+        {
+            List<Workspace> workspaces = Workspace.Query(limit: 2, user: organization).ToList();
+
+            Workspace workspace = Workspace.Update(workspaces[0].ID, status: "blocked", user: Organization.Replace(organization, workspaces[0].ID));
+
+            TestUtils.Log(workspace);
+            Assert.NotNull(workspace.ID);
+            Assert.Equal("blocked", workspace.Status);
+        }
+
+        [Fact]
+        public void UpdatePicture()
+        {
+            List<Workspace> workspaces = Workspace.Query(limit: 2, user: organization).ToList();
+
+            byte[] image = File.ReadAllBytes("../../../logo.png");
+
+            Workspace workspace = Workspace.Update(
+                workspaces[0].ID, 
+                picture: image,
+                pictureType: "image/png",
+                user: Organization.Replace(organization, workspaces[0].ID));
+
+            TestUtils.Log(workspace);
+            Assert.NotNull(workspace.ID);
+            Assert.Equal("blocked", workspace.Status);
         }
 
         internal static Workspace Example()

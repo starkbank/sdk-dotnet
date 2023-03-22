@@ -17,28 +17,29 @@ namespace StarkBank
     /// <br/>
     /// Properties:
     /// <list>
-    ///     <item>ID [string, default null]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
-    ///     <item>Name [string]: payer name. ex: "Iron Bank S.A."</item>
+    ///     <item>Amount [long integer]: Invoice value in cents. Minimum = 0 (any value will be accepted). ex: 1234 (= R$ 12.34)</item>
     ///     <item>TaxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+    ///     <item>Name [string]: payer name. ex: "Iron Bank S.A."</item>
     ///     <item>Due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0) for immediate invoices and DateTime(2020, 3, 10) for scheduled invoices</item>
     ///     <item>Expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
     ///     <item>Fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
-    ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
     ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "due":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"due", "2020-11-25T17:59:26.249976+00:00"}}</item>
     ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
-    ///     <item>NominalAmount [long integer, default null]: Invoice emission value in cents (will change if invoice is updated, but not if it's paid). ex: 400000</item>
-    ///     <item>Amount [long integer]: Invoice value in cents. Minimum = 0 (any value will be accepted). ex: 1234 (= R$ 12.34)</item>
-    ///     <item>FineAmount [long integer, default null]: Invoice fine value calculated over NominalAmount. ex: 20000</item>
-    ///     <item>InterestAmount [long integer, default null]: Invoice interest value calculated over NominalAmount. ex: 10000</item>
-    ///     <item>DiscountAmount [long integer, default null]: Invoice discount value calculated over NominalAmount. ex: 3000</item>
-    ///     <item>Brcode [string, default null]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
+    ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
     ///     <item>PdfUrl [string]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
-    ///     <item>Fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
-    ///     <item>Status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
-    ///     <item>TransactionIds [list of strings, default null]: ledger transaction ids linked to this Invoice (if there are more than one, all but the first are reversals or failed reversal chargebacks). ex: ["19827356981273"]</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Link [string]: public Invoice webpage URL. ex: "https://my-workspace.sandbox.starkbank.com/invoicelink/d454fa4e524441c1b0c1a729457ed9d8"</item>
+    ///     <item>NominalAmount [long integer]: Invoice emission value in cents (will change if invoice is updated, but not if it's paid). ex: 400000</item>
+    ///     <item>FineAmount [long integer]: Invoice fine value calculated over NominalAmount. ex: 20000</item>
+    ///     <item>InterestAmount [long integer]: Invoice interest value calculated over NominalAmount. ex: 10000</item>
+    ///     <item>DiscountAmount [long integer]: Invoice discount value calculated over NominalAmount. ex: 3000</item>
+    ///     <item>ID [string]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
+    ///     <item>Brcode [string]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
+    ///     <item>Status [string]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
+    ///     <item>Fee [integer]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
+    ///     <item>TransactionIds [list of strings]: ledger transaction ids linked to this Invoice (if there are more than one, all but the first are reversals or failed reversal chargebacks). ex: ["19827356981273"]</item>
+    ///     <item>Created [DateTime]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Updated [DateTime]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class Invoice : Utils.Resource
@@ -78,8 +79,8 @@ namespace StarkBank
         /// Parameters (required):
         /// <list>
         ///     <item>amount [long integer]: Invoice value in cents. Minimum = 0 (any value will be accepted). ex: 1234 (= R$ 12.34)</item>
-        ///     <item>name [string]: payer name. ex: "Iron Bank S.A."</item>
         ///     <item>taxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+        ///     <item>name [string]: payer name. ex: "Iron Bank S.A."</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
@@ -88,25 +89,26 @@ namespace StarkBank
         ///     <item>expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
         ///     <item>fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
         ///     <item>interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
-        ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
         ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "due":string pairs. ex: new List<Dictionary<string,object>>(){new Dictionary<string, string>{{"percentage", 1.5},{"due", DateTime(2020, 3, 10, 10, 30, 12, 15)}}</item>
         ///     <item>tags [list of strings, default null]: list of strings for tagging</item>
+        ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>pdf [string]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
-        ///     <item>nominalAmount [long integer, default null]: Invoice emission value in cents (will change if invoice is updated, but not if it's paid). ex: 400000</item>
-        ///     <item>fineAmount [long integer, default null]: Invoice fine value calculated over nominalAmount. ex: 20000</item>
-        ///     <item>interestAmount [long integer, default null]: Invoice interest value calculated over nominalAmount. ex: 10000</item>
-        ///     <item>discountAmount [long integer, default null]: Invoice discount value calculated over nominalAmount. ex: 3000</item>
-        ///     <item>id [string, default null]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
-        ///     <item>brcode [string, default null]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
-        ///     <item>fee [integer, default null]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
-        ///     <item>status [string, default null]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
-        ///     <item>transactionIds [list of strings, default null]: ledger transaction ids linked to this Invoice (if there are more than one, all but the first are reversals or failed reversal chargebacks). ex: ["19827356981273"]</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>pdfUrl [string]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
+        ///     <item>link [string]: public Invoice webpage URL. ex: "https://my-workspace.sandbox.starkbank.com/invoicelink/d454fa4e524441c1b0c1a729457ed9d8"</item>
+        ///     <item>nominalAmount [long integer]: Invoice emission value in cents (will change if invoice is updated, but not if it's paid). ex: 400000</item>
+        ///     <item>fineAmount [long integer]: Invoice fine value calculated over nominalAmount. ex: 20000</item>
+        ///     <item>interestAmount [long integer]: Invoice interest value calculated over nominalAmount. ex: 10000</item>
+        ///     <item>discountAmount [long integer]: Invoice discount value calculated over nominalAmount. ex: 3000</item>
+        ///     <item>id [string]: unique id returned when Invoice is created. ex: "5656565656565656"</item>
+        ///     <item>brcode [string]: BR Code for the Invoice payment. ex: "00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0"</item>
+        ///     <item>status [string]: current Invoice status. ex: "created", "paid", "canceled" or "overdue"</item>
+        ///     <item>fee [integer]: fee charged by this Invoice. ex: 65 (= R$ 0.65)</item>
+        ///     <item>transactionIds [list of strings]: ledger transaction ids linked to this Invoice (if there are more than one, all but the first are reversals or failed reversal chargebacks). ex: ["19827356981273"]</item>
+        ///     <item>created [DateTime]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>updated [DateTime]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public Invoice(long amount, string name, string taxID, DateTime? due = null, long? expiration = null, double? fine = null, double? interest = null,
@@ -141,7 +143,7 @@ namespace StarkBank
         internal new Dictionary<string, object> ToJson()
         {
             Dictionary<string, object> json = base.ToJson();
-            json["Due"] = new Utils.StarkBankDateTime((DateTime) json["Due"]);
+            json["Due"] = new Utils.StarkDateTime((DateTime) json["Due"]);
             return json;
         }
 
@@ -278,8 +280,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
@@ -300,8 +302,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -320,8 +322,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
@@ -343,8 +345,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -394,7 +396,7 @@ namespace StarkBank
                     { "amount", amount },
                     { "expiration", expiration },
                     { "status", status },
-                    { "due", new Utils.StarkBankDateTime(due) },
+                    { "due", new Utils.StarkDateTime(due) },
                 },
                 user: user
             ) as Invoice;

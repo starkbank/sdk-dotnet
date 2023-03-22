@@ -117,8 +117,8 @@ namespace StarkBank
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "limit", limit },
-                        { "after", new Utils.StarkBankDate(after) },
-                        { "before", new Utils.StarkBankDate(before) },
+                        { "after", new Utils.StarkDate(after) },
+                        { "before", new Utils.StarkDate(before) },
                         { "types", types },
                         { "paymentIds", paymentIds }
                     },
@@ -159,8 +159,8 @@ namespace StarkBank
                     query: new Dictionary<string, object> {
                         { "cursor", cursor },
                         { "limit", limit },
-                        { "after", new Utils.StarkBankDate(after) },
-                        { "before", new Utils.StarkBankDate(before) },
+                        { "after", new Utils.StarkDate(after) },
+                        { "before", new Utils.StarkDate(before) },
                         { "types", types },
                         { "paymentIds", paymentIds }
                     },

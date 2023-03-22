@@ -6,12 +6,43 @@ namespace StarkBank.Institution
 {
     public class Institution : SubResource
     {
-
+        /// <summary>
+        /// Institution object
+        /// <br/>
+        /// This resource is used to get information on the institutions that are recognized by the Brazilian Central Bank.
+        /// Besides the display name and full name, they also include the STR code (used for TEDs) and the SPI Code
+        /// (used for Pix) for the institutions. Either of these codes may be empty if the institution is not registered on
+        /// that Central Bank service.
+        /// <br/>
+        /// Properties:
+        /// <list>
+        ///     <item>DisplayName [string]: short version of the institution name that should be displayed to end users. ex: "Stark Bank"
+        ///     <item>Name [string]: full version of the institution name. ex: "Stark Bank S.A."</item>
+        ///     <item>SpiCode [string]: SPI code used to identify the institution on Pix transactions. ex: "20018183"</item>
+        ///     <item>StrCode [string]: STR code used to identify the institution on TED transactions. ex: "123"</item>
+        /// </list>
+        /// </summary>
         public string DisplayName { get; }
         public string Name { get; }
         public string SpiCode { get; }
         public string StrCode { get; }
 
+        /// <summary>
+        /// Institution object
+        /// <br/>
+        /// This resource is used to get information on the institutions that are recognized by the Brazilian Central Bank.
+        /// Besides the display name and full name, they also include the STR code (used for TEDs) and the SPI Code
+        /// (used for Pix) for the institutions. Either of these codes may be empty if the institution is not registered on
+        /// that Central Bank service.
+        /// <br/>
+        /// Attributes (return-only):
+        /// <list>
+        ///     <item>displayName [string]: short version of the institution name that should be displayed to end users. ex: "Stark Bank"
+        ///     <item>name [string]: full version of the institution name. ex: "Stark Bank S.A."</item>
+        ///     <item>spiCode [string]: SPI code used to identify the institution on Pix transactions. ex: "20018183"</item>
+        ///     <item>strCode [string]: STR code used to identify the institution on TED transactions. ex: "123"</item>
+        /// </list>
+        /// </summary>
         public Institution(string displayName, string name, string spiCode, string strCode)
         {
             DisplayName = displayName;
@@ -21,7 +52,7 @@ namespace StarkBank.Institution
         }
 
         /// <summary>
-        /// Retrieve DictKeys
+        /// Institution object
         /// <br/>
         /// Receive a list of Institution objects previously created in the Stark Bank API
         /// <br/>

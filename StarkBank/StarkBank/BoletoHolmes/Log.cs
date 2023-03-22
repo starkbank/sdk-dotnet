@@ -22,11 +22,13 @@ namespace StarkBank
         ///     <item>Holmes [BoletoHolmes]: BoletoHolmes entity to which the log refers to.</item>
         ///     <item>Type [string]: type of the BoletoHolmes event which triggered the log creation. ex: "solving" or "solved"</item>
         ///     <item>Created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>Updated [DateTime]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public class Log : Utils.Resource
         {
-            public DateTime Created { get; }
+            public DateTime? Created { get; }
+            public DateTime? Updated { get; }
             public string Type { get; }
             public BoletoHolmes Holmes { get; }
 
@@ -41,14 +43,16 @@ namespace StarkBank
             /// Attributes (return-only):
             /// <list>
             ///     <item>id [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
-            ///     <item>payment [BoletoHolmes]: BoletoHolmes entity to which the log refers to.</item>
+            ///     <item>holmes [BoletoHolmes]: BoletoHolmes entity to which the log refers to.</item>
             ///     <item>type [string]: type of the BoletoHolmes event which triggered the log creation. ex: "solving" or "solved"</item>
             ///     <item>created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+            ///     <item>updated [DateTime]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
             /// </list>
             /// </summary>
-            public Log(string id, DateTime created, string type, BoletoHolmes holmes) : base(id)
+            public Log(string id = null, DateTime? created = null, DateTime? updated = null, string type = null, BoletoHolmes holmes = null) : base(id)
             {
                 Created = created;
+                Updated = updated;
                 Type = type;
                 Holmes = holmes;
             }
@@ -92,8 +96,8 @@ namespace StarkBank
             /// Parameters (optional):
             /// <list>
             ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>types [list of strings, default null]: filter retrieved objects by event types. ex: "solving" or "solved"</item>
             ///     <item>holmesIds [list of strings, default null]: list of BoletoHolmes ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
             ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
@@ -113,8 +117,8 @@ namespace StarkBank
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "limit", limit },
-                        { "after", new Utils.StarkBankDate(after) },
-                        { "before", new Utils.StarkBankDate(before) },
+                        { "after", new Utils.StarkDate(after) },
+                        { "before", new Utils.StarkDate(before) },
                         { "types", types },
                         { "holmesIds", holmesIds }
                     },
@@ -133,8 +137,8 @@ namespace StarkBank
             /// <list>
             ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
             ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>types [list of strings, default null]: filter retrieved objects by event types. ex: "solving" or "solved"</item>
             ///     <item>holmesIds [list of strings, default null]: list of BoletoHolmes ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
             ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
@@ -155,8 +159,8 @@ namespace StarkBank
                     query: new Dictionary<string, object> {
                         { "cursor", cursor },
                         { "limit", limit },
-                        { "after", new Utils.StarkBankDate(after) },
-                        { "before", new Utils.StarkBankDate(before) },
+                        { "after", new Utils.StarkDate(after) },
+                        { "before", new Utils.StarkDate(before) },
                         { "types", types },
                         { "holmesIds", holmesIds }
                     },
@@ -180,10 +184,16 @@ namespace StarkBank
                 string id = json.id;
                 string createdString = json.created;
                 DateTime created = Utils.Checks.CheckDateTime(createdString);
+                string updatedString = json.updated;
+                DateTime updated = Utils.Checks.CheckDateTime(updatedString);
                 string type = json.type;
                 BoletoHolmes holmes = BoletoHolmes.ResourceMaker(json.holmes);
 
-                return new Log(id: id, created: created, type: type, holmes: holmes);
+
+                return new Log(
+                    id: id, created: created, updated: updated, type: type, 
+                    holmes: holmes
+                );
             }
         }
     }

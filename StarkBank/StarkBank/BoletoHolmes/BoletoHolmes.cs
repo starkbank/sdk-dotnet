@@ -15,12 +15,12 @@ namespace StarkBank
     /// Properties:
     /// <list>
     ///     <item>BoletoID [string]: Investigated boleto entity ID. ex: "5656565656565656"</item>
-    ///     <item>Tags [list of strings]: list of strings for tagging</item>
-    ///     <item>ID [string, default null]: unique id returned when holmes is created. ex: "5656565656565656"</item>
-    ///     <item>Status [string, default null]: current holmes status. ex: "solving" or "solved"</item>
+    ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
+    ///     <item>ID [string]: unique id returned when holmes is created. ex: "5656565656565656"</item>
+    ///     <item>Status [string]: current holmes status. ex: "solving" or "solved"</item>
     ///     <item>Result [string]: Result of boleto status investigation. ex: "paid" or "canceled"</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Created [DateTime]: creation datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Updated [DateTime]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class BoletoHolmes : Utils.Resource
@@ -46,16 +46,16 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>tags [list of strings]: list of strings for tagging</item>
+        ///     <item>tags [list of strings, default null]: list of strings for tagging</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when holmes is created. ex: "5656565656565656"</item>
-        ///     <item>status [string, default null]: current holmes status. ex: "solving" or "solved"</item>
+        ///     <item>id [string]: unique id returned when holmes is created. ex: "5656565656565656"</item>
+        ///     <item>status [string]: current holmes status. ex: "solving" or "solved"</item>
         ///     <item>result [string]: Result of boleto status investigation. ex: "paid" or "canceled"</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>created [DateTime]: creation datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>updated [DateTime]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public BoletoHolmes(string boletoID, string id = null, List<string> tags = null, string status = null, string result = null,
@@ -170,8 +170,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime.new(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime.new(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "solved"</item>
@@ -193,8 +193,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status },
@@ -214,8 +214,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime.new(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime.new(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime.new(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "solved"</item>
@@ -238,8 +238,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status },

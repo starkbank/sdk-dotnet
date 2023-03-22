@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using EllipticCurve;
 using StarkBank.Utils;
 
 
@@ -22,6 +20,7 @@ namespace StarkBank
     ///     <item>Created [DateTime]: creation datetime for the notification event. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     ///     <item>IsDelivered [bool]: true if the Event has been successfully delivered to the user url. ex: False</item>
     ///     <item>Subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"</item>
+    ///     <item>WorkspaceId [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: "4545454545454545"</item>
     /// </list>
     /// </summary>
     public partial class Event : Utils.Resource
@@ -97,8 +96,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>isDelivered [bool, default null]: bool to filter successfully delivered events. ex: True or False</item>
         ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
@@ -117,8 +116,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "isDelivered", isDelivered }
                 },
                 user: user
@@ -135,8 +134,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>isDelivered [bool, default null]: bool to filter successfully delivered events. ex: True or False</item>
         ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
@@ -156,8 +155,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "isDelivered", isDelivered }
                 },
                 user: user
@@ -262,55 +261,8 @@ namespace StarkBank
         /// </summary>
         public static Event Parse(string content, string signature, User user = null)
         {
-            dynamic json = Utils.Json.Decode(content);
-            Event parsedEvent = ResourceMaker(json["event"]);
-
-            Signature signatureObject;
-            try
-            {
-                signatureObject = Signature.fromBase64(signature);
-            } catch
-            {
-                throw new Error.InvalidSignatureError("The provided signature is not valid");
-            }
-
-            if (verifySignature(content, signatureObject, user)) {
-                return parsedEvent;
-            }
-            if (verifySignature(content, signatureObject, user, true)) {
-                return parsedEvent;
-            }
-
-            throw new Error.InvalidSignatureError("The provided signature and content do not match the Stark Bank public key");
-        }
-
-        private static bool verifySignature(string content, Signature signature, User user, bool refresh = false)
-        {
-            
-            PublicKey publicKey = Utils.Cache.StarkBankPublicKey;
-
-            if (publicKey is null || refresh)
-            {
-                publicKey = GetPublicKeyPem(user);
-            }
-
-            return Ecdsa.verify(content, signature, publicKey);
-        }
-
-        private static PublicKey GetPublicKeyPem(User user)
-        {
-            dynamic json = Utils.Request.Fetch(
-                method: Utils.Request.Get,
-                path: "public-key",
-                query: new Dictionary<string, object> { { "limit", 1 } },
-                user: user
-            ).Json();
-            List<JObject> publicKeys = json.publicKeys.ToObject<List<JObject>>();
-            dynamic publicKey = publicKeys.First();
-            string content = publicKey.content;
-            PublicKey publicKeyObject = PublicKey.fromPem(content);
-            Utils.Cache.StarkBankPublicKey = publicKeyObject;
-            return publicKeyObject;
+            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return (Event)Utils.Parse.ParseAndVerify(content, signature, resourceName, resourceMaker, user, "event");
         }
 
         internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()

@@ -28,19 +28,20 @@ namespace StarkBank
     ///     <item>Fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
     ///     <item>OverdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
-    ///     <item>ReceiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
-    ///     <item>ReceiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
     ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
     ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
-    ///     <item>ID [string, default null]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
-    ///     <item>Fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
-    ///     <item>Line [string, default null]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
-    ///     <item>BarCode [string, default null]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
-    ///     <item>TransactionIds [list of strings, null]: ledger transaction ids linked to this boleto. ex: ["19827356981273"]</item>
-    ///     <item>Status [string, default null]: current Boleto status. ex: "registered" or "paid"</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>OurNumber [string, default null]: Reference number registered at the settlement bank. ex:"10131474"</item>
+    ///     <item>ReceiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
+    ///     <item>ReceiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
+    ///     <item>ID [string]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
+    ///     <item>Fee [integer]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
+    ///     <item>Line [string]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
+    ///     <item>BarCode [string]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
+    ///     <item>Status [string]: current Boleto status. ex: "registered" or "paid"</item>
+    ///     <item>TransactionIds [list of strings]: ledger transaction ids linked to this boleto. ex: ["19827356981273"]</item>
+    ///     <item>WorkspaceID [string]: ID of the Workspace where this Boleto was generated. ex: "4545454545454545"</item>
+    ///     <item>OurNumber [string]: Reference number registered at the settlement bank. ex:"10131474"</item>
+    ///     <item>Created [DateTime]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class Boleto : Resource
@@ -68,8 +69,9 @@ namespace StarkBank
         public string BarCode { get; }
         public string Status { get; }
         public List<string> TransactionIds { get; }
-        public DateTime? Created { get; }
+        public string WorkspaceID { get; }
         public string OurNumber { get; }
+        public DateTime? Created { get; }
 
         /// <summary>
         /// Boleto object
@@ -94,8 +96,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: new DateTime(2020, 3, 10)</item>
-        ///     <item>fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
-        ///     <item>interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
+        ///     <item>fine [float, default 2.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
+        ///     <item>interest [float, default 1.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
         ///     <item>overdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
         ///     <item>receiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
         ///     <item>receiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
@@ -106,21 +108,24 @@ namespace StarkBank
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
-        ///     <item>fee [integer, default null]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
-        ///     <item>line [string, default null]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
-        ///     <item>barCode [string, default null]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
+        ///     <item>id [string]: unique id returned when Boleto is created. ex: "5656565656565656"</item>
+        ///     <item>fee [integer]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)</item>
+        ///     <item>line [string]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"</item>
+        ///     <item>barCode [string]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"</item>
+        ///     <item>status [string]: current Boleto status. ex: "registered" or "paid"</item>
         ///     <item>transactionIds [list of strings, null]: ledger transaction ids linked to this boleto. ex: ["19827356981273"]</item>
-        ///     <item>status [string, default null]: current Boleto status. ex: "registered" or "paid"</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>ourNumber [string, default null]: Reference number registered at the settlement bank. ex:"10131474"</item>
+        ///     <item>workspaceID [string]: unique id of the Workspace where the Boleto was created. ex: "5656565656565656"</item>
+        ///     <item>created [DateTime]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>ourNumber [string]: Reference number registered at the settlement bank. ex:"10131474"</item>
         /// </list>
         /// </summary>
         public Boleto(long amount, string name, string taxID, string streetLine1, string streetLine2, string district,
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
-            int? overdueLimit = null, string receiverName = null, string receiverTaxID = null, List<string> tags = null, List<Dictionary<string, object>> descriptions = null,
-            List<Dictionary<string, object>> discounts = null, string id = null, int? fee = null, string line = null,
-            string barCode = null, string status = null, List<string> transactionIds = null, DateTime? created = null, string ourNumber = null) : base(id)
+            int? overdueLimit = null, string receiverName = null, string receiverTaxID = null, List<string> tags = null,
+            List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null, 
+            string id = null, int? fee = null, string line = null, string barCode = null, string status = null, 
+            List<string> transactionIds = null, string workspaceID = null, DateTime? created = null, 
+            string ourNumber = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -145,6 +150,7 @@ namespace StarkBank
             BarCode = barCode;
             Status = status;
             TransactionIds = transactionIds;
+            WorkspaceID = workspaceID;
             OurNumber = ourNumber;
             Created = created;
         }
@@ -152,7 +158,7 @@ namespace StarkBank
         internal new Dictionary<string, object> ToJson()
         {
             Dictionary<string, object> json = base.ToJson();
-            json["Due"] = new StarkBankDate((DateTime)json["Due"]);
+            json["Due"] = new StarkDate((DateTime)json["Due"]);
             return json;
         }
 
@@ -259,9 +265,10 @@ namespace StarkBank
         ///     <item>id[string]: object unique id. ex: "5656565656565656"</item>
         /// </list>
         /// <br/>
-        /// Parameters(optional) :
+        /// Parameters(optional):
         /// <list>
-        ///     <item>layout[string]: Layout specification. Available options are "default" and "booklet"</item>
+        ///     <item>layout[string, default null]: Layout specification. Available options are "default" and "booklet"</item>
+        ///     <item>hiddenFields[string, default null]: Layout specification. Available options are "default" and "booklet"</item>
         ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
         /// <br/>
@@ -270,7 +277,7 @@ namespace StarkBank
         ///     <item>Boleto pdf file</item>
         /// </list>
         /// </summary>
-        public static byte[] Pdf(string id, string layout = null, User user = null)
+        public static byte[] Pdf(string id, string layout = null, List<string> hiddenFields = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
 
@@ -280,7 +287,8 @@ namespace StarkBank
                 subResourceName: "pdf",
                 id: id,
                 options: new Dictionary<string, object> {
-                    { "layout", layout }
+                    { "layout", layout },
+                    { "hiddenFields", hiddenFields }
                 },
                 user: user
             );
@@ -294,8 +302,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
@@ -316,8 +324,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new StarkBankDate(after) },
-                    { "before", new StarkBankDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids },
@@ -337,8 +345,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
@@ -360,8 +368,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new StarkBankDate(after) },
-                    { "before", new StarkBankDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -381,12 +389,12 @@ namespace StarkBank
         /// <br/>
         /// Delete a Boleto entity previously created in the Stark Bank API
         /// <br/>
-        /// Parameters(required) :
+        /// Parameters(required):
         /// <list>
         ///     <item>id[string]: Boleto unique id. ex: "5656565656565656"</item>
         /// </list>
         /// <br/>
-        /// Parameters(optional) :
+        /// Parameters(optional):
         /// <list>
         ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
@@ -444,6 +452,7 @@ namespace StarkBank
             string createdString = json.created;
             List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
             DateTime? created = Checks.CheckDateTime(createdString);
+            string workspaceID = json.workspaceId;
             string ourNumber = json.ourNumber;
 
             return new Boleto(
@@ -451,7 +460,8 @@ namespace StarkBank
                 district: district, city: city, stateCode: stateCode, zipCode: zipCode, due: due, fine: fine,
                 interest: interest, overdueLimit: overdueLimit, receiverName: receiverName, receiverTaxID: receiverTaxID,
                 tags: tags, descriptions: descriptions, discounts: discounts, id: id, fee: fee, line: line,
-                barCode: barCode, status: status, transactionIds: transactionIds, created: created, ourNumber: ourNumber
+                barCode: barCode, status: status, transactionIds: transactionIds, workspaceID: workspaceID,
+                created: created, ourNumber: ourNumber
             );
         }
     }

@@ -18,20 +18,22 @@ namespace StarkBank
     ///     <item>Amount [long integer]: amount in cents to be transferred. ex: 1234 (= R$ 12.34)</item>
     ///     <item>Name [string]: receiver full name. ex: "Anthony Edward Stark"</item>
     ///     <item>TaxID [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
-    ///     <item>BankCode [string]: code of the receiver bank institution in Brazil. If an ISPB (8 digits) is informed, a PIX transfer will be created, else a TED will be issued. ex: "20018183" or "341"</item>
+    ///     <item>BankCode [string]: code of the receiver bank institution in Brazil. If an ISPB (8 digits) is informed, a Pix transfer will be created, else a TED will be issued. ex: "20018183" or "341"</item>
     ///     <item>BranchCode [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: "876543-2"</item>
     ///     <item>AccountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings", "salary" or "payment"</item>
-    ///     <item>ExternalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated external_ids will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
+    ///     <item>ExternalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated externalIds will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
     ///     <item>Scheduled [DateTime, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
     ///     <item>Description [string, default null]: optional description to override default description to be shown in the bank statement. ex: "Payment for service #1234"</item>
     ///     <item>Tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
-    ///     <item>ID [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
-    ///     <item>Fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
-    ///     <item>Status [string, default null]: current Transfer status. ex: "success" or "failed"</item>
-    ///     <item>TransactionIds [list of strings, default null]: ledger Transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Rules [list of StarkBank.Transfer.Rule objects, default null]: list of Transfer.Rule objects to be applied to this Transfer. ex: [new StarkBank.Transfer.Rule("resendingLimit", 5)]</item>
+    ///     <item>ID [string]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
+    ///     <item>Fee [integer]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
+    ///     <item>Status [string]: current Transfer status. ex: "success" or "failed"</item>
+    ///     <item>TransactionIds [list of strings]: ledger Transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
+    ///     <item>Metadata [Dictionary object]: object used to store additional information about the Transfer object.</item>
+    ///     <item>Created [DateTime]: creation datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Updated [DateTime]: latest update datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class Transfer : Utils.Resource
@@ -46,10 +48,12 @@ namespace StarkBank
         public string ExternalID { get; }
         public DateTime? Scheduled { get; }
         public string Description { get; }
-        public List<string> TransactionIds { get; }
-        public int? Fee { get; }
         public List<string> Tags { get; }
+        public List<Rule> Rules { get; }
+        public int? Fee { get; }
         public string Status { get; }
+        public List<string> TransactionIds { get; }
+        public Dictionary<string, object> Metadata { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
 
@@ -73,27 +77,32 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>accountType [string, default "checking"]: Receiver bank account type. This parameter only has effect on Pix Transfers. ex: "checking", "savings" or "salary"</item>
-        ///     <item>externalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated external_ids will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
+        ///     <item>externalID [string, default null]: url safe string that must be unique among all your transfers.Duplicated externalIds will cause failures.By default, this parameter will block any transfer that repeats amount and receiver information on the same date.ex: "my-internal-id-123456"</item>
         ///     <item>scheduled [DateTime, default now]: datetime when the transfer will be processed.May be pushed to next business day if necessary. ex: new DateTime(2020, 3, 11, 8, 0, 0, 0)</item>
         ///     <item>description [string, default null]: optional description to override default description to be shown in the bank statement. ex: "Payment for service #1234"</item>
-        ///     <item>tags [list of strings]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
+        ///     <item>tags [list of strings, default null]: list of strings for reference when searching for Transfers. ex: ["employees", "monthly"]</item>
+        ///     <item>rules [list of StarkBank.Transfer.Rule objects, default null]: list of Transfer.Rule objects to be applied to this Transfer. ex: [new StarkBank.Transfer.Rule("resendingLimit", 5)]</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
-        ///     <item>fee [integer, default null]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
-        ///     <item>status [string, default null]: current Transfer status. ex: "success" or "failed"</item>
-        ///     <item>transactionIds [list of strings, default null]: ledger transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>id [string]: unique id returned when Transfer is created. ex: "5656565656565656"</item>
+        ///     <item>fee [integer]: fee charged when Transfer is created. ex: 200 (= R$ 2.00)</item>
+        ///     <item>status [string]: current Transfer status. ex: "success" or "failed"</item>
+        ///     <item>transactionIds [list of strings]: ledger transaction ids linked to this Transfer (if there are two, second is the chargeback). ex: ["19827356981273"]</item>
+        ///     <item>metadata [MetadataObj object]: object used to store additional information about the Transfer object.</item>
+        ///     <item>created [DateTime]: creation datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>updated [DateTime]: latest update datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public Transfer(long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber,
-            string accountType = null, string externalID = null, DateTime? scheduled = null, string description = null,
-            string id = null, List<string> transactionIds = null, int? fee = null, List<string> tags = null,
-            string status = null, DateTime? created = null, DateTime? updated = null
-            ) : base(id)
+        public Transfer(
+            long amount, string name, string taxID, string bankCode, string branchCode, 
+            string accountNumber,string accountType = null, string externalID = null, 
+            DateTime? scheduled = null, string description = null,string id = null, 
+            int? fee = null, List<string> tags = null,List<Rule> rules = null,
+            string status = null, List<string> transactionIds = null, Dictionary<string, object> metadata = null, DateTime? created = null, 
+            DateTime? updated = null
+        ) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -105,10 +114,12 @@ namespace StarkBank
             ExternalID = externalID;
             Scheduled = scheduled;
             Description = description;
-            TransactionIds = transactionIds;
-            Fee = fee;
             Tags = tags;
+            Rules = rules;
+            Fee = fee;
             Status = status;
+            TransactionIds = transactionIds;
+            Metadata = metadata;
             Created = created;
             Updated = updated;
         }
@@ -278,8 +289,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created or updated only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created or updated only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created or updated only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created or updated only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>transactionIds [list of strings, default null]: list of transaction IDs linked to the desired transfers. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
         ///     <item>taxID [string, default null]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"</item>
@@ -304,8 +315,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "transactionIds", transactionIds },
                     { "status", status },
                     { "taxID", taxID },
@@ -327,8 +338,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created or updated only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created or updated only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created or updated only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created or updated only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>transactionIds [list of strings, default null]: list of transaction IDs linked to the desired transfers. ex: ["5656565656565656", "4545454545454545"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"</item>
         ///     <item>taxID [string, default null]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"</item>
@@ -354,8 +365,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "transactionIds", transactionIds },
                     { "status", status },
                     { "taxID", taxID },
@@ -380,7 +391,6 @@ namespace StarkBank
 
         internal static Utils.Resource ResourceMaker(dynamic json)
         {
-            string id = json.id;
             long amount = json.amount;
             string name = json.name;
             string taxID = json.taxId;
@@ -392,16 +402,13 @@ namespace StarkBank
             string scheduledString = json.scheduled;
             DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
             string description = json.description;
-            List<string> transactionIds = new List<string>();
-            if (json.transactionIds != null) {
-                transactionIds = json.transactionIds.ToObject<List<string>>();
-            }
+            List<string> tags = json.tags?.ToObject<List<string>>();
+            List<Rule> rules = ParseRule(json.rules);
+            string id = json.id;
             int? fee = json.fee;
-            List<string> tags = new List<string>();
-            if (json.tags != null) {
-                tags = json.tags.ToObject<List<string>>();
-            }
             string status = json.status;
+            List<string> transactionIds = transactionIds = json.transactionIds?.ToObject<List<string>>();
+            Dictionary<string, object> metadata = json.metadata?.ToObject<Dictionary<string, object>>();
             string createdString = json.created;
             DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
@@ -409,10 +416,23 @@ namespace StarkBank
 
             return new Transfer(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
-                accountNumber: accountNumber, accountType: accountType, externalID: externalID,
-                scheduled: scheduled, description: description, transactionIds: transactionIds, fee: fee, tags: tags, status: status,
-                created: created, updated: updated
+                accountNumber: accountNumber, accountType: accountType, externalID: externalID, scheduled: scheduled,
+                description: description, metadata: metadata, transactionIds: transactionIds, fee: fee, tags: tags, 
+                rules: rules, status: status, created: created, updated: updated
             );
+        }
+
+        private static List<Rule> ParseRule(dynamic json)
+        {
+            if(json is null) return null;
+
+            List<Rule> rules = new List<Rule>();
+
+            foreach (dynamic rule in json)
+            {
+                rules.Add(Rule.ResourceMaker(rule));
+            }
+            return rules;
         }
     }
 }

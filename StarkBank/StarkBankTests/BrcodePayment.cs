@@ -20,6 +20,10 @@ namespace StarkBankTests
             BrcodePayment getBrcodePayment = BrcodePayment.Get(id: payment.ID);
             Assert.Equal(getBrcodePayment.ID, payment.ID);
             TestUtils.Log(payment);
+            foreach(BrcodePayment.Rule rule in payment.Rules)
+            {
+                TestUtils.Log(rule);
+            }
         }
 
         [Fact]
@@ -80,7 +84,13 @@ namespace StarkBankTests
                 brcode: invoice.Brcode,
                 scheduled: scheduled,
                 description: "loading a random account",
-                taxID: "20.018.183/0001-80"
+                taxID: "20.018.183/0001-80",
+                rules: new List<BrcodePayment.Rule>() {
+                    new BrcodePayment.Rule(
+                        key: "resendingLimit",
+                        value: 5
+                    )
+                }
             );
         }
     }

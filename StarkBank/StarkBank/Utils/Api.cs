@@ -10,7 +10,7 @@ namespace StarkBank.Utils
     {
         internal delegate SubResource ResourceMaker(dynamic json);
 
-        internal static Dictionary<string, object> ApiJson(Resource entity)
+        internal static Dictionary<string, object> ApiJson(SubResource entity)
         {
             return CastJsonToApiFormat(entity.ToJson());
         }
@@ -40,21 +40,26 @@ namespace StarkBank.Utils
                     DateTime data = value;
                     value = DateToString(data);
                 }
-                if (value is StarkBankDateTime) {
-                    StarkBankDateTime data = value;
-                    value = StarkBankDateTimeToString(data);
+                if (value is StarkDateTime) {
+                    StarkDateTime data = value;
+                    value = StarkDateTimeToString(data);
                 }
-                if (value is StarkBankDate) {
-                    StarkBankDate data = value;
-                    value = StarkBankDateToString(data);
+                if (value is StarkDate) {
+                    StarkDate data = value;
+                    value = StarkDateToString(data);
                 }
                 if (value is IList) {
                     bool nested = false;
                     List<object> casted = new List<object>();
-                    foreach (object nestedEntry in value) {
+                    foreach (dynamic nestedEntry in value) {
                         if(nestedEntry is Dictionary<string, object>) {
                             Dictionary<string, object> castedNestedEntry = nestedEntry as Dictionary<string, object>;
                             casted.Add(CastJsonToApiFormat(castedNestedEntry));
+                            nested = true;
+                        }
+                        if (nestedEntry is SubResource)
+                        {
+                            casted.Add(ApiJson(nestedEntry));
                             nested = true;
                         }
                     }
@@ -62,7 +67,7 @@ namespace StarkBank.Utils
                         value = casted;
                     }
                 }
-                if (value is Resource) {
+                if (value is SubResource) {
                     value = ApiJson(value);
                 }
 
@@ -81,19 +86,19 @@ namespace StarkBank.Utils
         internal static object DateToString(DateTime dateTime)
         {
             if (dateTime == dateTime.Date) {
-                return new StarkBankDate(dateTime).ToString();
+                return new StarkDate(dateTime).ToString();
             }
-            return new StarkBankDateTime(dateTime).ToString();
+            return new StarkDateTime(dateTime).ToString();
         }
 
-        internal static object StarkBankDateToString(StarkBankDate starkBankDate)
+        internal static object StarkDateToString(StarkDate starkDate)
         {
-            return starkBankDate.ToString();
+            return starkDate.ToString();
         }
 
-        internal static object StarkBankDateTimeToString(StarkBankDateTime starkBankDateTime)
+        internal static object StarkDateTimeToString(StarkDateTime starkDateTime)
         {
-            return starkBankDateTime.ToString();
+            return starkDateTime.ToString();
         }
 
         internal static SubResource FromApiJson(ResourceMaker resourceMaker, dynamic json)

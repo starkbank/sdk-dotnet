@@ -30,15 +30,18 @@ is as easy as sending a text message to your client!
     - [Transfers](#create-transfers): Wire transfers (TED and manual Pix)
     - [DictKeys](#get-dict-key): Pix Key queries to use with Transfers
     - [Institutions](#query-bacen-institutions): Instutitions recognized by the Central Bank
-    - [Invoices](#create-invoices): Reconciled receivables (dynamic PIX QR Codes)
-    - [Deposits](#query-deposits): Other cash-ins (static PIX QR Codes, manual PIX, etc)
+    - [Invoices](#create-invoices): Reconciled receivables (dynamic Pix QR Codes)
+    - [DynamicBrcode](#create-dynamicbrcodes): Simplified reconciled receivables (dynamic Pix QR Codes)
+    - [Deposits](#query-deposits): Other cash-ins (static Pix QR Codes, DynamicBrcodes, manual Pix, etc)
     - [Boletos](#create-boletos): Boleto receivables
     - [BoletoHolmes](#investigate-a-boleto): Boleto receivables investigator
     - [BrcodePayments](#pay-a-br-code): Pay Pix QR Codes
     - [BoletoPayments](#pay-a-boleto): Pay Boletos
     - [UtilityPayments](#create-utility-payments): Pay Utility bills (water, light, etc.)
     - [TaxPayments](#create-tax-payments): Pay taxes
+    - [DarfPayments](#create-darf-payment): Pay DARFs
     - [PaymentPreviews](#preview-payment-information-before-executing-the-payment): Preview all sorts of payments
+    - [PaymentRequest](#create-payment-requests-to-be-approved-by-authorized-people-in-a-cost-center): Request a payment approval to a cost center
     - [Webhooks](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
     - [WebhookEvents](#process-webhook-events): Manage webhook events
     - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
@@ -378,7 +381,7 @@ Console.WriteLine(balance);
 
 ## Create transfers
 
-You can also create transfers in the SDK (TED/Pix).
+You can also create transfers in the SDK (TED/Pix) and configure transfer behavior according to its rules.
 
 ```c#
 using System;
@@ -401,11 +404,17 @@ List<StarkBank.Transfer> transfers = StarkBank.Transfer.Create(
             branchCode: "1234",
             accountNumber: "123456-7",
             accountType: "salary",
-            externalID: "my-internal-id-12345"
+            externalID: "my-internal-id-12345",
             taxID: "012.345.678-90",
             name: "Jon Snow",
             scheduled: DateTime.Now.AddDays(1),
-            description: "Sword"
+            description: "Sword",
+            rules: new List<BrcodePayment.Rule>() {
+                new BrcodePayment.Rule(
+                    key: "resendingLimit",              // Set maximum number of retries if Transfer fails due to systemic issues at the receiver bank
+                    value: 5                            // Our resending limit is 10 by default
+                )
+            }
         )
     }
 );
@@ -766,6 +775,78 @@ StarkBank.InvoicePayment payment = Invoice.Payment("5155165527080960");
 Console.WriteLine(payment);
 ```
 
+## Create DynamicBrcodes
+
+You can create simplified dynamic QR Codes to receive money using Pix transactions. 
+When a DynamicBrcode is paid, a Deposit is created with the tags parameter containing the character “dynamic-brcode/” followed by the DynamicBrcode’s uuid "dynamic-brcode/{uuid}" for conciliation.
+
+The differences between an Invoice and the DynamicBrcode are the following:
+
+|                       | Invoice | DynamicBrcode |
+|-----------------------|:-------:|:-------------:|
+| Expiration            |    ✓    |       ✓       |
+| Can only be paid once |    ✓    |       ✓       |
+| Due, fine and fee     |    ✓    |       X       |
+| Discount              |    ✓    |       X       |
+| Description           |    ✓    |       X       |
+| Can be updated        |    ✓    |       X       |
+
+**Note:** In order to check if a BR code has expired, you must first calculate its expiration date (add the expiration to the creation date). 
+**Note:** To know if the BR code has been paid, you need to query your Deposits by the tag "dynamic-brcode/{uuid}" to check if it has been paid.
+
+```c#
+using System;
+
+List<DynamicBrcode> brcodes = StarkBank.DynamicBrcode.Create(
+    new List<DynamicBrcode>() { 
+        new DynamicBrcode(
+            amount: 23571,  // R$ 235,71 
+            expiration: 3600
+        ),
+        new DynamicBrcode(    
+            amount: 23571,  // R$ 235,71 
+            expiration: 3600
+        )
+    }
+)
+
+foreach(StarkBank.DynamicBrcode brcode in brcodes) {
+    Console.WriteLine(brcode);
+}
+```
+
+**Note**: Instead of using DynamicBrcode objects, you can also pass each brcode element in dictionary format
+
+## Get a DynamicBrcode
+
+After its creation, information on a DynamicBrcode may be retrieved by its uuid.
+
+```c#
+using System;
+
+StarkBank.DynamicBrcode brcode = StarkBank.DynamicBrcode.Get("bb9cd43ea6f4403391bf7ef6aa876600");
+
+Console.WriteLine(brcode);
+```
+
+## Query DynamicBrcodes
+
+You can get a list of created DynamicBrcodes given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+IEnumerable<StarkBank.DynamicBrcode> brcodes = StarkBank.DynamicBrcode.Query(
+    after: new DateTime(2023, 4, 1),
+    before: new DateTime(2023, 4, 30)
+);
+
+foreach(StarkBank.DynamicBrcode brcode in brcodes) {
+    Console.WriteLine(brcode);
+}
+```
+
 ## Query deposits
 
 You can get a list of created deposits given some filters.
@@ -1050,7 +1131,13 @@ List<StarkBank.BrcodePayment> payments = StarkBank.BrcodePayment.Create(
             taxID: "012.345.678-90",
             scheduled: DateTime.Today.Date.AddDays(2),
             description: "this will be fast",
-            tags: new List<string> { "pix", "qrcode" }
+            tags: new List<string> { "pix", "qrcode" },
+            rules: new List<BrcodePayment.Rule>() {
+                new BrcodePayment.Rule(
+                    key: "resendingLimit",                  // Set maximum number of retries if Payment fails due to systemic issues at the receiver bank
+                    value: 5                                // Our resending limit is 10 by default
+                )
+            }
         )
     }
 );
@@ -1060,6 +1147,7 @@ foreach(StarkBank.BrcodePayment payment in payments) {
 }
 ```
 
+**Note**: You can also configure payment behavior according to its rules
 **Note**: Instead of using BrcodePayment objects, you can also pass each payment element in dictionary format
 
 ## Get a BR Code payment
@@ -1442,9 +1530,9 @@ You can get a specific tax payment by its id:
 ```c#
 using System;
 
-StarkBank.TaxPayment taxPayment = StarkBank.TaxPayment.Get("5155165527080960");
+StarkBank.TaxPayment payment = StarkBank.TaxPayment.Get("5155165527080960");
 
-Console.WriteLine(taxPayment);
+Console.WriteLine(payment);
 ```
 
 ## Get tax payment PDF
@@ -1471,9 +1559,9 @@ Note that this is not possible if it has been processed already.
 ```c#
 using System;
 
-StarkBank.TaxPayment taxPayment = StarkBank.TaxPayment.Delete("5155165527080960");
+StarkBank.TaxPayment payment = StarkBank.TaxPayment.Delete("5155165527080960");
 
-Console.WriteLine(taxPayment);
+Console.WriteLine(payment);
 ```
 
 ## Query tax payment logs
@@ -1508,6 +1596,126 @@ Console.WriteLine(log);
 **Note**: Some taxes can't be payed with bar codes. Since they have specific parameters, each one of them has its own
 resource and routes, which are all analogous to the TaxPayment resource. The ones we currently support are:
 - DarfPayment, for DARFs
+
+## Create DARF payment
+
+If you want to manually pay DARFs without barCodes, you may create DarfPayments:
+
+```c#
+using System;
+
+List<StarkBank.DarfPayment> payments = StarkBank.DarfPayment.Create(
+    new List<StarkBank.DarfPayment>() { 
+        new StarkBank.DarfPayment(
+            revenueCode: "1240",
+            taxId: "012.345.678-90",
+            competence: "2020-09-01",
+            referenceNumber: "2340978970",
+            nominalAmount: 1234,
+            fineAmount: 12,
+            interestAmount: 34,
+            due: DateTime.Today.Date.AddDays(30),
+            scheduled: DateTime.Today.Date.AddDays(30),
+            tags: new List<string> { "DARF", "making money" },
+            description: "take my money",
+        )
+    }
+);
+
+foreach (StarkBank.DarfPayment payment in payments)
+{
+    Console.WriteLine(payment);
+}
+```
+
+**Note**: Instead of using DarfPayment objects, you can also pass each payment element in dictionary format
+
+## Query DARF payments
+
+To search for DARF payments using filters, run:
+
+```c#
+using System;
+
+List<StarkBank.DarfPayment> payments = StarkBank.DarfPayment.Query(
+    tags: new List<string>{ "darf", "july" }
+).ToList();
+
+foreach (StarkBank.DarfPayment payment in payments)
+{
+    Console.WriteLine(payment);
+}
+```
+
+## Get DARF payment
+
+You can get a specific DARF payment by its id:
+
+```c#
+using System;
+
+StarkBank.DarfPayment payment = StarkBank.DarfPayment.Get("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
+## Get DARF payment PDF
+
+After its creation, a DARF payment PDF may also be retrieved by its id. 
+
+```c#
+using System;
+
+byte[] pdf = StarkBank.DarfPayment.Pdf("5155165527080960");
+
+System.IO.File.WriteAllBytes("darfPayment.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+## Delete DARF payment
+
+You can also cancel a DARF payment by its id.
+Note that this is not possible if it has been processed already.
+
+```c#
+using System;
+
+StarkBank.DarfPayment payment = StarkBank.DarfPayment.Delete("5155165527080960");
+
+Console.WriteLine(payment);
+```
+
+## Query DARF payment logs
+
+You can search for payment logs by specifying filters. Use this to understand each payment life cycle.
+
+```c#
+using System;
+
+List<StarkBank.DarfPayment.Log> logs = StarkBank.DarfPayment.Log.Query(
+    limit: 5
+).ToList();
+
+foreach (StarkBank.DarfPayment.Log log in logs)
+{
+    Console.WriteLine(log);
+}
+```
+
+## Get DARF payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```c#
+using System;
+
+StarkBank.DarfPayment.Log log = StarkBank.DarfPayment.Log.Get("1902837198237992");
+
+Console.WriteLine(log);
+```
 
 ## Preview payment information before executing the payment
 
@@ -1836,12 +2044,32 @@ You can update a specific Workspace by its id.
 
 ```c#
 using System;
+using System.IO;
+
+byte[] image = File.ReadAllBytes("../../../logo.png");
 
 Workspace updatedWorkspace = Workspace.Update(
     id: workspace.ID,
     name: "Updated workspace test",
     username: "new-username-test",
     allowedTaxIds: new List<string>(new string[] { "359.536.680-82", "20.018.183/0001-80" }),
+    picture: image,
+    pictureType: "image/png",
+    user: Organization.Replace(organization, workspace.ID)
+);
+
+Console.WriteLine(updatedWorkspace);
+```
+
+You can also block a specific Workspace by its id.
+
+```c#
+using System;
+
+Workspace updatedWorkspace = Workspace.Update(
+    id: workspace.ID,
+    status: "blocked",
+    user: Organization.Replace(organization, workspace.ID)
 );
 
 Console.WriteLine(updatedWorkspace);

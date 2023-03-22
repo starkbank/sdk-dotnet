@@ -12,37 +12,37 @@ namespace StarkBank
     /// <br/>
     /// Properties:
     /// <list>
-    ///     <item>ID [string, default null]: unique id associated with a Deposit when it is created. ex: "5656565656565656"</item>
-    ///     <item>Amount [long integer]: Deposit value in cents. ex: 1234 (= R$ 12.34)</item>
+    ///     <item>ID [string]: unique id associated with a Deposit when it is created. ex: "5656565656565656"</item>
     ///     <item>Name [string]: payer name. ex: "Iron Bank S.A."</item>
     ///     <item>TaxID [string]: payer tax ID (CPF or CNPJ). ex: "012.345.678-90" or "20.018.183/0001-80"</item>
     ///     <item>BankCode [string]: payer bank code in Brazil. ex: "20018183" or "341"</item>
     ///     <item>BranchCode [string]: payer bank account branch. ex: "1357-9"</item>
     ///     <item>AccountNumber [string]: payer bank account number. ex: "876543-2"</item>
     ///     <item>AccountType [string]: payer bank account type. ex: "checking"</item>
+    ///     <item>Amount [long integer]: Deposit value in cents. ex: 1234 (= R$ 12.34)</item>
     ///     <item>Type [string]: Type of settlement that originated the deposit.ex: "pix" or "ted"</item>
-    ///     <item>Fee [integer, default null]: fee charged for this Deposit. ex: 50 (= R$ 0.50)</item>
-    ///     <item>TransactionIds [list of strings, default null]: ledger Transaction ids linked to this Deposit (if there are more than one, all but first are reversals)</item>
-    ///     <item>Status [string, default null]: current Deposit status. ex: "created"</item>
-    ///     <item>Tags [list of strings, default null]: list of strings for tagging. ex: ["reconciliationId", "txId"]</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Status [string]: current Deposit status. ex: "created"</item>
+    ///     <item>Tags [list of strings]: list of strings for tagging. ex: ["reconciliationId", "txId"]</item>
+    ///     <item>Fee [integer]: fee charged for this Deposit. ex: 50 (= R$ 0.50)</item>
+    ///     <item>TransactionIds [list of strings]: ledger Transaction ids linked to this Deposit (if there are more than one, all but first are reversals)</item>
+    ///     <item>Created [DateTime]: creation datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Updated [DateTime]: latest update datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class Deposit : Utils.Resource
     {
-        public long Amount { get; }
         public string Name { get; }
         public string TaxID { get; }
         public string BankCode { get; }
         public string BranchCode { get; }
         public string AccountNumber { get; }
         public string AccountType { get; }
+        public long Amount { get; }
         public string Type { get; }
-        public int? Fee { get; }
-        public List<string> TransactionIds { get; }
         public string Status { get; }
         public List<string> Tags { get; }
+        public int? Fee { get; }
+        public List<string> TransactionIds { get; }
         public DateTime Created { get; }
         public DateTime Updated { get; }
 
@@ -56,38 +56,38 @@ namespace StarkBank
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id associated with a Deposit when it is created. ex: "5656565656565656"</item>
-        ///     <item>amount [long integer]: Deposit value in cents. ex: 1234 (= R$ 12.34)</item>
+        ///     <item>id [string]: unique id associated with a Deposit when it is created. ex: "5656565656565656"</item>
         ///     <item>name [string]: payer name. ex: "Iron Bank S.A."</item>
         ///     <item>taxID [string]: payer tax ID (CPF or CNPJ). ex: "012.345.678-90" or "20.018.183/0001-80"</item>
         ///     <item>bankCode [string]: payer bank code in Brazil. ex: "20018183" or "341"</item>
         ///     <item>branchCode [string]: payer bank account branch. ex: "1357-9"</item>
         ///     <item>accountNumber [string]: payer bank account number. ex: "876543-2"</item>
         ///     <item>accountType [string]: payer bank account type. ex: "checking"</item>
+        ///     <item>amount [long integer]: Deposit value in cents. ex: 1234 (= R$ 12.34)</item>
         ///     <item>type [string]: Type of settlement that originated the deposit.ex: "pix" or "ted"</item>
-        ///     <item>fee [integer, default null]: fee charged for this Deposit. ex: 50 (= R$ 0.50)</item>
-        ///     <item>transactionIds [list of strings, default null]: ledger Transaction ids linked to this Deposit (if there are more than one, all but first are reversals)</item>
-        ///     <item>status [string, default null]: current Deposit status. ex: "created"</item>
-        ///     <item>tags [list of strings, default null]: list of strings for tagging. ex: ["reconciliationId", "txId"]</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>status [string]: current Deposit status. ex: "created"</item>
+        ///     <item>tags [list of strings]: list of strings for tagging. ex: ["reconciliationId", "txId"]</item>
+        ///     <item>fee [integer]: fee charged for this Deposit. ex: 50 (= R$ 0.50)</item>
+        ///     <item>transactionIds [list of strings]: ledger Transaction ids linked to this Deposit (if there are more than one, all but first are reversals)</item>
+        ///     <item>created [DateTime]: creation datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>updated [DateTime]: latest update datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public Deposit(string id, long amount, string name, string taxID, string bankCode, string branchCode, string accountNumber, string accountType,
             string type, int? fee, List<string> transactionIds, string status, List<string> tags, DateTime created, DateTime updated) : base(id)
         {
-            Amount = amount;
             Name = name;
             TaxID = taxID;
             BankCode = bankCode;
             BranchCode = branchCode;
             AccountNumber = accountNumber;
             AccountType = accountType;
+            Amount = amount;
             Type = type;
-            Fee = fee;
-            TransactionIds = transactionIds;
             Status = status;
             Tags = tags;
+            Fee = fee;
+            TransactionIds = transactionIds;
             Created = created;
             Updated = updated;
         }
@@ -162,8 +162,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"</item>
         ///     <item>sort [string, default "-created"]: sort order considered in the response. Options are: "created" and "-created". "-" means descending order.</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
@@ -185,8 +185,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "status", status },
                     { "sort", sort },
                     { "tags", tags },
@@ -206,8 +206,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"</item>
         ///     <item>sort [string, default "-created"]: sort order considered in the response. Options are: "created" and "-created". "-" means descending order.</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
@@ -230,8 +230,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "status", status },
                     { "sort", sort },
                     { "tags", tags },

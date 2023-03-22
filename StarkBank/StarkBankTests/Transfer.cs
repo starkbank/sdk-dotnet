@@ -25,6 +25,10 @@ namespace StarkBankTests
             Transfer deleteTransfer = Transfer.Delete(id: transfer.ID);
             Assert.True(deleteTransfer.Status == "canceled");
             TestUtils.Log(transfer);
+            foreach (Transfer.Rule rule in transfer.Rules)
+            {
+                TestUtils.Log(rule);
+            }
         }
 
         [Fact]
@@ -106,7 +110,13 @@ namespace StarkBankTests
                 accountType: "checking",
                 externalID: Guid.NewGuid().ToString(),
                 scheduled: scheduled,
-                description: "Good description"
+                description: "Good description",
+                rules: new List<Transfer.Rule>() {
+                    new Transfer.Rule(
+                        key: "resendingLimit",
+                        value: 5
+                    )
+                }
             );
         }
     }
