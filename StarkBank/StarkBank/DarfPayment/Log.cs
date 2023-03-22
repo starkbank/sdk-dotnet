@@ -93,8 +93,8 @@ namespace StarkBank
             /// Parameters (optional):
             /// <list>
             ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>types [list of strings, default null]: filter retrieved objects by event types. ex: "paid" or "registered"</item>
             ///     <item>paymentIds [list of strings, default null]: list of DarfPayment ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
             ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
@@ -114,8 +114,8 @@ namespace StarkBank
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "types", types },
                     { "paymentIds", paymentIds }
                     },
@@ -133,8 +133,8 @@ namespace StarkBank
             /// <list>
             ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
             ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-            ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-            ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+            ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>types [list of strings, default null]: filter retrieved objects by event types. ex: "paid" or "registered"</item>
             ///     <item>paymentIds [list of strings, default null]: list of DarfPayment ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]</item>
             ///     <item>user [Project object, default null]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
@@ -155,8 +155,8 @@ namespace StarkBank
                     query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "types", types },
                     { "paymentIds", paymentIds }
                     },

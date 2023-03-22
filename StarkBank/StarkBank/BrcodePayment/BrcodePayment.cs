@@ -15,14 +15,15 @@ namespace StarkBank
     /// <br/>
     /// Properties:
     /// <list>
-    ///     <item>Brcode [string]: : String loaded directly from the QRCode or copied from the invoice.ex: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"</item>
+    ///     <item>Brcode [string]: String loaded directly from the QRCode or copied from the invoice.ex: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"</item>
     ///     <item>TaxID [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
     ///     <item>Amount [long integer]: If the BR Code does not provide an amount, this parameter is mandatory, else it is optional, but when it is informed, it must be a match. ex: 23456 (= R$ 234.56)</item>
     ///     <item>Scheduled [DateTime]: payment scheduled datetime. ex: new DateTime(2020, 3, 10)</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
-    ///     <item>Name [string]: receiver name. ex: "Jon Snow"</item>
+    ///     <item>Rules [list of BrcodePayment.Rule objects, default null]: list of rules to overwrite default behavior. ex: new List<BrcodePayment.Rule>() {new BrcodePayment.Rule("resendingLimit", 5)}</item>
     ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
+    ///     <item>Name [string]: receiver name. ex: "Jon Snow"</item>
     ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
     ///     <item>Type [string]: brcode type. ex: "static" or "dynamic"</item>
     ///     <item>TransactionIds [list of strings, default null]: ledger transaction ids linked to this payment. ex: ["19827356981273"]</item>
@@ -39,6 +40,7 @@ namespace StarkBank
         public long? Amount { get; }
         public DateTime? Scheduled { get; }
         public List<string> Tags { get; }
+        public List<Rule> Rules { get; }
         public string Name { get; }
         public string Status { get; }
         public string Type { get; }
@@ -66,23 +68,26 @@ namespace StarkBank
         ///     <item>amount [long integer, default null]: If the BRCode does not provide an amount, this parameter is mandatory, else it is optional, but if informed must be a match. ex: 23456 (= R$ 234.56)</item>
         ///     <item>scheduled [DateTime, default now]: payment scheduled datetime. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: list of strings for tagging</item>
+        ///     <item>rules [list of BrcodePayment.Rule objects, default null]: list of rules to overwrite default behavior. ex: new List<BrcodePayment.Rule>() {new BrcodePayment.Rule("resendingLimit", 5)}</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
-        ///     <item>name [string, default null]: receiver name. ex: "Jon Snow"</item>
-        ///     <item>status [string, default null]: current payment status. ex: "success" or "failed"</item>
-        ///     <item>type [string, default null]: brcode type. ex: "static" or "dynamic"</item>
-        ///     <item>fee [integer, default null]: fee charged when BrcodePayment is created. ex: 200 (= R$ 2.00)</item>
-        ///     <item>transactionIds [list of strings, default null]: ledger transaction ids linked to this payment. ex: ["19827356981273"]</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>updated [DateTime, default null]: latest udpate datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>id [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
+        ///     <item>name [string]: receiver name. ex: "Jon Snow"</item>
+        ///     <item>status [string]: current payment status. ex: "success" or "failed"</item>
+        ///     <item>type [string]: brcode type. ex: "static" or "dynamic"</item>
+        ///     <item>fee [integer]: fee charged when BrcodePayment is created. ex: 200 (= R$ 2.00)</item>
+        ///     <item>transactionIds [list of strings]: ledger transaction ids linked to this payment. ex: ["19827356981273"]</item>
+        ///     <item>created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>updated [DateTime]: latest udpate datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public BrcodePayment(string brcode, string taxID, string description, string id = null, long? amount = null,
-            DateTime? scheduled = null, List<string> tags = null, string name = null, string status = null, string type = null,
-            List<string> transactionIds = null, int? fee = null, DateTime? created = null, DateTime? updated = null) : base(id)
+            DateTime? scheduled = null, List<string> tags = null, List<Rule> rules = null, string name = null, 
+            string status = null, string type = null, List<string> transactionIds = null, int? fee = null, 
+            DateTime? created = null, DateTime? updated = null
+        ) : base(id)
         {
             Brcode = brcode;
             TaxID = taxID;
@@ -90,6 +95,7 @@ namespace StarkBank
             Amount = amount;
             Scheduled = scheduled;
             Tags = tags;
+            Rules = rules;
             Name = name;
             Status = status;
             Type = type;
@@ -266,8 +272,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "success" or "failed"</item>
@@ -288,8 +294,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status }
@@ -308,8 +314,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "success" or "failed"</item>
@@ -332,8 +338,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status }
@@ -363,16 +369,13 @@ namespace StarkBank
             string scheduledString = json.scheduled;
             DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
             List<string> tags = new List<string>();
+            List<Rule> rules = ParseRule(json.rules);
             string name = json.name;
-            if (json.tags != null) {
-                tags = json.tags.ToObject<List<string>>();
-            }
+            tags = json.tags?.ToObject<List<string>>();
             string status = json.status;
             string type = json.type;
             List<string> transactionIds = new List<string>();
-            if (json.transactionIds != null) {
-                transactionIds = json.transactionIds.ToObject<List<string>>();
-            }
+            transactionIds = json.transactionIds?.ToObject<List<string>>();
             int? fee = json.fee;
             string createdString = json.created;
             DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
@@ -381,8 +384,22 @@ namespace StarkBank
 
             return new BrcodePayment(
                 id: id, brcode: brcode, taxID: taxID, description: description, amount: amount, scheduled: scheduled, tags: tags,
-                name: name, status: status, type: type, transactionIds: transactionIds, fee: fee, created: created, updated: updated
+                rules: rules, name: name, status: status, type: type, transactionIds: transactionIds, fee: fee, created: created, 
+                updated: updated
             );
+        }
+
+        private static List<Rule> ParseRule(dynamic json)
+        {
+            if(json is null) return null;
+
+            List<Rule> rules = new List<Rule>();
+
+            foreach (dynamic rule in json)
+            {
+                rules.Add(Rule.ResourceMaker(rule));
+            }
+            return rules;
         }
     }
 }

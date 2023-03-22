@@ -1,12 +1,13 @@
 ﻿using System;
 
+
 namespace StarkBank.Utils
 {
-    public class StarkBankDate
+    public class StarkDate
     {
         public DateTime? Value;
 
-        public StarkBankDate(DateTime? value) {
+        public StarkDate(DateTime? value) {
             Value = value;
         }
 
@@ -18,11 +19,11 @@ namespace StarkBank.Utils
         }
     }
 
-    public class StarkBankDateTime
+    public class StarkDateTime
     {
         public DateTime? Value;
 
-        public StarkBankDateTime(DateTime? value)
+        public StarkDateTime(DateTime? value)
         {
             Value = value;
         }

@@ -15,10 +15,10 @@ namespace StarkBank
     /// <br/>
     /// Properties:
     /// <list>
-    ///     <item>ID [string, default null]: unique id returned when Balance is created. ex: "5656565656565656"</item>
-    ///     <item>Amount [long integer, default null]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)</item>
-    ///     <item>Currency [string, default null]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"</item>
-    ///     <item>Updated [DateTime, default null]: update datetime for the balance. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>ID [string]: unique id returned when Balance is created. ex: "5656565656565656"</item>
+    ///     <item>Amount [long integer]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)</item>
+    ///     <item>Currency [string]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"</item>
+    ///     <item>Updated [DateTime]: update datetime for the balance. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public class Balance : Utils.Resource
@@ -37,10 +37,10 @@ namespace StarkBank
         /// <br/>
         /// Attributes(return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when Balance is created. ex: "5656565656565656"</item>
-        ///     <item>amount [long integer, default null]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)</item>
-        ///     <item>currency [string, default null]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"</item>
-        ///     <item>updated [DateTime, default null]: update datetime for the balance. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>id [string]: unique id returned when Balance is created. ex: "5656565656565656"</item>
+        ///     <item>amount [long integer]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)</item>
+        ///     <item>currency [string]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"</item>
+        ///     <item>updated [DateTime]: update datetime for the balance. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public Balance(string id, long amount, string currency, DateTime updated) : base(id)

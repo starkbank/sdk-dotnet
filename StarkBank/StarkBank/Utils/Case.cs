@@ -1,5 +1,6 @@
 ﻿using System.Text;
 
+
 namespace StarkBank.Utils
 {
     internal static class Case

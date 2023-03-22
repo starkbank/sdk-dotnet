@@ -17,7 +17,7 @@ namespace StarkBank
     /// <list>
     ///     <item>Url [string]: Url that will be notified when an event occurs.</item>
     ///     <item>Subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ["transfer", "invoice"]</item>
-    ///     <item>ID [string, default null]: unique id returned when the Webhook is created. ex: "5656565656565656"</item>
+    ///     <item>ID [string]: unique id returned when the Webhook is created. ex: "5656565656565656"</item>
     /// </list>
     /// </summary>
     public partial class Webhook : Utils.Resource
@@ -40,7 +40,7 @@ namespace StarkBank
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when the Webhook is created. ex: "5656565656565656"</item>
+        ///     <item>id [string]: unique id returned when the Webhook is created. ex: "5656565656565656"</item>
         /// </list>
         /// </summary>
         public Webhook(string url, List<string> subscriptions = null, string id = null) : base(id)

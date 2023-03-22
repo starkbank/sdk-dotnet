@@ -57,6 +57,7 @@
     <Folder Include="TaxPayment\" />
     <Folder Include="DarfPayment\" />
     <Folder Include="PaymentPreview\" />
+    <Folder Include="DynamicBrcode\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

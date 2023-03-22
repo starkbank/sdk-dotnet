@@ -13,6 +13,23 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- picture and pictureType parameters to Workspace.update method
+- rules and metadata attribute to Transfer resource
+- Transfer.Rule sub-resource
+- rules attribute to BrcodePayment resource
+- BrcodePayment.Rule sub-resource
+- DynamicBrcode resource
+- status, created, organizationId and pictureUrl attributes to Workspace resource
+- workspaceId attribute to Boleto resource
+- updated attribute to BoletoHolmes.Log resource
+- updated, transactionIds and type attributes to UtilityPayment resource
+- description attribute to PaymentRequest resource
+- transactionIds attribute to BoletoPayment, DarfPayment and TaxPayment resource
+### Changed
+- amount attribute to parameter to BoletoPayment resource
+### Removed
+- deprecated BrcodePreview resource
 
 ## [2.6.4] - 2022-09-22
 ### Added
@@ -87,10 +104,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [2.2.0] - 2020-11-16
 ### Added
 - Invoice resource to load your account with dynamic QR Codes
-- DictKey resource to get DICT (PIX) key parameters
+- DictKey resource to get DICT (Pix) key parameters
 - Deposit resource to receive transfers passively
-- PIX support in Transfer resource
-- BrcodePayment support to pay static and dynamic PIX QR Codes
+- Pix support in Transfer resource
+- BrcodePayment support to pay static and dynamic Pix QR Codes
 
 ## [2.1.0] - 2020-10-28
 ### Added

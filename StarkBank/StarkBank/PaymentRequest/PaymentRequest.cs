@@ -21,13 +21,14 @@ namespace StarkBank
     ///     <item>Payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.</item>
     ///     <item>Type [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
     ///     <item>Due [DateTime]: Payment target date in ISO format. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Tags [list of strings]: list of strings for tagging</item>
-    ///     <item>ID [string, default null]: unique id returned when PaymentRequest is created. ex: "5656565656565656"</item>
-    ///     <item>Amount [integer, default null]: PaymentRequest amount. ex: 100000 = R$1.000,00</item>
-    ///     <item>Status [string, default null]: current PaymentRequest status. ex: "pending" or "approved"</item>
-    ///     <item>Actions [list of dictionaries, default null]: list of actions that are affecting this PaymentRequest. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"type", "member"},{"id", "56565656565656"},{"action", "requested"}}</item>
-    ///     <item>Updated [DateTime, default null]: latest update datetime for the PaymentRequest. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the PaymentRequest. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
+    ///     <item>ID [string]: unique id returned when PaymentRequest is created. ex: "5656565656565656"</item>
+    ///     <item>Amount [integer]: PaymentRequest amount. ex: 100000 = R$1.000,00</item>
+    ///     <item>Description [string]: payment request description. ex: "Tony Stark's Suit"</item>
+    ///     <item>Status [string]: current PaymentRequest status. ex: "pending" or "approved"</item>
+    ///     <item>Actions [list of dictionaries]: list of actions that are affecting this PaymentRequest. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"type", "member"},{"id", "56565656565656"},{"action", "requested"}}</item>
+    ///     <item>Updated [DateTime]: latest update datetime for the PaymentRequest. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Created [DateTime]: creation datetime for the PaymentRequest. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class PaymentRequest : Utils.Resource
@@ -38,6 +39,7 @@ namespace StarkBank
         public DateTime? Due { get; }
         public List<string> Tags { get; }
         public long? Amount { get; }
+        public string Description { get; }
         public string Status { get; }
         public List<Dictionary<string, string>> Actions { get; }
         public DateTime? Updated { get; }
@@ -70,17 +72,18 @@ namespace StarkBank
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when PaymentRequest is created. ex: "5656565656565656"</item>
-        ///     <item>amount [integer, default null]: PaymentRequest amount. ex: 100000 = R$1.000,00</item>
-        ///     <item>status [string, default null]: current PaymentRequest status. ex: "pending" or "approved"</item>
-        ///     <item>actions [list of dictionaries, default null]: list of actions that are affecting this PaymentRequest. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"type", "member"},{"id", "56565656565656"},{"action", "requested"}}</item>
-        ///     <item>updated [DateTime, default null]: latest update datetime for the PaymentRequest. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the PaymentRequest. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>id [string]: unique id returned when PaymentRequest is created. ex: "5656565656565656"</item>
+        ///     <item>amount [integer]: PaymentRequest amount. ex: 100000 = R$1.000,00</item>
+        ///     <item>description [string]: payment request description. ex: "Tony Stark's Suit"</item>
+        ///     <item>status [string]: current PaymentRequest status. ex: "pending" or "approved"</item>
+        ///     <item>actions [list of dictionaries]: list of actions that are affecting this PaymentRequest. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"type", "member"},{"id", "56565656565656"},{"action", "requested"}}</item>
+        ///     <item>updated [DateTime]: latest update datetime for the PaymentRequest. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+        ///     <item>created [DateTime]: creation datetime for the PaymentRequest. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public PaymentRequest(Utils.Resource payment, string centerID, string id = null, string type = null, DateTime? due = null,
-            List<string> tags = null, long? amount = null, string status = null,
-            List<Dictionary<string, string>> actions = null, DateTime? updated = null, DateTime? created = null) : base(id)
+            List<string> tags = null, long? amount = null, string status = null, List<Dictionary<string, string>> actions = null, 
+            string description = null, DateTime? updated = null, DateTime? created = null) : base(id)
         {
             CenterID = centerID;
             Payment = payment;
@@ -90,6 +93,7 @@ namespace StarkBank
             Amount = amount;
             Status = status;
             Actions = actions;
+            Description = description;
             Updated = updated;
             Created = created;
 
@@ -127,7 +131,7 @@ namespace StarkBank
         internal new Dictionary<string, object> ToJson()
         {
             Dictionary<string, object> json = base.ToJson();
-            json["Due"] = new Utils.StarkBankDate((DateTime)json["Due"]);
+            json["Due"] = new Utils.StarkDate((DateTime)json["Due"]);
             return json;
         }
 
@@ -175,8 +179,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "success", "failed"</item>
         ///     <item>type [string, default null]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
         ///     <item>sort [string, default "-created"]: sort order considered in response. Valid options are "-created" or "-due".
@@ -198,8 +202,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "centerID", centerID },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "status", status },
                     { "type", type },
                     { "sort", sort },
@@ -225,8 +229,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "success", "failed"</item>
         ///     <item>type [string, default null]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
         ///     <item>sort [string, default "-created"]: sort order considered in response. Valid options are "-created" or "-due".
@@ -249,8 +253,8 @@ namespace StarkBank
                     { "cursor", cursor },
                     { "centerID", centerID },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "status", status },
                     { "type", type },
                     { "sort", sort },
@@ -282,6 +286,7 @@ namespace StarkBank
             DateTime? due = Utils.Checks.CheckNullableDateTime(dueString);
             List<string> tags = json.tags.ToObject<List<string>>();
             long? amount = json.amount;
+            string description = json.description;
             string status = json.status;
             List<Dictionary<string, string>> actions = json.actions.ToObject<List<Dictionary<string, string>>>();
             string createdString = json.created;
@@ -291,7 +296,8 @@ namespace StarkBank
 
             return new PaymentRequest(
                 id: id, centerID: centerID, type: type, payment: payment, due: due, tags: tags,
-                amount: amount, status: status, actions: actions, created: created, updated: updated
+                amount: amount, status: status, description: description, actions: actions, 
+                created: created, updated: updated
             );
         }
 

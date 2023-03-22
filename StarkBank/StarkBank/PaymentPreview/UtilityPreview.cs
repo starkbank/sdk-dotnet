@@ -9,7 +9,7 @@
         /// <br/>
         /// Properties:
         /// <list>
-        ///     <item>Amount [int]: final amount to be paid. ex: 23456 (= R$ 234.56)</item>
+        ///     <item>Amount [integer]: final amount to be paid. ex: 23456 (= R$ 234.56)</item>
         ///     <item>Name [string]: beneficiary full name. ex: "Iron Throne"</item>
         ///     <item>Description [string]: utility payment description. ex: "Utility Payment - Light Company"</item>
         ///     <item>Line [string]: Number sequence that identifies the payment. ex: "82660000002 8 44361143007 7 41190025511 7 00010601813 8"</item>
@@ -30,7 +30,7 @@
             /// <br/>
             /// Attributes (return-only):
             /// <list>
-            ///     <item>Amount [int]: final amount to be paid. ex: 23456 (= R$ 234.56)</item>
+            ///     <item>Amount [integer]: final amount to be paid. ex: 23456 (= R$ 234.56)</item>
             ///     <item>Name [string]: beneficiary full name. ex: "Iron Throne"</item>
             ///     <item>Description [string]: utility payment description. ex: "Utility Payment - Light Company"</item>
             ///     <item>Line [string]: Number sequence that identifies the payment. ex: "82660000002 8 44361143007 7 41190025511 7 00010601813 8"</item>

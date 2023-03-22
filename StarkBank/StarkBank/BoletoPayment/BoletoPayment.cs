@@ -19,26 +19,28 @@ namespace StarkBank
     ///     <item>BarCode [string, default null]: Bar code number that describes the payment. Either 'line' or 'barCode' parameters are required. If both are sent, they must match. ex: "34195819600000000621090063571277307144464000"</item>
     ///     <item>TaxID [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
+    ///     <item>Amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
     ///     <item>Scheduled [DateTime, default today]: payment scheduled date. ex: new DateTime(2020, 3, 10)</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
-    ///     <item>ID [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
-    ///     <item>Status [string, default null]: current payment status. ex: "success" or "failed"</item>
-    ///     <item>Amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
-    ///     <item>Created [DateTime, default null]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Fee [integer, default null]: fee charged when BoletoPayment is created. ex: 200 (= R$ 2.00)</item>
+    ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
+    ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
+    ///     <item>Fee [integer]: fee charged when BoletoPayment is created. ex: 200 (= R$ 2.00)</item>
+    ///     <item>TransactionIds [list of strings]: ledger transaction ids linked to this BoletoPayment. ex: ["19827356981273"]</item>
+    ///     <item>Created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
     public partial class BoletoPayment : Utils.Resource
     {
-        public long? Amount { get; }
-        public string Description { get; }
-        public string TaxID { get; }
         public string Line { get; }
         public string BarCode { get; }
+        public string TaxID { get; }
+        public string Description { get; }
+        public long? Amount { get; }
         public DateTime? Scheduled { get; }
         public List<string> Tags { get; }
         public string Status { get; }
         public int? Fee { get; }
+        public List<string> TransactionIds { get; }
         public DateTime? Created { get; }
 
         /// <summary>
@@ -62,22 +64,23 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
+        ///     <item>amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
         ///     <item>scheduled [DateTime, default today]: payment scheduled date. ex: new DateTime(2020, 3, 10)</item>
-        ///     <item>tags [list of strings]: list of strings for tagging</item>
+        ///     <item>tags [list of strings, default null]: list of strings for tagging</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
         /// <list>
-        ///     <item>id [string, default null]: unique id returned when payment is created. ex: "5656565656565656"</item>
-        ///     <item>status [string, default null]: current payment status. ex: "success" or "failed"</item>
-        ///     <item>amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
-        ///     <item>created [DateTime, default null]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-        ///     <item>fee [integer, default null]: fee charged when BoletoPayment is created. ex: 200 (= R$ 2.00)</item>
+        ///     <item>id [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
+        ///     <item>status [string]: current payment status. ex: "success" or "failed"</item>
+        ///     <item>fee [integer]: fee charged when BoletoPayment is created. ex: 200 (= R$ 2.00)</item>
+        ///     <item>transactionIds [list of strings]: ledger transaction ids linked to this BoletoPayment. ex: ["19827356981273"]</item>
+        ///     <item>created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public BoletoPayment(string taxID, string description, string id = null, long? amount = null, string line = null,
             string barCode = null, DateTime? scheduled = null, List<string> tags = null, string status = null,
-            int? fee = null, DateTime? created = null) : base(id)
+            int? fee = null, List<string> transactionIds = null, DateTime? created = null) : base(id)
         {
             Amount = amount;
             Description = description;
@@ -88,13 +91,14 @@ namespace StarkBank
             Tags = tags;
             Status = status;
             Fee = fee;
+            TransactionIds = transactionIds;
             Created = created;
         }
 
         internal new Dictionary<string, object> ToJson()
         {
             Dictionary<string, object> json = base.ToJson();
-            json["Scheduled"] = new Utils.StarkBankDate((DateTime)json["Scheduled"]);
+            json["Scheduled"] = new Utils.StarkDate((DateTime)json["Scheduled"]);
             return json;
         }
 
@@ -232,8 +236,8 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid"</item>
@@ -254,8 +258,8 @@ namespace StarkBank
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status }
@@ -274,8 +278,8 @@ namespace StarkBank
         /// <list>
         ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
         ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
-        ///     <item>after [DateTime, default null] date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
-        ///     <item>before [DateTime, default null] date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: new DateTime(2020, 3, 10)</item>
+        ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: new DateTime(2020, 3, 10)</item>
         ///     <item>tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]</item>
         ///     <item>ids [list of strings, default null]: list of strings to get specific entities by ids. ex: ["12376517623", "1928367198236"]</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "paid"</item>
@@ -297,8 +301,8 @@ namespace StarkBank
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkBankDate(after) },
-                    { "before", new Utils.StarkBankDate(before) },
+                    { "after", new Utils.StarkDate(after) },
+                    { "before", new Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status }
@@ -350,25 +354,24 @@ namespace StarkBank
         internal static Utils.Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
-            long? amount = json.amount;
-            string description = json.description;
-            string taxID = json.taxId;
             string line = json.line;
             string barCode = json.barCode;
+            string taxID = json.taxId;
+            string description = json.description;
+            long? amount = json.amount;
             string scheduledString = json.scheduled;
             DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
-            List<string> tags = new List<string>();
-            if (json.tags != null) {
-                tags = json.tags.ToObject<List<string>>();
-            }
+            List<string> tags = json.tags?.ToObject<List<string>>();
             string status = json.status;
             int? fee = json.fee;
+            List<string> transactionIds = json.transactionIds?.ToObject<List<string>>();
             string createdString = json.created;
             DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
 
             return new BoletoPayment(
                 id: id, amount: amount, description: description, taxID: taxID, line: line, barCode: barCode,
-                scheduled: scheduled, tags: tags, status: status, fee: fee, created: created
+                scheduled: scheduled, tags: tags, status: status, fee: fee, transactionIds: transactionIds,
+                created: created
             );
         }
     }
