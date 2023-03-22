@@ -38,7 +38,7 @@ namespace StarkBank.Utils
         private static HttpClient makeClient()
         {
             HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", $".NET-{Environment.Version}-SDK-2.6.4");
+            client.DefaultRequestHeaders.Add("User-Agent", $".NET-{Environment.Version}-SDK-2.7.0");
             return client;
         }
 

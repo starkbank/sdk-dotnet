@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.7.0] - 2023-03-22
 ### Added
 - picture and pictureType parameters to Workspace.update method
 - rules and metadata attribute to Transfer resource
