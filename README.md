@@ -42,6 +42,13 @@ is as easy as sending a text message to your client!
     - [DarfPayments](#create-darf-payment): Pay DARFs
     - [PaymentPreviews](#preview-payment-information-before-executing-the-payment): Preview all sorts of payments
     - [PaymentRequest](#create-payment-requests-to-be-approved-by-authorized-people-in-a-cost-center): Request a payment approval to a cost center
+    - [CorporateHolders](#create-corporateholders): Manage cardholders
+    - [CorporateCards](#create-corporatecards): Create virtual and/or physical cards
+    - [CorporateInvoices](#create-corporateinvoices): Add money to your corporate balance
+    - [CorporateWithdrawals](#create-corporatewithdrawals): Send money back to your Workspace from your corporate balance
+    - [CorporateBalance](#get-your-corporatebalance): View your corporate balance
+    - [CorporateTransactions](#query-corporatetransactions): View the transactions that have affected your corporate balance
+    - [CorporateEnums](#corporate-enums): Query enums related to the corporate purchases, such as merchant categories, countries and card purchase methods
     - [Webhooks](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
     - [WebhookEvents](#process-webhook-events): Manage webhook events
     - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
@@ -1807,6 +1814,519 @@ IEnumerable<StarkBank.PaymentRequest> requests = StarkBank.PaymentRequest.Query(
 
 foreach(StarkBank.PaymentRequest request in requests) {
     Console.WriteLine(request);
+}
+```
+
+## Create CorporateHolders
+
+You can create card holders to which your cards will be bound.
+They support spending rules that will apply to all underlying cards.
+
+```c#
+using System;
+
+List<StarkBank> holders = StarkBank.CorporateHolder.Create(
+    new List<StarkBank.CorporateHolder> {
+        new StarkBank.CorporateHolder(
+            name: "Iron Bank S.A.",
+            tags: new List<string> { "Traveler Employee" },
+            rules: new List<StarkBank.CorporateRule>() {
+                new StarkBank.CorporateRule(
+                    name: "General USD",
+                    interval: "day",
+                    amount: 100000,
+                    currencyCode: "USD"
+                )
+            }
+        )
+    }
+)
+
+foreach (StarkBank.CorporateHolder holder in holders) {
+    Console.Write(holder);   
+}
+```
+
+**Note**: Instead of using CorporateHolder objects, you can also pass each element in dictionary format
+
+## Query CorporateHolders
+
+You can query multiple holders according to filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporateHolder> holders = StarkBank.CorporateHolder.Query(
+    after: new DateTime(2019, 1, 1),
+    before: new DateTime(2022, 3, 1)
+);
+
+foreach(StarkBank.CorporateHolder holder in holders)
+{
+    Console.Write(holder);
+}
+```
+
+## Cancel a CorporateHolder
+
+To cancel a single Corporate Holder by its id, run:
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateHolder holder = StarkBank.CorporateHolder.Cancel("5353197895942144");
+
+Console.Write(holder);
+```
+
+## Get a CorporateHolder
+
+To get a single Corporate Holder by its id, run:
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateHolder holder = StarkBank.CorporateHolder.Get("5353197895942144");
+
+Console.Write(holder);
+```
+
+## Query CorporateHolder logs
+
+You can query holder logs to better understand holder life cycles.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporateHolder.Log> logs = StarkBank.CorporateHolder.Log.Query(limit: 10);
+
+foreach (StarkBank.CorporateHolder.Log log in logs)
+{
+    Console.Write(log);
+}
+```
+
+## Get a CorporateHolder log
+
+You can also get a specific log by its id.
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateHolder.Log log = StarkBank.CorporateHolder.Log.Get("6299741604282368");
+
+Console.Write(log);
+```
+
+## Create CorporateCard
+
+You can issue cards with specific spending rules.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+StarkBank.CorporateCard card = StarkBank.CorporateCard.Create(
+    new StarkBank.CorporateCard(
+        holderID: "5155165527080960"
+    )
+);
+
+Console.Write(card);
+```
+
+## Query CorporateCards
+
+You can get a list of created cards given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporateCard> cards = StarkBank.CorporateCard.Query(
+    after: new DateTime(2019, 1, 1),
+    before: new DateTime(2023, 3, 1)
+);
+
+foreach(StarkBank.CorporateCard card in cards)
+{
+    Console.Write(card);
+}
+```
+
+## Get a CorporateCard
+
+After its creation, information on a card may be retrieved by its id.
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateCard card = StarkBank.CorporateCard.Get("5353197895942144");
+
+Console.Write(card);
+```
+
+## Update a CorporateCard
+
+You can update a specific card by its id.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+Dictionary<string, object> patchData = new Dictionary<string, object> {
+    { "status", "blocked" }
+};
+
+StarkBank.CorporateCard card = StarkBank.CorporateCard.Update("5353197895942144", patchData);
+
+Console.Write(card);
+```
+
+## Cancel a CorporateCard
+
+You can also cancel a card by its id.
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateCard card = StarkBank.CorporateCard.Cancel("5353197895942144");
+
+Console.Write(card);
+```
+
+## Query CorporateCard logs
+
+Logs are pretty important to understand the life cycle of a card.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporateCard.Log> logs = StarkBank.CorporateCard.Log.Query(limit: 10);
+
+foreach (StarkBank.CorporateCard.Log log in logs)
+{
+    Console.Write(log);
+}
+```
+
+## Get a CorporateCard log
+
+You can get a single log by its id.
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateCard.Log log = StarkBank.CorporateCard.Log.Get("6299741604282368");
+
+Console.Write(log);
+```
+
+## Query CorporatePurchases
+
+You can get a list of created purchases given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporatePurchase> purchases = StarkBank.CorporatePurchase.Query(
+    after: new DateTime(2019, 1, 1),
+    before: new DateTime(2022, 3, 1)
+);
+
+foreach (StarkBank.CorporatePurchase purchase in purchases)
+{
+    Console.Write(purchase);
+}
+```
+
+## Get a CorporatePurchase
+
+After its creation, information on a purchase may be retrieved by its id. 
+
+```c#
+using System;
+using StarkBank;
+
+StarkBank.CorporatePurchase purchase = StarkBank.CorporatePurchase.Get("5642359077339136");
+
+Console.Write(purchase);
+```
+
+## Query CorporatePurchase logs
+
+Logs are pretty important to understand the life cycle of a purchase.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporatePurchase.Log> logs = StarkBank.CorporatePurchase.Log.Query(limit: 10);
+
+foreach (StarkBank.CorporatePurchase.Log log in logs)
+{
+    Console.Write(log);
+}
+```
+
+## Get a CorporatePurchase log
+
+You can get a single log by its id.
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporatePurchase.Log log = StarkBank.CorporatePurchase.Log.Get("6428086769811456");
+
+Console.Write(log);
+```
+
+## Create CorporateInvoices
+
+You can create Pix invoices to transfer money from accounts you have in any bank to your Corporate balance,
+allowing you to run your corporate operation.
+
+```c#
+using System;
+using StarkBank;
+
+StarkBank.CorporateInvoice invoice = StarkBank.CorporateInvoice.Create(
+    new StarkBank.CorporateInvoice(
+        amount: 10000
+    )
+);
+    
+Console.Write(invoice);
+```
+
+**Note**: Instead of using CorporateInvoice objects, you can also pass each element in dictionary format
+
+## Query CorporateInvoices
+
+You can get a list of created invoices given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporateInvoice> invoices = StarkBank.CorporateInvoice.Query(
+    after: new DateTime(2019, 1, 1),
+    before: new DateTime(2022, 3, 1)
+);
+
+foreach (StarkBank.CorporateInvoice invoice in invoices)
+{
+    Console.Write(invoice);
+}
+```
+
+## Create CorporateWithdrawals
+
+You can create withdrawals to send cash back from your Corporate balance to your Banking balance
+by using the Withdrawal resource.
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateWithdrawal withdrawal = StarkBank.CorporateWithdrawal.Create(
+    new StarkBank.CorporateWithdrawal(
+        amount: 10000,
+        externalID: "3257"
+    )
+);
+
+Console.Write(withdrawal);
+```
+
+**Note**: Instead of using CorporateWithdrawal objects, you can also pass each element in dictionary format
+
+## Get a CorporateWithdrawal
+
+After its creation, information on a withdrawal may be retrieved by its id.
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateWithdrawal withdrawal = StarkBank.CorporateWithdrawal.Get("5440727945314304");
+
+Console.Write(withdrawal);
+```
+
+## Query CorporateWithdrawals
+
+You can get a list of created withdrawals given some filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporateWithdrawal> withdrawals = StarkBank.CorporateWithdrawal.Query(
+    after: new DateTime(2019, 1, 1),
+    before: new DateTime(2022, 3, 1)
+);
+
+foreach (StarkBank.CorporateWithdrawal withdrawal in withdrawals)
+{
+    Console.Write(withdrawal);
+}
+```
+
+## Get your CorporateBalance
+
+To know how much money you have available to run authorizations, run:
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateBalance balance = StarkBank.CorporateBalance.Get();
+
+Console.Write(balance);
+```
+
+## Query CorporateTransactions
+
+To understand your balance changes (corporate statement), you can query
+transactions. Note that our system creates transactions for you when
+you make purchases, withdrawals, receive corporate invoice payments, for example.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CorporateTransaction> transactions = StarkBank.CorporateTransaction.Query(
+    after: new DateTime(2019, 1, 1),
+    before: new DateTime(2022, 3, 1)
+);
+
+foreach (StarkBank.CorporateTransaction transaction in transactions)
+{
+    Console.Write(transaction);
+}
+```
+
+## Get a CorporateTransaction
+
+You can get a specific transaction by its id:
+
+```c#
+using System;
+using StarkBank;
+
+
+StarkBank.CorporateTransaction transaction = StarkBank.CorporateTransaction.Get("6539944898068480");
+
+Console.Write(transaction);
+```
+
+## Corporate Enums
+
+### Query MerchantCategories
+
+You can query any merchant categories using this resource.
+You may also use MerchantCategories to define specific category filters in CorporateRules.
+Either codes (which represents specific MCCs) or types (code groups) will be accepted as filters.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.MerchantCategory> categories = StarkBank.MerchantCategory.Query(
+    search: "food"
+);
+
+foreach (StarkBank.MerchantCategory category in categories)
+{
+    Console.Write(category);
+}
+```
+
+### Query MerchantCountries
+
+You can query any merchant countries using this resource.
+You may also use MerchantCountries to define specific country filters in CorporateRules.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.MerchantCountry> countries = StarkBank.MerchantCountry.Query(
+    search: "brazil"
+);
+
+foreach (StarkBank.MerchantCountry country in countries)
+{
+    Console.Write(country);
+}
+```
+
+### Query CardMethods
+
+You can query available card methods using this resource.
+You may also use CardMethods to define specific purchase method filters in CorporateRules.
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+
+IEnumerable<StarkBank.CardMethod> methods = StarkBank.CardMethod.Query(
+    search: "token"
+);
+
+foreach (StarkBank.CardMethod method in methods)
+{
+    Console.Write(method);
 }
 ```
 
