@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
-
+using Newtonsoft.Json.Linq;
 
 namespace StarkBank.Utils
 {
@@ -149,6 +149,17 @@ namespace StarkBank.Utils
                 payload: Api.ApiJson(entity)
             ).Json()[Api.LastName(resourceName)];
             return Api.FromApiJson(resourceMaker, json);
+        }
+
+        static internal JObject PostRaw(string path, User user, Dictionary<string, object> payload = null, Dictionary<string, object> query = null)
+        {
+            return Request.Fetch(
+                user: user,
+                method: Request.Post,
+                path: path,
+                query: query,
+                payload: Api.ApiJson(payload)
+            ).Json();
         }
 
         static internal SubResource DeleteId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)

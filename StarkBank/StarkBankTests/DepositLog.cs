@@ -15,11 +15,11 @@ namespace StarkBankTests
         public void QueryAndGet()
         {
             List<Deposit.Log> logs = Deposit.Log.Query(
-                limit: 101,
+                limit: 50,
                 before: DateTime.Now.Date,
                 types: new List<string> { "created" }
             ).ToList();
-            Assert.Equal(101, logs.Count);
+            Assert.Equal(50, logs.Count);
             Assert.True(logs.First().ID != logs.Last().ID);
             foreach (Deposit.Log log in logs)
             {

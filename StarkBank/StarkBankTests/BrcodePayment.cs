@@ -27,7 +27,7 @@ namespace StarkBankTests
         }
 
         [Fact]
-        public void CreateAndCancel()
+        public void QueryAndCancel()
         {
             BrcodePayment payment = BrcodePayment.Query(status: "created", limit: 1).ToList().First();
             TestUtils.Log(payment);
