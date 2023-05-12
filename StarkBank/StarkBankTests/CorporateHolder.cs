@@ -108,6 +108,14 @@ namespace StarkBankTests
                         ownerId: Environment.GetEnvironmentVariable("SANDBOX_ID"),
                         ownerType: "project"
                     )
+                    ),
+                },
+                rules: new List<CorporateRule> {
+                    new CorporateRule(
+                        name: "rule_name",
+                        amount: 10,
+                        purposes: new List<string> {"purchase"}
+                    ),
                 }
             );
         }

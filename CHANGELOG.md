@@ -13,6 +13,11 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- description attribute to CorporatePurchase.Log resource
+- purpose attribute to CorporateRule resource
+- Invoice.Rule sub-resource
+- rules attribute to Invoice resource
 
 ## [2.8.0] - 2023-04-11
 ### Added

@@ -20,6 +20,7 @@ namespace StarkBank
         /// <list>
         ///     <item>ID[string]: unique id returned when the log is created. ex: "5656565656565656"</item>
         ///     <item>Purchase [CorporatePurchase]: CorporatePurchase entity to which the log refers to.</item>
+        ///     <item>Description [string]: purchase descriptions. ex: "my_description"</item>
         ///     <item>CorporateTransactionID [string]: transaction ID related to the CorporateCard.</item>
         ///     <item>Errors [list of strings]: list of errors linked to this CorporatePurchase event.</item>
         ///     <item>Type [string]: type of the CorporatePurchase event which triggered the log creation. ex: "approved", "canceled", "confirmed", "denied", "reversed" and "voided"</item>
@@ -29,6 +30,7 @@ namespace StarkBank
         public class Log : Resource
         {
             public CorporatePurchase Purchase { get; }
+            public string Description { get; }
             public string CorporateTransactionID { get; }
             public string Type { get; }
             public List<Dictionary<string, object>> Errors { get; }
@@ -44,19 +46,28 @@ namespace StarkBank
             /// Attributes (return-only):
             /// <list>
             ///     <item>id [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
+            ///     <item>type [string]: type of the CorporatePurchase event which triggered the log creation. ex: "approved", "canceled", "confirmed", "denied", "reversed" and "voided"</item>
             ///     <item>purchase [CorporatePurchase]: CorporatePurchase entity to which the log refers to.</item>
+            ///     <item>description [string]: purchase descriptions. ex: "my_description"</item>
             ///     <item>corporateTransactionID [string]: transaction ID related to the CorporateCard.</item>
             ///     <item>errors [list of strings]: list of errors linked to this CorporatePurchase event.</item>
-            ///     <item>type [string]: type of the CorporatePurchase event which triggered the log creation. ex: "approved", "canceled", "confirmed", "denied", "reversed" and "voided"</item>
             ///     <item>created [DateTime]: creation DateTime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
             /// </list>
             /// </summary>
-            public Log(string id, DateTime created, string type, List<Dictionary<string, object>> errors, CorporatePurchase purchase) : base(id)
+            public Log(
+                string id,
+                string type,
+                CorporatePurchase purchase,
+                string description,
+                List<Dictionary<string,object>> errors,
+                DateTime created
+            ) : base(id)
             {
                 Created = created;
                 Type = type;
                 Errors = errors;
                 Purchase = purchase;
+                Description = description;
             }
 
             /// <summary>
@@ -189,10 +200,11 @@ namespace StarkBank
                 string id = json.id;
                 string createdString = json.created;
                 DateTime created = Checks.CheckDateTime(createdString);
+                string description = json.description;
                 string type = json.type;
                 CorporatePurchase purchase = CorporatePurchase.ResourceMaker(json.purchase);
 
-                return new Log(id: id, created: created, type: type, errors: errors, purchase: purchase);
+                return new Log(id: id, created: created, type: type, errors: errors, purchase: purchase, description: description);
             }
         }
     }
