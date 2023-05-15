@@ -148,6 +148,12 @@ namespace StarkBankTests
                         {"percentage", 3.5},
                         {"due", DateTime.Now.AddDays(2)}
                     }
+                },
+                rules: new List<Invoice.Rule>() {
+                    new Invoice.Rule(
+                        key: "allowedTaxIds",
+                        value: new List<string> {"012.345.678-90", "45.059.493/0001-73"}
+                    )
                 }
             );
         }
