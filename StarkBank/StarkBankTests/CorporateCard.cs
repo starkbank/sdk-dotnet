@@ -88,7 +88,7 @@ namespace StarkBankTests
             TestUtils.Log(getCard);
             CorporateCard canceledCard = CorporateCard.Cancel(id: card.ID);
             Assert.Equal(canceledCard.ID, card.ID);
-            Assert.Equal(canceledCard.Status, "canceled");
+            Assert.Equal("canceled", canceledCard.Status);
             TestUtils.Log(canceledCard);
         }
         
