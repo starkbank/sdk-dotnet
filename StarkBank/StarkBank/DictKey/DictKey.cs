@@ -24,9 +24,6 @@ namespace StarkBank
     ///     <item> AccountNumber [string]: bank account number associated with the DICT key. ex: "9828282578010513"</item>
     ///     <item> AccountType [string]: bank account type associated with the DICT key. ex: "checking", "saving", "salary" or "payment"</item>
     ///     <item> Status [string]: current DICT key status. ex: "created", "registered", "canceled" or "failed"</item>
-    ///     <item> AccountCreated [string]: creation datetime of the bank account associated with the DICT key. ex: "2020-11-05T14:55:08.812665+00:00"</item>
-    ///     <item> Owned [string]: datetime since when the current owner hold this DICT key. ex : "2020-11-05T14:55:08.812665+00:00"</item>
-    ///     <item> Created [string]: creation datetime for the DICT key. ex: "2020-03-10 10:30:00.000"</item>
     /// </list>
     /// </summary>
     public partial class DictKey : Utils.Resource
@@ -41,9 +38,6 @@ namespace StarkBank
         public string AccountNumber { get; }
         public string AccountType { get; }
         public string Status { get; }
-        public string AccountCreated { get; }
-        public string Owned { get; }
-        public string Created { get; }
 
         /// <summary>
         /// DictKey object
@@ -65,9 +59,6 @@ namespace StarkBank
         ///     <item> accountNumber [string]: bank account number associated with the Pix key. ex: "9828282578010513"</item>
         ///     <item> accountType [string]: bank account type associated with the Pix key. ex: "checking", "saving" e "salary"</item>
         ///     <item> status [string]: current Pix key status. ex: "created", "registered", "canceled" or "failed"</item>
-        ///     <item> accountCreated [DateTime]: creation datetime of the bank account associated with the Pix key. ex: "2020-11-05T14:55:08.812665+00:00"</item>
-        ///     <item> owned [DateTime]: datetime since when the current owner hold this Pix key. ex : "2020-11-05T14:55:08.812665+00:00"</item>
-        ///     <item> created [DateTime]: creation datetime for the Pix key. ex: "2020-03-10 10:30:00.000"</item>
         /// </list>
         /// </summary>
         public DictKey(string id = null, string type = null, string name = null, string taxId = null, string ownerType = null, string bankName = null,
@@ -84,9 +75,6 @@ namespace StarkBank
             AccountNumber = accountNumber;
             AccountType = accountType;
             Status = status;
-            AccountCreated = accountCreated;
-            Owned = owned;
-            Created = created;
         }
 
         /// <summary>
@@ -227,14 +215,10 @@ namespace StarkBank
             string accountNumber = json.accountNumber;
             string accountType = json.accountType;
             string status = json.status;
-            string accountCreated = json.accountCreated;
-            string owned = json.owned;
-            string created = json.created;
 
             return new DictKey(
-                id: id, type: type, accountCreated: accountCreated, accountType: accountType, name: name,
-                taxId: taxId, ownerType: ownerType, bankName: bankName, ispb: ispb, branchCode: branchCode,
-                accountNumber: accountNumber, status: status, owned: owned, created: created
+                id: id, type: type, accountCreated: accountCreated, accountType: accountType, name: name, taxId: taxId,
+                ownerType: ownerType, bankName: bankName, ispb: ispb, branchCode: branchCode, status: status
             );
         }
     }
