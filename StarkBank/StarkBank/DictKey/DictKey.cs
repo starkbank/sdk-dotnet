@@ -20,8 +20,8 @@ namespace StarkBank
     ///     <item> OwnerType [string]: DICT key owner type. ex "naturalPerson" or "legalPerson"</item>
     ///     <item> BankName [string]: bank name associated with the DICT key. ex: "Stark Bank"</item>
     ///     <item> Ispb [string]: ISPB code used for transactions. ex: "20018183"</item>
-    ///     <item> BranchCode [string]: bank account branch code associated with the DICT key. ex: "9585"</item>
-    ///     <item> AccountNumber [string]: bank account number associated with the DICT key. ex: "9828282578010513"</item>
+    ///     <item> BranchCode [string]: bank account branch code associated with the DICT key. ex: "ZW5jcnlwdGVkLWJyYW5jaC1jb2Rl"</item>
+    ///     <item> AccountNumber [string]: bank account number associated with the DICT key. ex: "ZW5jcnlwdGVkLWFjY291bnQtbnVtYmVy"</item>
     ///     <item> AccountType [string]: bank account type associated with the DICT key. ex: "checking", "saving", "salary" or "payment"</item>
     ///     <item> Status [string]: current DICT key status. ex: "created", "registered", "canceled" or "failed"</item>
     /// </list>
