@@ -13,8 +13,6 @@
         ///     <item>Name [string]: Payment receiver name. ex: "Tony Stark"</item>
         ///     <item>TaxID [string]: Payment receiver tax ID. ex: "012.345.678-90"</item>
         ///     <item>BankCode [string]: Payment receiver bank code. ex: "20018183"</item>
-        ///     <item>BranchCode [string]: Payment receiver branch code. ex: "0001"</item>
-        ///     <item>AccountNumber [string]: Payment receiver account number. ex: "1234567"</item>
         ///     <item>AccountType [string]: Payment receiver account type. ex: "checking"</item>
         ///     <item>AllowChange [bool]: If True, the payment is able to receive amounts that are different from the nominal one. ex: True or False</item>
         ///     <item>Amount [long]: Value in cents that this payment is expecting to receive. If 0, any value is accepted. ex: 123 (= R$1,23)</item>
@@ -32,8 +30,6 @@
             public string Name { get; }
             public string TaxID { get; }
             public string BankCode { get; }
-            public string BranchCode { get; }
-            public string AccountNumber { get; }
             public string AccountType { get; }
             public bool AllowChange { get; }
             public long Amount { get; }
@@ -55,8 +51,6 @@
             ///     <item>Name [string]: Payment receiver name. ex: "Tony Stark"</item>
             ///     <item>TaxID [string]: Payment receiver tax ID. ex: "012.345.678-90"</item>
             ///     <item>BankCode [string]: Payment receiver bank code. ex: "20018183"</item>
-            ///     <item>BranchCode [string]: Payment receiver branch code. ex: "0001"</item>
-            ///     <item>AccountNumber [string]: Payment receiver account number. ex: "1234567"</item>
             ///     <item>AccountType [string]: Payment receiver account type. ex: "checking"</item>
             ///     <item>AllowChange [bool]: If True, the payment is able to receive amounts that are different from the nominal one. ex: True or False</item>
             ///     <item>Amount [long]: Value in cents that this payment is expecting to receive. If 0, any value is accepted. ex: 123 (= R$1,23)</item>
@@ -68,17 +62,14 @@
             ///     <item>ReconciliationID [string]: Reconciliation ID linked to this payment. ex: "txId", "payment-123"</item>
             /// </list>
             /// </summary>
-            public BrcodePreview(string status, string name, string taxID, string bankCode,
-                string branchCode, string accountNumber, string accountType, bool allowChange,
-                long amount, long nominalAmount, long interestAmount, long fineAmount,
-                long reductionAmount, long discountAmount, string reconciliationID)
+            public BrcodePreview(string status, string name, string taxID, string bankCode, 
+            string accountType, bool allowChange, long amount, long nominalAmount, long interestAmount,
+            long fineAmount, long reductionAmount, long discountAmount, string reconciliationID)
             {
                 Status = status;
                 Name = name;
                 TaxID = taxID;
                 BankCode = bankCode;
-                BranchCode = branchCode;
-                AccountNumber = accountNumber;
                 AccountType = accountType;
                 AllowChange = allowChange;
                 Amount = amount;
@@ -101,8 +92,6 @@
                 string name = json.name;
                 string taxID = json.taxId;
                 string bankCode = json.bankCode;
-                string branchCode = json.branchCode;
-                string accountNumber = json.accountNumber;
                 string accountType = json.accountType;
                 bool allowChange = json.allowChange;
                 long amount = json.amount;
@@ -114,8 +103,8 @@
                 string reconciliationID = json.reconciliationId;
 
                 return new BrcodePreview(
-                    status: status, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,
-                    accountNumber: accountNumber, accountType: accountType, allowChange: allowChange, amount: amount,
+                    status: status, name: name, taxID: taxID, bankCode: bankCode,
+                    accountType: accountType, allowChange: allowChange, amount: amount,
                     nominalAmount: nominalAmount, interestAmount: interestAmount, fineAmount: fineAmount,
                     reductionAmount: reductionAmount, discountAmount: discountAmount, reconciliationID: reconciliationID
                 );
