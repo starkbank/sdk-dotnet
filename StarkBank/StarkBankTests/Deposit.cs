@@ -45,5 +45,17 @@ namespace StarkBankTests
             }
             Assert.True(ids.Count == 10);
         }
+
+        [Fact]
+        public void Update()
+        {
+            List<Deposit> deposits = Deposit.Query(limit: 1, status: "paid").ToList();
+            foreach (Deposit deposit in deposits)
+            {
+                Deposit updatedDeposit = Deposit.Update(id: deposit.ID, amount: 0);
+                Assert.Equal(0, updatedDeposit.Amount);
+                TestUtils.Log(updatedDeposit);
+            }
+        }
     }
 }

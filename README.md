@@ -902,6 +902,21 @@ foreach(StarkBank.Deposit.Log log in logs) {
 }
 ```
 
+## Update a deposit
+
+Update a deposit by passing its id to be partially or fully reversed.
+
+```c#
+using System;
+
+StarkBank.Deposit deposit = StarkBank.Deposit.Update(
+    "5155165527080960",
+    amount: 0
+);
+
+Console.WriteLine(deposit);
+```
+
 ## Get a deposit log
 
 You can get a single log by its id.
