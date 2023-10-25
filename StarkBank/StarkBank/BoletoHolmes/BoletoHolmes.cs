@@ -1,7 +1,8 @@
 ﻿using System;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
 
 namespace StarkBank
 {
@@ -23,7 +24,7 @@ namespace StarkBank
     ///     <item>Updated [DateTime]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class BoletoHolmes : Utils.Resource
+    public partial class BoletoHolmes : Resource
     {
         public string BoletoID { get; }
         public List<string> Tags { get; }
@@ -91,7 +92,7 @@ namespace StarkBank
         /// </summary>
         public static List<BoletoHolmes> Create(List<BoletoHolmes> holmes, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -122,7 +123,7 @@ namespace StarkBank
         /// </summary>
         public static List<BoletoHolmes> Create(List<Dictionary<string, object>> holmes, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -153,7 +154,7 @@ namespace StarkBank
         /// </summary>
         public static BoletoHolmes Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -187,14 +188,14 @@ namespace StarkBank
         public static IEnumerable<BoletoHolmes> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             List<string> tags = null, List<string> ids = null, string status = null, string boletoID = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status },
@@ -231,15 +232,15 @@ namespace StarkBank
         public static (List<BoletoHolmes> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, List<string> tags = null, List<string> ids = null, string status = null, string boletoID = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids},
                     { "status", status },
@@ -256,12 +257,12 @@ namespace StarkBank
         }
 
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "BoletoHolmes", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
 
@@ -270,9 +271,9 @@ namespace StarkBank
             string status = json.status;
             string result = json.result;
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Checks.CheckDateTime(createdString);
             string updatedString = json.updated;
-            DateTime? updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime? updated = Checks.CheckDateTime(updatedString);
 
             return new BoletoHolmes(
                 id: id, boletoID: boletoID, tags: tags, status: status, result: result, created: created, updated: updated

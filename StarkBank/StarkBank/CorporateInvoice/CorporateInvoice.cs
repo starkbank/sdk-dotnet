@@ -1,8 +1,8 @@
 ﻿using System;
+using StarkCore;
+using StarkCore.Utils;
 using System.Collections.Generic;
 using System.Linq;
-using StarkBank.Utils;
-
 
 namespace StarkBank
 {
@@ -118,7 +118,7 @@ namespace StarkBank
         public static CorporateInvoice Create(CorporateInvoice invoice, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.PostSingle(
+            return Utils.Rest.PostSingle(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entity: invoice,
@@ -149,7 +149,7 @@ namespace StarkBank
         public static CorporateInvoice Create(Dictionary<string, object> invoice, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.PostSingle(
+            return Utils.Rest.PostSingle(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entity: invoice,
@@ -182,7 +182,7 @@ namespace StarkBank
             User user = null
         ) {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetList(
+            return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -224,7 +224,7 @@ namespace StarkBank
             User user = null
         ) {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {

@@ -1,7 +1,10 @@
 ﻿using System;
+using StarkCore;
+using StarkBank;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
+
 
 
 namespace StarkBank
@@ -185,7 +188,7 @@ namespace StarkBank
         public static List<Boleto> Create(List<Boleto> boletos, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
+            return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: boletos,
@@ -216,7 +219,7 @@ namespace StarkBank
         public static List<Boleto> Create(List<Dictionary<string, object>> boletos, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
+            return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: boletos,
@@ -247,7 +250,7 @@ namespace StarkBank
         public static Boleto Get(string id, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetId(
+            return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -281,7 +284,7 @@ namespace StarkBank
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
 
-            return Rest.GetContent(
+            return Utils.Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 subResourceName: "pdf",
@@ -319,7 +322,7 @@ namespace StarkBank
             string status = null, List<string> tags = null, List<string> ids = null, String customerId = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetList(
+            return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -362,7 +365,7 @@ namespace StarkBank
             DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -407,7 +410,7 @@ namespace StarkBank
         public static Boleto Delete(string id, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.DeleteId(
+            return Utils.Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,

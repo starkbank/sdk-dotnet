@@ -1,4 +1,7 @@
-﻿namespace StarkBank
+﻿using StarkCore;
+using StarkCore.Utils;
+
+namespace StarkBank
 {
     public partial class PaymentPreview
     {
@@ -24,7 +27,7 @@
         ///     <item>ReconciliationID [string]: Reconciliation ID linked to this payment. ex: "txId", "payment-123"</item>
         /// </list>
         /// </summary>
-        public class BrcodePreview : Utils.SubResource
+        public class BrcodePreview : SubResource
         {
             public string Status { get; }
             public string Name { get; }
@@ -81,12 +84,12 @@
                 ReconciliationID = reconciliationID;
             }
 
-            internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) SubResource()
+            internal static (string resourceName, Api.ResourceMaker resourceMaker) SubResource()
             {
                 return (resourceName: "BrcodePreview", resourceMaker: ResourceMaker);
             }
 
-            public static Utils.SubResource ResourceMaker(dynamic json)
+            public static SubResource ResourceMaker(dynamic json)
             {
                 string status = json.status;
                 string name = json.name;

@@ -3,6 +3,8 @@ using StarkBank;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using StarkCore;
+using StarkCore.Utils;
 
 
 namespace StarkBankTests
@@ -63,7 +65,7 @@ namespace StarkBankTests
         internal static PaymentRequest Example()
         {
             Random random = new Random();
-            StarkBank.Utils.Resource payment = CreatePayment();
+            Resource payment = CreatePayment();
             DateTime? due = null;
             if (payment.GetType() != typeof(Transaction)) {
                 due = DateTime.Today.Date.AddDays(random.Next(0, 7));
@@ -75,7 +77,7 @@ namespace StarkBankTests
             );
         }
 
-        private static StarkBank.Utils.Resource CreatePayment()
+        private static Resource CreatePayment()
         {
             Random random = new Random();
             int choice = random.Next(0, 3);

@@ -2,6 +2,7 @@
 using StarkBank;
 using StarkBank.Institution;
 using Xunit;
+using StarkCore;
 
 
 namespace StarkBankTests

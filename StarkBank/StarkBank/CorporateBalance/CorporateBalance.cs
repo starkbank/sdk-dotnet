@@ -1,8 +1,8 @@
 ﻿using System;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
-
 
 namespace StarkBank
 {
@@ -77,7 +77,7 @@ namespace StarkBank
         public static CorporateBalance Get(User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetList(
+            return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object>(),

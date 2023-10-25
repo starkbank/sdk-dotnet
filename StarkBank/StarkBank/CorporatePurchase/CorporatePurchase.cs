@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using Newtonsoft.Json;
-using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -115,7 +115,7 @@ namespace StarkBank
             string id = null, string holderID = null, string holderName = null, string centerID = null, string cardID = null, 
             string cardEnding = null, string description = null, long? amount = null, int? tax = null, long? issuerAmount = null, 
             string issuerCurrencyCode = null, string issuerCurrencySymbol = null, long? merchantAmount = null, string merchantCurrencyCode = null, 
-            string merchantCurrencySymbol = null, string merchantCategoryCode = null, string MerchantCategoryType = null, 
+            string merchantCurrencySymbol = null, string merchantCategoryCode = null, string merchantCategoryType = null, 
             string merchantCountryCode = null, string merchantName = null, string merchantDisplayName = null, string merchantDisplayUrl = null, 
             int? merchantFee = null, string methodCode = null, List<string> tags = null, List<string> corporateTransactionIds = null, 
             string status = null, DateTime? updated = null, DateTime? created = null        
@@ -136,7 +136,7 @@ namespace StarkBank
             MerchantCurrencyCode = merchantCurrencyCode;
             MerchantCurrencySymbol = merchantCurrencySymbol;
             MerchantCategoryCode = merchantCategoryCode;
-            MerchantCategoryType = MerchantCategoryType;
+            MerchantCategoryType = merchantCategoryType;
             MerchantCountryCode = merchantCountryCode;
             MerchantName = merchantName;
             MerchantDisplayName = merchantDisplayName;
@@ -173,7 +173,7 @@ namespace StarkBank
         public static CorporatePurchase Get(string id, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetId(
+            return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -209,7 +209,7 @@ namespace StarkBank
             string status = null, User user = null
         ) {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetList(
+            return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -258,7 +258,7 @@ namespace StarkBank
             string status = null, User user = null
         ) {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {

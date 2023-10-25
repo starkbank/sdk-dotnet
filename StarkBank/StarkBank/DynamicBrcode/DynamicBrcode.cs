@@ -1,8 +1,8 @@
 using System;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
-
 
 namespace StarkBank
 {
@@ -29,7 +29,7 @@ namespace StarkBank
     ///     <item>Updated [DateTime]: latest update datetime for the DynamicBrcode. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class DynamicBrcode : Utils.Resource
+    public partial class DynamicBrcode : Resource
     {
         public long Amount { get; }
         public long? Expiration { get; }
@@ -106,7 +106,7 @@ namespace StarkBank
         /// </summary>
         public static List<DynamicBrcode> Create(List<DynamicBrcode> DynamicBrcodes, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -137,7 +137,7 @@ namespace StarkBank
         /// </summary>
         public static List<DynamicBrcode> Create(List<Dictionary<string, object>> DynamicBrcodes, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -168,7 +168,7 @@ namespace StarkBank
         /// </summary>
         public static DynamicBrcode Get(string uuid, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -201,14 +201,14 @@ namespace StarkBank
         public static IEnumerable<DynamicBrcode> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             string status = null, List<string> tags = null, List<string> uuids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "uuids", uuids }
@@ -243,15 +243,15 @@ namespace StarkBank
         public static (List<DynamicBrcode> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, string status = null, List<string> tags = null, List<string> uuids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "uuids", uuids }
@@ -266,12 +266,12 @@ namespace StarkBank
             return (DynamicBrcodes, pageCursor);
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "DynamicBrcode", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             long amount = json.amount;
             long? expiration = json.expiration;
@@ -281,8 +281,8 @@ namespace StarkBank
             string pictureUrl = json.pictureUrl;
             string createdString = json.created;
             string updatedString = json.updated;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
-            DateTime? updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime? created = Checks.CheckDateTime(createdString);
+            DateTime? updated = Checks.CheckDateTime(updatedString);
 
             return new DynamicBrcode( 
                 amount: amount, expiration: expiration, tags: tags, id: id, uuid: uuid, pictureUrl: pictureUrl, 

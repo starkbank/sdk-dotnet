@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using StarkCore;
+using StarkCore.Utils;
 
 
 namespace StarkBank
@@ -21,7 +23,7 @@ namespace StarkBank
     ///     <item>Updated [DateTime]: update datetime for the balance. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public class Balance : Utils.Resource
+    public class Balance : Resource
     {
         public long Amount { get; }
         public string Currency { get; }
@@ -67,7 +69,7 @@ namespace StarkBank
         /// </summary>
         public static Balance Get(User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -76,18 +78,18 @@ namespace StarkBank
             ).First() as Balance;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Balance", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             long amount = json.amount;
             string currency = json.currency;
             string updatedString = json.updated;
-            DateTime updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime updated = Checks.CheckDateTime(updatedString);
 
             return new Balance(id: id, amount: amount, currency: currency, updated: updated);
         }

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using StarkCore;
 using System.Linq;
-using StarkBank.Utils;
-
+using StarkCore.Utils;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -108,7 +108,7 @@ namespace StarkBank
         public static List<CorporateHolder> Create(List<CorporateHolder> holders, Dictionary<string, object> parameters = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
+            return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: holders,
@@ -144,7 +144,7 @@ namespace StarkBank
         public static List<CorporateHolder> Create(List<Dictionary<string, object>> holders, Dictionary<string, object> parameters = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
+            return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: holders,
@@ -180,7 +180,7 @@ namespace StarkBank
         public static CorporateHolder Get(string id, Dictionary<string, object> parameters = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetId(
+            return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -216,7 +216,7 @@ namespace StarkBank
             User user = null
         ) {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetList(
+            return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -262,7 +262,7 @@ namespace StarkBank
             List<string> tags = null, List<string> expand = null, User user = null
         ) {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -314,7 +314,7 @@ namespace StarkBank
         public static CorporateHolder Update(string id, Dictionary<string, object> patchData, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.PatchId(
+            return Utils.Rest.PatchId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -346,7 +346,7 @@ namespace StarkBank
         public static CorporateHolder Cancel(string id, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.DeleteId(
+            return Utils.Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,

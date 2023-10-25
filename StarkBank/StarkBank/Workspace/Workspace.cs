@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System;
-using StarkBank.Utils;
+using StarkCore.Utils;
+using StarkCore;
 
 
 namespace StarkBank
@@ -25,7 +26,7 @@ namespace StarkBank
     ///     <item>Created [DateTime]: creation datetime for the workspace. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class Workspace : Utils.Resource
+    public partial class Workspace : Resource
     {
         public string Username { get; }
         public string Name { get; }
@@ -96,7 +97,7 @@ namespace StarkBank
         /// </summary>
         public static Workspace Create(string username, string name, List<string> allowedTaxIds = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.PostSingle(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -127,7 +128,7 @@ namespace StarkBank
         /// </summary>
         public static Workspace Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -156,7 +157,7 @@ namespace StarkBank
         /// </summary>
         public static IEnumerable<Workspace> Query(int? limit = null, string username = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -192,7 +193,7 @@ namespace StarkBank
         public static (List<Workspace> page, string pageCursor) Page(string cursor = null, int? limit = null,
             string username = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -256,7 +257,7 @@ namespace StarkBank
                 patchData.Add("picture", "data:" + pictureType  + ";base64," + Convert.ToBase64String(picture));
             }
 
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.PatchId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -266,12 +267,12 @@ namespace StarkBank
             ) as Workspace;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Workspace", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             string username = json.username;
@@ -281,7 +282,7 @@ namespace StarkBank
             string organizationId = json.organizationId;
             string pictureUrl = json.pictureUrl;
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
+            DateTime? created = Checks.CheckNullableDateTime(createdString);
 
             return new Workspace(
                 id: id, username: username, name: name, allowedTaxIds: allowedTaxIds, 

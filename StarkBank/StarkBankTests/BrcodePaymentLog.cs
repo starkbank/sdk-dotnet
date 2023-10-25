@@ -2,6 +2,7 @@
 using StarkBank;
 using System.Linq;
 using System.Collections.Generic;
+using StarkCore;
 
 namespace StarkBankTests
 {

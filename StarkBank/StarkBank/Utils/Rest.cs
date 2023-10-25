@@ -1,198 +1,187 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using StarkCore;
+using System.Linq;
+using StarkCore.Utils;
+using System.Net.NetworkInformation;
 using Newtonsoft.Json.Linq;
+using System.Collections;
 
 namespace StarkBank.Utils
 {
-    static internal class Rest
+    public class Rest
     {
-        static internal (List<SubResource> entities, string cursor) GetPage(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> query, User user)
+
+        static string host = StarkHost.bank;
+        static string apiVersion = "v2";
+        static string sdkVersion = "2.14.0";
+
+        public static IEnumerable<SubResource> GetList(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> query = null)
         {
-            dynamic json = Request.Fetch(
-                user: user,
-                method: Request.Get,
-                path: Api.Endpoint(resourceName),
-                query: query
-            ).Json();
-            
-            List<SubResource> entities = new List<SubResource>();
-            foreach (dynamic entityJson in json[Api.LastNamePlural(resourceName)])
-            {
-                entities.Add(Api.FromApiJson(resourceMaker, entityJson));
-            }
-            string cursor = json["cursor"];
-            return (entities, cursor);
-        }
-
-        internal static IEnumerable<SubResource> GetList(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> query, User user)
-        {
-            query.TryGetValue("limit", out object rawLimit);
-            query["limit"] = rawLimit;
-            int limit = 0;
-            bool limited = false;
-            if (rawLimit != null)
-            {
-                limited = true;
-                limit = (int)rawLimit;
-                query["limit"] = Math.Min(limit, 100);
-            }
-
-            string cursor;
-
-            do
-            {
-                dynamic json = Request.Fetch(
-                    user: user,
-                    method: Request.Get,
-                    path: Api.Endpoint(resourceName),
-                    query: query
-                ).Json();
-
-                foreach (dynamic entityJson in json[Api.LastNamePlural(resourceName)])
-                {
-                    yield return Api.FromApiJson(resourceMaker, entityJson);
-                }
-
-                if (limited)
-                {
-                    limit -= 100;
-                    query["limit"] = Math.Min(limit, 100);
-                }
-
-                cursor = json["cursor"];
-                query["cursor"] = cursor;
-            } while (cursor != null && cursor.Length > 0 && (!limited || limit > 0));
-        }
-
-        internal static Resource GetId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user, Dictionary<string, object> query = null)
-        {
-            dynamic json = Request.Fetch(
-                user: user,
-                method: Request.Get,
-                path: $"{Api.Endpoint(resourceName)}/{id}",
-                query: query
-            ).Json()[Api.LastName(resourceName)];
-            return Api.FromApiJson(resourceMaker, json);
-        }
-
-        static internal byte[] GetContent(string resourceName, Api.ResourceMaker resourceMaker, string id,
-                                          Dictionary<string, object> options = null, string subResourceName = null, User user = null)
-        {
-            return Request.Fetch(
-                user: user,
-                method: Request.Get,
-                path: $"{Api.Endpoint(resourceName)}/{id}/{subResourceName}",
-                query: options
-            ).ByteContent;
-        }
-
-        static internal IEnumerable<SubResource> Post(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<SubResource> entities, User user, Dictionary<string, object> query = null)
-        {
-            List<Dictionary<string, object>> jsons = new List<Dictionary<string, object>>();
-            foreach (SubResource entity in entities)
-            {
-                jsons.Add(Api.ApiJson(entity));
-            }
-            return PrivatePost(resourceName, resourceMaker, jsons, user, query);
-        }
-
-        static internal IEnumerable<SubResource> Post(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<Dictionary<string, object>> entities, User user, Dictionary<string, object> query = null)
-        {
-            List<Dictionary<string, object>> jsons = new List<Dictionary<string, object>>();
-            foreach (Dictionary<string, object> entity in entities)
-            {
-                jsons.Add(Api.ApiJson(entity));
-            }
-            return PrivatePost(resourceName, resourceMaker, jsons, user, query);
-        }
-
-        static private IEnumerable<SubResource> PrivatePost(string resourceName, Api.ResourceMaker resourceMaker, IEnumerable<Dictionary<string, object>> entities, User user, Dictionary<string, object> query = null)
-        {
-            Dictionary<string, object> payload = new Dictionary<string, object>
-            {
-                {Api.LastNamePlural(resourceName), entities}
-            };
-
-            dynamic fetchedJsons = Request.Fetch(
-                user: user,
-                method: Request.Post,
-                path: Api.Endpoint(resourceName),
+            return StarkCore.Utils.Rest.GetList(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
                 query: query,
-                payload: payload
-            ).Json()[Api.LastNamePlural(resourceName)];
-
-            List<SubResource> returnedEntities = new List<SubResource>();
-            foreach (dynamic json in fetchedJsons)
-            {
-                returnedEntities.Add(Api.FromApiJson(resourceMaker, json));
-            }
-            return returnedEntities;
+                user: user
+            );
         }
 
-        static internal SubResource PostSingle(string resourceName, Api.ResourceMaker resourceMaker, SubResource entity, User user)
+        public static IEnumerable<SubResource> Post(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, IEnumerable<SubResource> entities = null, Dictionary<string, object> query = null)
         {
-            dynamic json = Request.Fetch(
-                user: user,
-                method: Request.Post,
-                path: Api.Endpoint(resourceName),
-                payload: Api.ApiJson(entity)
-            ).Json()[Api.LastName(resourceName)];
-            return Api.FromApiJson(resourceMaker, json);
-        }
-        
-        static internal SubResource PostSingle(string resourceName, Api.ResourceMaker resourceMaker, Dictionary<string, object> entity, User user)
-        {
-            dynamic json = Request.Fetch(
-                user: user,
-                method: Request.Post,
-                path: Api.Endpoint(resourceName),
-                payload: Api.ApiJson(entity)
-            ).Json()[Api.LastName(resourceName)];
-            return Api.FromApiJson(resourceMaker, json);
+            return StarkCore.Utils.Rest.Post(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: query,
+                entities: entities,
+                user: user
+            );
         }
 
-        static internal JObject PostRaw(string path, User user, Dictionary<string, object> payload = null, Dictionary<string, object> query = null)
+        public static IEnumerable<SubResource> Post(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, IEnumerable<Dictionary<string, object>> entities = null, Dictionary<string, object> query = null)
         {
-            return Request.Fetch(
-                user: user,
-                method: Request.Post,
+            return StarkCore.Utils.Rest.Post(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: query,
+                entities: entities,
+                user: user
+            );
+        }
+
+        public static Resource GetId(string id, User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> query = null)
+        {
+            return StarkCore.Utils.Rest.GetId(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                id: id,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: query,
+                user: user
+            );
+        }
+
+        public static (List<SubResource> entities, string cursor) GetPage(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> query = null)
+        {
+             (List<SubResource> page, string pageCursor) = StarkCore.Utils.Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                query: query,
+                user: user
+            );
+
+            return (page, pageCursor);
+        }
+
+        public static SubResource PatchId(string id, User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> payload = null)
+        {
+            return StarkCore.Utils.Rest.PatchId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                id: id,
+                payload: payload,
+                user: user
+            );
+        }
+
+        public static byte[] GetContent(string id, User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> options = null, string subResourceName = null)
+        {
+            return StarkCore.Utils.Rest.GetContent(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                subResourceName: subResourceName,
+                options: options,
+                id: id,
+                user: user
+            );
+        }
+
+        public static SubResource GetSubResource(string id, Dictionary<string, object> payload = null, string resourceName = null, User user = null, string subResourceName = null, Api.ResourceMaker subResourceMaker = null)
+        {
+            return StarkCore.Utils.Rest.GetSubResource(
+                resourceName: resourceName,
+                subResourceMaker: subResourceMaker,
+                subResourceName: subResourceName,
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                id: id,
+                payload: payload,
+                user: user
+            );
+        }
+
+        public static SubResource DeleteId(string id, User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null)
+        {
+            return StarkCore.Utils.Rest.DeleteId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                id: id,
+                user: user
+            );
+        }
+
+        static public JObject PostRaw(Dictionary<string, object> payload, string path, Dictionary<string, object> query, User user)
+        {
+            return StarkCore.Utils.Rest.PostRaw(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
                 path: path,
+                payload: payload,
                 query: query,
-                payload: Api.ApiJson(payload)
-            ).Json();
+                user: user
+            );
         }
 
-        static internal SubResource DeleteId(string resourceName, Api.ResourceMaker resourceMaker, string id, User user)
+        public static SubResource PostSingle(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, SubResource entity = null)
         {
-            dynamic json = Request.Fetch(
-                user: user,
-                method: Request.Delete,
-                path: $"{Api.Endpoint(resourceName)}/{id}"
-            ).Json()[Api.LastName(resourceName)];
-            return Api.FromApiJson(resourceMaker, json);
+            return StarkCore.Utils.Rest.PostSingle(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                entity: entity,
+                user: user
+            );
         }
 
-        static internal SubResource PatchId(string resourceName, Api.ResourceMaker resourceMaker, string id, Dictionary<string, object> payload, User user)
+        public static SubResource PostSingle(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> entity = null)
         {
-            dynamic json = Request.Fetch(
-                user: user,
-                method: Request.Patch,
-                path: $"{Api.Endpoint(resourceName)}/{id}",
-                payload: Api.CastJsonToApiFormat(payload)
-            ).Json()[Api.LastName(resourceName)];
-            return Api.FromApiJson(resourceMaker, json);
+            return StarkCore.Utils.Rest.PostSingle(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                entity: entity,
+                user: user
+            );
         }
 
-        static internal SubResource GetSubResource(string resourceName, Api.ResourceMaker subResourceMaker, string subResourceName,
-                                                   string id, User user, Dictionary<string, object> payload = null)
-        {
-            dynamic json = Request.Fetch(
-                user: user,
-                method: Request.Get,
-                path: $"{Api.Endpoint(resourceName)}/{id}/{Api.Endpoint(subResourceName)}",
-                payload: payload
-            ).Json()[Api.LastName(subResourceName)];
-            return Api.FromApiJson(subResourceMaker, json);
-        }
     }
 }

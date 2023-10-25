@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using StarkBank.Utils;
+using StarkCore.Utils;
+using StarkCore;
 using System;
 
 
@@ -20,7 +21,7 @@ namespace StarkBank
     ///     <item>ID [string]: unique id returned when the Webhook is created. ex: "5656565656565656"</item>
     /// </list>
     /// </summary>
-    public partial class Webhook : Utils.Resource
+    public partial class Webhook : Resource
     {
         public string Url { get; }
         public List<string> Subscriptions { get; }
@@ -72,7 +73,7 @@ namespace StarkBank
         /// </summary>
         public static Webhook Create(string url, List<string> subscriptions, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.PostSingle(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -103,7 +104,7 @@ namespace StarkBank
         /// </summary>
         public static Webhook Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -130,7 +131,7 @@ namespace StarkBank
         /// </summary>
         public static IEnumerable<Webhook> Query(int? limit = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -161,7 +162,7 @@ namespace StarkBank
         /// </summary>
         public static (List<Webhook> page, string pageCursor) Page(string cursor = null, int? limit = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -201,7 +202,7 @@ namespace StarkBank
         /// </summary>
         public static Webhook Delete(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -210,12 +211,12 @@ namespace StarkBank
             ) as Webhook;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Webhook", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string url = json.url;
             List<string> subscriptions = json.subscriptions.ToObject<List<string>>();

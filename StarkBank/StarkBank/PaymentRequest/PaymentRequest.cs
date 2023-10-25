@@ -1,7 +1,9 @@
 ﻿using System;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
+
 
 
 namespace StarkBank
@@ -31,10 +33,10 @@ namespace StarkBank
     ///     <item>Created [DateTime]: creation datetime for the PaymentRequest. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class PaymentRequest : Utils.Resource
+    public partial class PaymentRequest : Resource
     {
         public string CenterID { get; }
-        public Utils.Resource Payment { get; }
+        public Resource Payment { get; }
         public string Type { get; }
         public DateTime? Due { get; }
         public List<string> Tags { get; }
@@ -81,7 +83,7 @@ namespace StarkBank
         ///     <item>created [DateTime]: creation datetime for the PaymentRequest. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public PaymentRequest(Utils.Resource payment, string centerID, string id = null, string type = null, DateTime? due = null,
+        public PaymentRequest(Resource payment, string centerID, string id = null, string type = null, DateTime? due = null,
             List<string> tags = null, long? amount = null, string status = null, List<Dictionary<string, string>> actions = null, 
             string description = null, DateTime? updated = null, DateTime? created = null) : base(id)
         {
@@ -102,7 +104,7 @@ namespace StarkBank
             }
         }
 
-        private static string GetType(Utils.Resource payment)
+        private static string GetType(Resource payment)
         {
             if (payment.GetType() == typeof(Transfer)) {
                 return "transfer";
@@ -131,7 +133,7 @@ namespace StarkBank
         internal new Dictionary<string, object> ToJson()
         {
             Dictionary<string, object> json = base.ToJson();
-            json["Due"] = new Utils.StarkDate((DateTime)json["Due"]);
+            json["Due"] = new StarkDate((DateTime)json["Due"]);
             return json;
         }
 
@@ -157,7 +159,7 @@ namespace StarkBank
         /// </summary>
         public static List<PaymentRequest> Create(List<PaymentRequest> requests, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -195,15 +197,15 @@ namespace StarkBank
         public static IEnumerable<PaymentRequest> Query(string centerID, int? limit = null, DateTime? after = null, DateTime? before = null,
             string status = null, string type = null, string sort = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "centerID", centerID },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "type", type },
                     { "sort", sort },
@@ -245,7 +247,7 @@ namespace StarkBank
         public static (List<PaymentRequest> page, string pageCursor) Page(string centerID, string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, string status = null, string type = null, string sort = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -253,8 +255,8 @@ namespace StarkBank
                     { "cursor", cursor },
                     { "centerID", centerID },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "type", type },
                     { "sort", sort },
@@ -271,28 +273,28 @@ namespace StarkBank
             return (paymentRequests, pageCursor);
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "PaymentRequest", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             string centerID = json.centerId;
             string type = json.type;
-            Utils.Resource payment = ParsePaymentJson(json: json.payment, type: type);
+            Resource payment = ParsePaymentJson(json: json.payment, type: type);
             string dueString = json.due;
-            DateTime? due = Utils.Checks.CheckNullableDateTime(dueString);
+            DateTime? due = Checks.CheckNullableDateTime(dueString);
             List<string> tags = json.tags.ToObject<List<string>>();
             long? amount = json.amount;
             string description = json.description;
             string status = json.status;
             List<Dictionary<string, string>> actions = json.actions.ToObject<List<Dictionary<string, string>>>();
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = Checks.CheckDateTime(createdString);
             string updatedString = json.updated;
-            DateTime? updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime? updated = Checks.CheckDateTime(updatedString);
 
             return new PaymentRequest(
                 id: id, centerID: centerID, type: type, payment: payment, due: due, tags: tags,
@@ -301,7 +303,7 @@ namespace StarkBank
             );
         }
 
-        private static Utils.Resource ParsePaymentJson(dynamic json, string type)
+        private static Resource ParsePaymentJson(dynamic json, string type)
         {
             if (type == "transfer") {
                 return Transfer.ResourceMaker(json);

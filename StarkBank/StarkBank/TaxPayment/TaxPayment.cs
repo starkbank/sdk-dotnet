@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StarkBank.Utils;
+using StarkCore.Utils;
+using StarkCore;
 
 namespace StarkBank
 {
@@ -29,7 +30,7 @@ namespace StarkBank
     ///     <item>Created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class TaxPayment : Utils.Resource
+    public partial class TaxPayment : Resource
     {
         public string Line { get; }
         public string BarCode { get; }
@@ -118,7 +119,7 @@ namespace StarkBank
         /// </summary>
         public static List<TaxPayment> Create(List<TaxPayment> payments, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -149,7 +150,7 @@ namespace StarkBank
         /// </summary>
         public static List<TaxPayment> Create(List<Dictionary<string, object>> payments, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -180,7 +181,7 @@ namespace StarkBank
         /// </summary>
         public static TaxPayment Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -212,7 +213,7 @@ namespace StarkBank
         /// </summary>
         public static byte[] Pdf(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -246,14 +247,14 @@ namespace StarkBank
         public static IEnumerable<TaxPayment> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             List<string> tags = null, List<string> ids = null, string status = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids },
                     { "status", status }
@@ -288,15 +289,15 @@ namespace StarkBank
         public static (List<TaxPayment> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, List<string> tags = null, List<string> ids = null, string status = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids },
                     { "status", status }
@@ -333,7 +334,7 @@ namespace StarkBank
         /// </summary>
         public static TaxPayment Delete(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -342,18 +343,18 @@ namespace StarkBank
             ) as TaxPayment;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "TaxPayment", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string line = json.line;
             string barCode = json.barCode;
             string description = json.description;
             string scheduledString = json.scheduled;
-            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
+            DateTime? scheduled = Checks.CheckNullableDateTime(scheduledString);
             List<string> tags = json.tags?.ToObject<List<string>>();
             string id = json.id;
             string status = json.status;
@@ -362,9 +363,9 @@ namespace StarkBank
             int? fee = json.fee;
             List<string> transactionIds = json.transactionIds?.ToObject<List<string>>();
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
+            DateTime? created = Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
-            DateTime? updated = Utils.Checks.CheckNullableDateTime(updatedString);
+            DateTime? updated = Checks.CheckNullableDateTime(updatedString);
 
             return new TaxPayment(
                 line: line, barCode: barCode, description: description, id: id, tags: tags,

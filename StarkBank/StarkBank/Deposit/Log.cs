@@ -1,8 +1,8 @@
 using System;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
-
 
 namespace StarkBank
 {
@@ -25,7 +25,7 @@ namespace StarkBank
         ///     <item>Created [DateTime]: creation datetime for the log. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public class Log : Utils.Resource
+        public class Log : Resource
         {
             public DateTime Created { get; }
             public string Type { get; }
@@ -79,7 +79,7 @@ namespace StarkBank
             /// </summary>
             public static Log Get(string id, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
                 return Utils.Rest.GetId(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
@@ -111,14 +111,14 @@ namespace StarkBank
             public static IEnumerable<Log> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
                 List<string> types = null, List<string> depositIds = null, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
                 return Utils.Rest.GetList(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "limit", limit },
-                        { "after", new Utils.StarkDate(after) },
-                        { "before", new Utils.StarkDate(before) },
+                        { "after", new StarkDate(after) },
+                        { "before", new StarkDate(before) },
                         { "types", types },
                         { "depositIds", depositIds }
                     },
@@ -151,15 +151,15 @@ namespace StarkBank
             public static (List<Log> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
                 DateTime? before = null, List<string> types = null, List<string> depositIds = null, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
                 (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "cursor", cursor },
                         { "limit", limit },
-                        { "after", new Utils.StarkDate(after) },
-                        { "before", new Utils.StarkDate(before) },
+                        { "after", new StarkDate(after) },
+                        { "before", new StarkDate(before) },
                         { "types", types },
                         { "depositIds", depositIds }
                     },
@@ -173,17 +173,17 @@ namespace StarkBank
                 return (logs, pageCursor);
             }
 
-            internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "DepositLog", resourceMaker: ResourceMaker);
             }
 
-            internal static Utils.Resource ResourceMaker(dynamic json)
+            internal static Resource ResourceMaker(dynamic json)
             {
                 List<string> errors = json.errors.ToObject<List<string>>();
                 string id = json.id;
                 string createdString = json.created;
-                DateTime created = Utils.Checks.CheckDateTime(createdString);
+                DateTime created = Checks.CheckDateTime(createdString);
                 string type = json.type;
                 Deposit deposit = Deposit.ResourceMaker(json.deposit);
 

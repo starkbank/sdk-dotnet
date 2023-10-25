@@ -1,7 +1,8 @@
 ﻿using System;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
 
 
 namespace StarkBank
@@ -76,7 +77,7 @@ namespace StarkBank
             public static Log Get(string id, User user = null)
             {
                 (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-                return Rest.GetId(
+                return Utils.Rest.GetId(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     id: id,
@@ -109,7 +110,7 @@ namespace StarkBank
                 List<string> types = null, List<string> cardIds = null, User user = null)
             {
                 (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-                return Rest.GetList(
+                return Utils.Rest.GetList(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
@@ -153,7 +154,7 @@ namespace StarkBank
                 User user = null)
             {
                 (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-                (List<SubResource> page, string pageCursor) = Rest.GetPage(
+                (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
@@ -175,12 +176,12 @@ namespace StarkBank
                 return (logs, pageCursor);
             }
 
-            internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "CorporateCardLog", resourceMaker: ResourceMaker);
             }
 
-            internal static Utils.Resource ResourceMaker(dynamic json)
+            internal static Resource ResourceMaker(dynamic json)
             {
                 string id = json.id;
                 CorporateCard card = CorporateCard.ResourceMaker(json.card);

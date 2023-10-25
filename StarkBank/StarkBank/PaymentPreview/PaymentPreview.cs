@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StarkBank.Utils;
+using StarkCore.Utils;
+using StarkCore;
 
 namespace StarkBank
 {
@@ -92,7 +93,7 @@ namespace StarkBank
         public static List<PaymentPreview> Create(List<PaymentPreview> previews, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
+            return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: previews,
@@ -123,7 +124,7 @@ namespace StarkBank
         public static List<PaymentPreview> Create(List<Dictionary<string, object>> previews, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
+            return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: previews,

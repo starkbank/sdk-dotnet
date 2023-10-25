@@ -1,6 +1,7 @@
 ﻿using System;
+using StarkCore;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
 
 namespace StarkBank.Institution
 {
@@ -73,7 +74,7 @@ namespace StarkBank.Institution
         public static List<Institution> Query(int? limit = null, string search = null,
             List<string> spiCodes = null, List<string> strCodes = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = SubResource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = SubResource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -93,12 +94,12 @@ namespace StarkBank.Institution
             return institutions;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) SubResource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) SubResource()
         {
             return (resourceName: "Institution", resourceMaker: ResourceMaker);
         }
 
-        public static Utils.SubResource ResourceMaker(dynamic json)
+        public static SubResource ResourceMaker(dynamic json)
         {
             string displayName = json.displayName;
             string name = json.name;

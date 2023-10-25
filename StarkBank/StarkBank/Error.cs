@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using StarkCore;
+using StarkCore.Utils;
 
 
 namespace StarkBank.Error
@@ -26,7 +28,7 @@ namespace StarkBank.Error
 
         public InputErrors(string content) : base(content)
         {
-            dynamic json = Utils.Json.Decode(content);
+            dynamic json = Json.Decode(content);
             dynamic errors = json.errors;
 
             string code;

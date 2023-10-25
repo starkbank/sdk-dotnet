@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using StarkCore;
 using System.Linq;
-using StarkBank.Utils;
-
+using StarkCore.Utils;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -69,7 +69,7 @@ namespace StarkBank
         public static IEnumerable<MerchantCountry> Query(string search = null, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetList(
+            return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {

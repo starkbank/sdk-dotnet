@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using StarkCore;
 using System.Linq;
-using StarkBank.Utils;
-
+using StarkCore.Utils;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -80,7 +80,7 @@ namespace StarkBank
         public static CorporateTransaction Get(string id, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetId(
+            return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -115,7 +115,7 @@ namespace StarkBank
             User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.GetList(
+            return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -161,7 +161,7 @@ namespace StarkBank
             List<string> ids = null, string cursor = null, int? limit = 1, User user = null)
         {
             (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {

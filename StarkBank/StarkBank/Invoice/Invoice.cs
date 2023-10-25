@@ -1,8 +1,8 @@
 using System;
+using StarkCore;
 using System.Linq;
+using StarkCore.Utils;
 using System.Collections.Generic;
-using StarkBank.Utils;
-
 
 namespace StarkBank
 {
@@ -43,7 +43,7 @@ namespace StarkBank
     ///     <item>Updated [DateTime]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class Invoice : Utils.Resource
+    public partial class Invoice : Resource
     {
         public string Name { get; }
         public string TaxID { get; }
@@ -147,7 +147,7 @@ namespace StarkBank
         internal new Dictionary<string, object> ToJson()
         {
             Dictionary<string, object> json = base.ToJson();
-            json["Due"] = new Utils.StarkDateTime((DateTime) json["Due"]);
+            json["Due"] = new StarkDateTime((DateTime) json["Due"]);
             return json;
         }
 
@@ -173,7 +173,7 @@ namespace StarkBank
         /// </summary>
         public static List<Invoice> Create(List<Invoice> invoices, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -204,7 +204,7 @@ namespace StarkBank
         /// </summary>
         public static List<Invoice> Create(List<Dictionary<string, object>> invoices, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -235,7 +235,7 @@ namespace StarkBank
         /// </summary>
         public static Invoice Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -266,7 +266,7 @@ namespace StarkBank
         /// </summary>
         public static byte[] Pdf(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -300,14 +300,14 @@ namespace StarkBank
         public static IEnumerable<Invoice> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             string status = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -342,15 +342,15 @@ namespace StarkBank
         public static (List<Invoice> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkDate(after) },
+                    { "before", new StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "ids", ids }
@@ -391,7 +391,7 @@ namespace StarkBank
         /// </summary>
         public static Invoice Update(string id, string status = null, long? amount = null, DateTime? due = null, long? expiration = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Rest.PatchId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -400,7 +400,7 @@ namespace StarkBank
                     { "amount", amount },
                     { "expiration", expiration },
                     { "status", status },
-                    { "due", new Utils.StarkDateTime(due) },
+                    { "due", new StarkDateTime(due) },
                 },
                 user: user
             ) as Invoice;
@@ -429,7 +429,7 @@ namespace StarkBank
         /// </summary>
         public static byte[] Qrcode(string id, int? size = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
 
             return Utils.Rest.GetContent(
                 resourceName: resourceName,
@@ -465,8 +465,8 @@ namespace StarkBank
         /// </summary>
         public static InvoicePayment Payment(string id, Dictionary<string, object> payload = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (string subResourceName, Utils.Api.ResourceMaker subResourceMaker) = InvoicePayment.SubResource();
+            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string subResourceName, Api.ResourceMaker subResourceMaker) = InvoicePayment.SubResource();
 
             return Utils.Rest.GetSubResource(
                 resourceName: resourceName,
@@ -478,18 +478,18 @@ namespace StarkBank
             ) as InvoicePayment;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Invoice", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             long amount = json.amount;
             string name = json.name;
             string taxID = json.taxId;
             string dueString = json.due;
-            DateTime? due = Utils.Checks.CheckDateTime(dueString);
+            DateTime? due = Checks.CheckDateTime(dueString);
             long? expiration = json.expiration;
             double? fine = json.fine;
             double? interest = json.interest;
@@ -498,7 +498,7 @@ namespace StarkBank
             List<Dictionary<string, object>> discounts = json.discounts.ToObject<List<Dictionary<string, object>>>();
             List<Rule> rules = ParseRule(json.rules);
             foreach (Dictionary<string, object> discount in discounts) {
-                discount["due"] = Utils.Checks.CheckDateTime((string)discount["due"]);
+                discount["due"] = Checks.CheckDateTime((string)discount["due"]);
             }
             long? nominalAmount = json.nominalAmount;
             long? fineAmount = json.fineAmount;
@@ -513,8 +513,8 @@ namespace StarkBank
             string createdString = json.created;
             string updatedString = json.updated;
             List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
-            DateTime? updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime? created = Checks.CheckDateTime(createdString);
+            DateTime? updated = Checks.CheckDateTime(updatedString);
 
             return new Invoice(
                 amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine, interest: interest,

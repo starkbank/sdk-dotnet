@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using System;
 using StarkBank;
+using StarkCore;
 
 
 namespace StarkBankTests

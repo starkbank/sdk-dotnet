@@ -2,6 +2,7 @@
 using StarkBank;
 using Xunit;
 using System.Diagnostics;
+using StarkCore;
 
 
 namespace StarkBankTests
