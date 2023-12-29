@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using StarkBank.Utils;
-
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -115,7 +114,7 @@ namespace StarkBank
             string id = null, string holderID = null, string holderName = null, string centerID = null, string cardID = null, 
             string cardEnding = null, string description = null, long? amount = null, int? tax = null, long? issuerAmount = null, 
             string issuerCurrencyCode = null, string issuerCurrencySymbol = null, long? merchantAmount = null, string merchantCurrencyCode = null, 
-            string merchantCurrencySymbol = null, string merchantCategoryCode = null, string MerchantCategoryType = null, 
+            string merchantCurrencySymbol = null, string merchantCategoryCode = null, string merchantCategoryType = null, 
             string merchantCountryCode = null, string merchantName = null, string merchantDisplayName = null, string merchantDisplayUrl = null, 
             int? merchantFee = null, string methodCode = null, List<string> tags = null, List<string> corporateTransactionIds = null, 
             string status = null, DateTime? updated = null, DateTime? created = null        
@@ -136,7 +135,7 @@ namespace StarkBank
             MerchantCurrencyCode = merchantCurrencyCode;
             MerchantCurrencySymbol = merchantCurrencySymbol;
             MerchantCategoryCode = merchantCategoryCode;
-            MerchantCategoryType = MerchantCategoryType;
+            MerchantCategoryType = merchantCategoryType;
             MerchantCountryCode = merchantCountryCode;
             MerchantName = merchantName;
             MerchantDisplayName = merchantDisplayName;
@@ -172,7 +171,7 @@ namespace StarkBank
         /// </summary>
         public static CorporatePurchase Get(string id, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -208,7 +207,7 @@ namespace StarkBank
             DateTime? before = null, List<string> merchantCategoryTypes = null, List<string> holderIds = null,List<string> cardIds = null, 
             string status = null, User user = null
         ) {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -257,8 +256,8 @@ namespace StarkBank
             DateTime? before = null, List<string> merchantCategoryTypes = null, List<string> holderIds = null,List<string> cardIds = null, 
             string status = null, User user = null
         ) {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -275,7 +274,7 @@ namespace StarkBank
                 user: user
             );
             List<CorporatePurchase> purchases = new List<CorporatePurchase>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 purchases.Add(subResource as CorporatePurchase);
             }
@@ -309,7 +308,7 @@ namespace StarkBank
         /// </summary>
         public static CorporatePurchase Parse(string content, string signature, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Utils.Parse.ParseAndVerify(
                 content: content,
                 signature: signature,
@@ -354,11 +353,11 @@ namespace StarkBank
                     }
                 }
             };
-            Dictionary<string, object> response = Api.CastJsonToApiFormat(rawResponse);
+            Dictionary<string, object> response = StarkCore.Utils.Api.CastJsonToApiFormat(rawResponse);
             return JsonConvert.SerializeObject(response);
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "CorporatePurchase", resourceMaker: ResourceMaker);
         }
@@ -391,9 +390,9 @@ namespace StarkBank
             List<string> corporateTransactionIds = json.corporateTransactionIds?.ToObject<List<string>>();
             string status = json.status;
             string createdString = json.created;
-            DateTime? created = Checks.CheckNullableDateTime(createdString);
+            DateTime? created = StarkCore.Utils.Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
-            DateTime? updated = Checks.CheckNullableDateTime(updatedString);
+            DateTime? updated = StarkCore.Utils.Checks.CheckNullableDateTime(updatedString);
 
             return new CorporatePurchase(
                 id: id, holderID: holderID, holderName: holderName, centerID: centerID, cardID: cardID, cardEnding: cardEnding, 

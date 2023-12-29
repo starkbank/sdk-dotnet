@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -26,7 +25,7 @@ namespace StarkBank
     ///     <item> Status [string]: current DICT key status. ex: "created", "registered", "canceled" or "failed"</item>
     /// </list>
     /// </summary>
-    public partial class DictKey : Utils.Resource
+    public partial class DictKey : Resource
     {
         public string Type { get; }
         public string Name { get; }
@@ -98,8 +97,8 @@ namespace StarkBank
         /// </summary>
         public static DictKey Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -131,15 +130,15 @@ namespace StarkBank
         public static IEnumerable<DictKey> Query(int? limit = null, string type = null, DateTime? after = null,
             DateTime? before = null, List<string> ids = null, string status = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
                     { "type", type },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "ids", ids },
                     { "status", status }
                 },
@@ -173,35 +172,35 @@ namespace StarkBank
         public static (List<DictKey> page, string pageCursor) Page(string cursor = null, int? limit = null, string type = null,
             DateTime? after = null, DateTime? before = null, List<string> ids = null, string status = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
                     { "type", type },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "ids", ids },
                     { "status", status }
                 },
                 user: user
             );
             List<DictKey> dictKeys = new List<DictKey>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 dictKeys.Add(subResource as DictKey);
             }
             return (dictKeys, pageCursor);
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "DictKey", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             string type = json.type;

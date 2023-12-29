@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -19,7 +18,7 @@ namespace StarkBank
     ///     <item>ShortCode [string]: country's short code. ex: "BR"</item>
     /// </list>
     /// </summary>
-    public partial class MerchantCountry : SubResource
+    public partial class MerchantCountry : StarkCore.Utils.SubResource
     {
         public string Code { get; }
         public string Name { get; }
@@ -68,7 +67,7 @@ namespace StarkBank
         /// </summary>
         public static IEnumerable<MerchantCountry> Query(string search = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -92,12 +91,12 @@ namespace StarkBank
             return countries;
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "MerchantCountry", resourceMaker: ResourceMaker);
         }
 
-        internal static SubResource ResourceMaker(dynamic json)
+        internal static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
         {
             string code = json.code;
             string name = json.name;

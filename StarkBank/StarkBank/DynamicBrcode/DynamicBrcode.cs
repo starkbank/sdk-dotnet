@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -29,7 +28,7 @@ namespace StarkBank
     ///     <item>Updated [DateTime]: latest update datetime for the DynamicBrcode. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class DynamicBrcode : Utils.Resource
+    public partial class DynamicBrcode : Resource
     {
         public long Amount { get; }
         public long? Expiration { get; }
@@ -106,8 +105,8 @@ namespace StarkBank
         /// </summary>
         public static List<DynamicBrcode> Create(List<DynamicBrcode> DynamicBrcodes, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: DynamicBrcodes,
@@ -137,8 +136,8 @@ namespace StarkBank
         /// </summary>
         public static List<DynamicBrcode> Create(List<Dictionary<string, object>> DynamicBrcodes, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: DynamicBrcodes,
@@ -168,8 +167,8 @@ namespace StarkBank
         /// </summary>
         public static DynamicBrcode Get(string uuid, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: uuid,
@@ -201,14 +200,14 @@ namespace StarkBank
         public static IEnumerable<DynamicBrcode> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             string status = null, List<string> tags = null, List<string> uuids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "uuids", uuids }
@@ -243,15 +242,15 @@ namespace StarkBank
         public static (List<DynamicBrcode> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, string status = null, List<string> tags = null, List<string> uuids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
                     { "uuids", uuids }
@@ -259,19 +258,19 @@ namespace StarkBank
                 user: user
             );
             List<DynamicBrcode> DynamicBrcodes = new List<DynamicBrcode>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 DynamicBrcodes.Add(subResource as DynamicBrcode);
             }
             return (DynamicBrcodes, pageCursor);
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "DynamicBrcode", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             long amount = json.amount;
             long? expiration = json.expiration;
@@ -281,8 +280,8 @@ namespace StarkBank
             string pictureUrl = json.pictureUrl;
             string createdString = json.created;
             string updatedString = json.updated;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
-            DateTime? updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime? created = StarkCore.Utils.Checks.CheckDateTime(createdString);
+            DateTime? updated = StarkCore.Utils.Checks.CheckDateTime(updatedString);
 
             return new DynamicBrcode( 
                 amount: amount, expiration: expiration, tags: tags, id: id, uuid: uuid, pictureUrl: pictureUrl, 

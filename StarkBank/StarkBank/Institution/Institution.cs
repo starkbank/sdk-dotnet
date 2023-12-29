@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using StarkBank.Utils;
+using System.Collections.Generic;
 
 namespace StarkBank.Institution
 {
-    public class Institution : SubResource
+    public class Institution : StarkCore.Utils.SubResource
     {
         /// <summary>
         /// Institution object
@@ -73,8 +73,8 @@ namespace StarkBank.Institution
         public static List<Institution> Query(int? limit = null, string search = null,
             List<string> spiCodes = null, List<string> strCodes = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = SubResource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = SubResource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -86,19 +86,19 @@ namespace StarkBank.Institution
                 user: user
             );
             List<Institution> institutions = new List<Institution>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 institutions.Add(subResource as Institution);
             }
             return institutions;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) SubResource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) SubResource()
         {
             return (resourceName: "Institution", resourceMaker: ResourceMaker);
         }
 
-        public static Utils.SubResource ResourceMaker(dynamic json)
+        public static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
         {
             string displayName = json.displayName;
             string name = json.name;

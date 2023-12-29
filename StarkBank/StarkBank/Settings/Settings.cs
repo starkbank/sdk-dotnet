@@ -1,8 +1,6 @@
-﻿namespace StarkBank
+﻿using StarkBank;
+
+namespace StarkBank
 {
-    public abstract class Settings
-    {
-        public static User User;
-        public static string Language = "en-US";
-    }
+    public abstract class Settings : StarkCore.Settings { }
 }

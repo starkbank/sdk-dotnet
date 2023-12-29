@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
+using System.Collections.Generic;
 
 
 namespace StarkBank
@@ -25,7 +25,7 @@ namespace StarkBank
         ///     <item>Updated [DateTime]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public class Log : Utils.Resource
+        public class Log : Resource
         {
             public DateTime? Created { get; }
             public DateTime? Updated { get; }
@@ -79,8 +79,8 @@ namespace StarkBank
             /// </summary>
             public static Log Get(string id, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-                return Utils.Rest.GetId(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                return Rest.GetId(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     id: id,
@@ -111,14 +111,14 @@ namespace StarkBank
             public static IEnumerable<Log> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
                 List<string> types = null, List<string> holmesIds = null, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-                return Utils.Rest.GetList(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                return Rest.GetList(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "limit", limit },
-                        { "after", new Utils.StarkDate(after) },
-                        { "before", new Utils.StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "types", types },
                         { "holmesIds", holmesIds }
                     },
@@ -152,40 +152,40 @@ namespace StarkBank
             public static (List<Log> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
                 DateTime? before = null, List<string> types = null, List<string> holmesIds = null, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-                (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "cursor", cursor },
                         { "limit", limit },
-                        { "after", new Utils.StarkDate(after) },
-                        { "before", new Utils.StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "types", types },
                         { "holmesIds", holmesIds }
                     },
                     user: user
                 );
                 List<Log> logs = new List<Log>();
-                foreach (SubResource subResource in page)
+                foreach (StarkCore.Utils.SubResource subResource in page)
                 {
                     logs.Add(subResource as Log);
                 }
                 return (logs, pageCursor);
             }
 
-            internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "BoletoHolmesLog", resourceMaker: ResourceMaker);
             }
 
-            internal static Utils.Resource ResourceMaker(dynamic json)
+            internal static Resource ResourceMaker(dynamic json)
             {
                 string id = json.id;
                 string createdString = json.created;
-                DateTime created = Utils.Checks.CheckDateTime(createdString);
+                DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
                 string updatedString = json.updated;
-                DateTime updated = Utils.Checks.CheckDateTime(updatedString);
+                DateTime updated = StarkCore.Utils.Checks.CheckDateTime(updatedString);
                 string type = json.type;
                 BoletoHolmes holmes = BoletoHolmes.ResourceMaker(json.holmes);
 

@@ -1,8 +1,7 @@
 ﻿using System;
+using StarkBank.Utils;
 using System.Collections.Generic;
 using System.Linq;
-using StarkBank.Utils;
-
 
 namespace StarkBank
 {
@@ -117,7 +116,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateInvoice Create(CorporateInvoice invoice, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.PostSingle(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -148,7 +147,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateInvoice Create(Dictionary<string, object> invoice, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.PostSingle(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -181,7 +180,7 @@ namespace StarkBank
             DateTime? before = null, string status = null, List<string> tags = null, 
             User user = null
         ) {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -223,8 +222,8 @@ namespace StarkBank
             DateTime? after = null, DateTime? before = null, string status = null, List<string> tags = null, 
             User user = null
         ) {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -238,14 +237,14 @@ namespace StarkBank
                 user: user
             );
             List<CorporateInvoice> corporateInvoices = new List<CorporateInvoice>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 corporateInvoices.Add(subResource as CorporateInvoice);
             }
             return (corporateInvoices, pageCursor);
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "CorporateInvoice", resourceMaker: ResourceMaker);
         }
@@ -259,14 +258,14 @@ namespace StarkBank
             string id = json.id;
             string brcode = json.brcode;
             string dueString = json.due;
-            DateTime? due = Checks.CheckNullableDateTime(dueString);
+            DateTime? due = StarkCore.Utils.Checks.CheckNullableDateTime(dueString);
             string link = json.link;
             string status = json.status;
             string corporateTransactionID = json.corporateTransactionId;
             string updatedString = json.updated;
-            DateTime? updated = Checks.CheckNullableDateTime(updatedString);
+            DateTime? updated = StarkCore.Utils.Checks.CheckNullableDateTime(updatedString);
             string createdString = json.created;
-            DateTime? created = Checks.CheckNullableDateTime(createdString);
+            DateTime? created = StarkCore.Utils.Checks.CheckNullableDateTime(createdString);
 
             return new CorporateInvoice(
                 amount: amount, taxID: taxID, name: name, tags: tags, id: id, brcode: brcode, 
