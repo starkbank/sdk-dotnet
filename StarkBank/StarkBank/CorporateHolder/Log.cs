@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
 using System.Diagnostics;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -76,7 +75,7 @@ namespace StarkBank
             /// </summary>
             public static Log Get(string id, User user = null)
             {
-                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
                 return Rest.GetId(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
@@ -109,14 +108,14 @@ namespace StarkBank
             public static IEnumerable<Log> Query(int? limit = null, List<string> ids = null, DateTime? after = null, DateTime? before = null,
                 List<string> types = null, List<string> holderIds = null, User user = null)
             {
-                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
                 return Rest.GetList(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "limit", limit },
-                        { "after", new StarkDate(after) },
-                        { "before", new StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "types", types },
                         { "holderIds", holderIds },
                         { "ids", ids }
@@ -152,15 +151,15 @@ namespace StarkBank
             public static (List<Log> page, string pageCursor) Page(string cursor = null, int? limit = null, List<string> ids = null, DateTime? after = null,
                 DateTime? before = null, List<string> types = null, List<string> holderIds = null, User user = null)
             {
-                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-                (List<SubResource> page, string pageCursor) = Rest.GetPage(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "cursor", cursor },
                         { "limit", limit },
-                        { "after", new StarkDate(after) },
-                        { "before", new StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "types", types },
                         { "ids", ids },
                         { "holderIds", holderIds }
@@ -168,14 +167,14 @@ namespace StarkBank
                     user: user
                 );
                 List<Log> logs = new List<Log>();
-                foreach (SubResource subResource in page)
+                foreach (StarkCore.Utils.SubResource subResource in page)
                 {
                     logs.Add(subResource as Log);
                 }
                 return (logs, pageCursor);
             }
 
-            internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "CorporateHolderLog", resourceMaker: ResourceMaker);
             }
@@ -186,7 +185,7 @@ namespace StarkBank
                 CorporateHolder holder = CorporateHolder.ResourceMaker(json.holder);
                 string type = json.type;
                 string createdString = json.created;
-                DateTime created = Checks.CheckDateTime(createdString);
+                DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
 
                 return new Log(id: id, holder: holder, type: type, created: created);
             }

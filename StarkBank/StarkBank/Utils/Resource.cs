@@ -1,16 +1,7 @@
-﻿using System.Linq;
-using System.Reflection;
-
-
-namespace StarkBank.Utils
+﻿namespace StarkBank.Utils
 {
-    public abstract class Resource : SubResource
+    public abstract class Resource : StarkCore.Utils.Resource
     {
-        public string ID { get; }
-
-        public Resource(string id)
-        {
-            ID = id;
-        }
+        public Resource(string id) : base(id) { }
     }
 }

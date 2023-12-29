@@ -5,7 +5,7 @@ using StarkBank;
 
 namespace StarkBankTests
 {
-    public class BalanceTest
+    public class BalanceTest 
     {
         public readonly User user = TestUser.SetDefaultProject();
 

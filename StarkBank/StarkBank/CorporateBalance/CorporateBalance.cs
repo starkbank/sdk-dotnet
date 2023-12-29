@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -76,7 +75,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateBalance Get(User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -85,7 +84,7 @@ namespace StarkBank
             ).First() as CorporateBalance;
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "CorporateBalance", resourceMaker: ResourceMaker);
         }
@@ -98,7 +97,7 @@ namespace StarkBank
             int maxLimit = json.maxLimit;
             string currency = json.currency;
             string updatedString = json.updated;
-            DateTime updated = Checks.CheckDateTime(updatedString);
+            DateTime updated = StarkCore.Utils.Checks.CheckDateTime(updatedString);
 
             return new CorporateBalance(id: id, amount: amount, limit: limit, maxLimit: maxLimit, currency: currency, updated: updated);
         }

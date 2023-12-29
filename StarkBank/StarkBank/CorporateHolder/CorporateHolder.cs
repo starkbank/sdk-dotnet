@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -107,7 +106,7 @@ namespace StarkBank
         /// </summary>
         public static List<CorporateHolder> Create(List<CorporateHolder> holders, Dictionary<string, object> parameters = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -143,7 +142,7 @@ namespace StarkBank
         /// </summary>
         public static List<CorporateHolder> Create(List<Dictionary<string, object>> holders, Dictionary<string, object> parameters = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -179,7 +178,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateHolder Get(string id, Dictionary<string, object> parameters = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -215,7 +214,7 @@ namespace StarkBank
             DateTime? before = null, string status = null, List<string> tags = null,List<string> expand = null, 
             User user = null
         ) {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -261,8 +260,8 @@ namespace StarkBank
             List<string> ids = null, DateTime? after = null, DateTime? before = null, string status = null, 
             List<string> tags = null, List<string> expand = null, User user = null
         ) {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -278,7 +277,7 @@ namespace StarkBank
                 user: user
             );
             List<CorporateHolder> holders = new List<CorporateHolder>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 holders.Add(subResource as CorporateHolder);
             }
@@ -313,7 +312,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateHolder Update(string id, Dictionary<string, object> patchData, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.PatchId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -345,7 +344,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateHolder Cancel(string id, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -354,7 +353,7 @@ namespace StarkBank
             ) as CorporateHolder;
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "CorporateHolder", resourceMaker: ResourceMaker);
         }
@@ -369,9 +368,9 @@ namespace StarkBank
             string id = json.id;
             string status = json.status;
             string updatedString = json.updated;
-            DateTime updated = Checks.CheckDateTime(updatedString);
+            DateTime updated = StarkCore.Utils.Checks.CheckDateTime(updatedString);
             string createdString = json.created;
-            DateTime created = Checks.CheckDateTime(createdString);
+            DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
 
             return new CorporateHolder(
                 name: name, centerID: centerID, permissions: permissions, rules: rules, 

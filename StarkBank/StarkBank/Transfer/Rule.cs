@@ -19,7 +19,7 @@ namespace StarkBank
         ///     <item>value [integer]: Value of the rule. ex: 5</item>
         /// </list>
         /// </summary>
-        public partial class Rule : SubResource
+        public partial class Rule : StarkCore.Utils.SubResource
         {
             public string Key { get; }
             public int Value { get; }
@@ -42,12 +42,12 @@ namespace StarkBank
                 Value = value;
             }
 
-            internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "Rule", resourceMaker: ResourceMaker);
             }
 
-            internal static SubResource ResourceMaker(dynamic json)
+            internal static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
             {
                 string key = json.key;
                 int value = json.value;

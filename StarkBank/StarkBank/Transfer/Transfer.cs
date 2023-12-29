@@ -36,7 +36,7 @@ namespace StarkBank
     ///     <item>Updated [DateTime]: latest update datetime for the Transfer. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class Transfer : Utils.Resource
+    public partial class Transfer : Resource
     {
         public long Amount { get; }
         public string Name { get; }
@@ -146,8 +146,8 @@ namespace StarkBank
         /// </summary>
         public static List<Transfer> Create(List<Transfer> transfers, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: transfers,
@@ -177,8 +177,8 @@ namespace StarkBank
         /// </summary>
         public static List<Transfer> Create(List<Dictionary<string, object>> transfers, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: transfers,
@@ -208,8 +208,8 @@ namespace StarkBank
         /// </summary>
         public static Transfer Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -239,8 +239,8 @@ namespace StarkBank
         /// </summary>
         public static Transfer Delete(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.DeleteId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -271,8 +271,8 @@ namespace StarkBank
         /// </summary>
         public static byte[] Pdf(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetContent(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 subResourceName: "pdf",
@@ -309,14 +309,14 @@ namespace StarkBank
             List<string> transactionIds = null, string status = null, string taxID = null, string sort = null, List<string> tags = null, List<string> ids = null,
             User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "transactionIds", transactionIds },
                     { "status", status },
                     { "taxID", taxID },
@@ -358,15 +358,15 @@ namespace StarkBank
             DateTime? before = null, List<string> transactionIds = null, string status = null, string taxID = null, string sort = null,
             List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "transactionIds", transactionIds },
                     { "status", status },
                     { "taxID", taxID },
@@ -377,19 +377,19 @@ namespace StarkBank
                 user: user
             );
             List<Transfer> transactions = new List<Transfer>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 transactions.Add(subResource as Transfer);
             }
             return (transactions, pageCursor);
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Transfer", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             long amount = json.amount;
             string name = json.name;
@@ -400,7 +400,7 @@ namespace StarkBank
             string accountType = json.accountType;
             string externalID = json.externalId;
             string scheduledString = json.scheduled;
-            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
+            DateTime? scheduled = StarkCore.Utils.Checks.CheckNullableDateTime(scheduledString);
             string description = json.description;
             List<string> tags = json.tags?.ToObject<List<string>>();
             List<Rule> rules = ParseRule(json.rules);
@@ -410,9 +410,9 @@ namespace StarkBank
             List<string> transactionIds = transactionIds = json.transactionIds?.ToObject<List<string>>();
             Dictionary<string, object> metadata = json.metadata?.ToObject<Dictionary<string, object>>();
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
+            DateTime? created = StarkCore.Utils.Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
-            DateTime? updated = Utils.Checks.CheckNullableDateTime(updatedString);
+            DateTime? updated = StarkCore.Utils.Checks.CheckNullableDateTime(updatedString);
 
             return new Transfer(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,

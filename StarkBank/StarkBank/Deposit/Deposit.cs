@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -29,7 +29,7 @@ namespace StarkBank
     ///     <item>Updated [DateTime]: latest update datetime for the Deposit. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class Deposit : Utils.Resource
+    public partial class Deposit : Resource
     {
         public string Name { get; }
         public string TaxID { get; }
@@ -114,8 +114,8 @@ namespace StarkBank
         /// </summary>
         public static List<Deposit> Create(List<Deposit> deposits, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: deposits,
@@ -145,8 +145,8 @@ namespace StarkBank
         /// </summary>
         public static Deposit Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -179,14 +179,14 @@ namespace StarkBank
         public static IEnumerable<Deposit> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             string status = null, string sort = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "sort", sort },
                     { "tags", tags },
@@ -223,15 +223,15 @@ namespace StarkBank
         public static (List<Deposit> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, string status = null, string sort = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "sort", sort },
                     { "tags", tags },
@@ -240,19 +240,19 @@ namespace StarkBank
                 user: user
             );
             List<Deposit> deposits = new List<Deposit>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 deposits.Add(subResource as Deposit);
             }
             return (deposits, pageCursor);
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Deposit", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             long amount = json.amount;
@@ -269,8 +269,8 @@ namespace StarkBank
             List<string> tags = json.tags.ToObject<List<string>>();
             string createdString = json.created;
             string updatedString = json.updated;
-            DateTime created = Utils.Checks.CheckDateTime(createdString);
-            DateTime updated = Utils.Checks.CheckDateTime(updatedString);
+            DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
+            DateTime updated = StarkCore.Utils.Checks.CheckDateTime(updatedString);
 
             return new Deposit(
                 id: id, amount: amount, name: name, taxID: taxID, bankCode: bankCode, branchCode: branchCode,

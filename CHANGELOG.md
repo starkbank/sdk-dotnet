@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- starkCore as dependency
 
 ## [2.10.0] - 2023-09-18
 ### Removed

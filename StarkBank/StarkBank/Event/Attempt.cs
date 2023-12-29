@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -23,7 +23,7 @@ namespace StarkBank
         ///     <item>Created [DateTime]: datetime representing the moment when the attempt was made. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public class Attempt : Utils.Resource
+        public class Attempt : Resource
         {
             public string Code { get; }
             public string Message { get; }
@@ -78,8 +78,8 @@ namespace StarkBank
             /// </summary>
             public static Attempt Get(string id, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-                return Utils.Rest.GetId(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                return Rest.GetId(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     id: id,
@@ -110,14 +110,14 @@ namespace StarkBank
             public static IEnumerable<Attempt> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
                                                      List<string> eventIds = null, List<string> webhookIds = null, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-                return Utils.Rest.GetList(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                return Rest.GetList(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "limit", limit },
-                        { "after", new Utils.StarkDate(after) },
-                        { "before", new Utils.StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "eventIds", eventIds },
                         { "webhookIds", webhookIds }
                     },
@@ -150,34 +150,34 @@ namespace StarkBank
             public static (List<Attempt> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
                 DateTime? before = null, List<string> eventIds = null, List<string> webhookIds = null, User user = null)
             {
-                (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-                (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "cursor", cursor },
                         { "limit", limit },
-                        { "after", new Utils.StarkDate(after) },
-                        { "before", new Utils.StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "eventIds", eventIds },
                         { "webhookIds", webhookIds }
                     },
                     user: user
                 );
                 List<Attempt> attempts = new List<Attempt>();
-                foreach (SubResource subResource in page)
+                foreach (StarkCore.Utils.SubResource subResource in page)
                 {
                     attempts.Add(subResource as Attempt);
                 }
                 return (attempts, pageCursor);
             }
 
-            internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "EventAttempt", resourceMaker: ResourceMaker);
             }
 
-            internal static Utils.Resource ResourceMaker(dynamic json)
+            internal static Resource ResourceMaker(dynamic json)
             {
                 string id = json.id;
                 string code = json.code;
