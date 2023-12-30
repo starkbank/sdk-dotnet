@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
 using System.Diagnostics;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -92,7 +91,7 @@ namespace StarkBank
             /// </summary>
             public static Log Get(string id, User user = null)
             {
-                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
                 return Rest.GetId(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
@@ -125,14 +124,14 @@ namespace StarkBank
             public static IEnumerable<Log> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
                 List<string> types = null, List<string> purchaseIds = null, User user = null)
             {
-                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
                 return Rest.GetList(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "limit", limit },
-                        { "after", new StarkDate(after) },
-                        { "before", new StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "types", types },
                         { "purchaseIds", purchaseIds }
                     },
@@ -167,29 +166,29 @@ namespace StarkBank
             public static (List<Log> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
                 DateTime? before = null, List<string> types = null, List<string> purchaseIds = null, User user = null)
             {
-                (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-                (List<SubResource> page, string pageCursor) = Rest.GetPage(
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                     resourceName: resourceName,
                     resourceMaker: resourceMaker,
                     query: new Dictionary<string, object> {
                         { "cursor", cursor },
                         { "limit", limit },
-                        { "after", new StarkDate(after) },
-                        { "before", new StarkDate(before) },
+                        { "after", new StarkCore.Utils.StarkDate(after) },
+                        { "before", new StarkCore.Utils.StarkDate(before) },
                         { "types", types },
                         { "purchaseIds", purchaseIds }
                     },
                     user: user
                 );
                 List<Log> logs = new List<Log>();
-                foreach (SubResource subResource in page)
+                foreach (StarkCore.Utils.SubResource subResource in page)
                 {
                     logs.Add(subResource as Log);
                 }
                 return (logs, pageCursor);
             }
 
-            internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "CorporatePurchaseLog", resourceMaker: ResourceMaker);
             }
@@ -199,7 +198,7 @@ namespace StarkBank
                 List<Dictionary<string, object>> errors = json.errors.ToObject<List<Dictionary<string, object>>>();
                 string id = json.id;
                 string createdString = json.created;
-                DateTime created = Checks.CheckDateTime(createdString);
+                DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
                 string description = json.description;
                 string type = json.type;
                 CorporatePurchase purchase = CorporatePurchase.ResourceMaker(json.purchase);

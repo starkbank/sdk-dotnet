@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -55,7 +55,7 @@ namespace StarkBank
             Type = type;
             Payment = payment;
 
-            var subResourceByType = new Dictionary<string, Api.ResourceMaker>()
+            var subResourceByType = new Dictionary<string, StarkCore.Utils.Api.ResourceMaker>()
             {
                 { "brcode-payment",  BrcodePreview.ResourceMaker},
                 { "boleto-payment",  BoletoPreview.ResourceMaker},
@@ -65,7 +65,7 @@ namespace StarkBank
 
             if (Type != null && subResourceByType.ContainsKey(Type))
             {
-                Payment = Api.FromApiJson(subResourceByType[Type], Payment);
+                Payment = StarkCore.Utils.Api.FromApiJson(subResourceByType[Type], Payment);
             }
         }
 
@@ -91,7 +91,7 @@ namespace StarkBank
         /// </summary>
         public static List<PaymentPreview> Create(List<PaymentPreview> previews, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -122,7 +122,7 @@ namespace StarkBank
         /// </summary>
         public static List<PaymentPreview> Create(List<Dictionary<string, object>> previews, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -131,16 +131,16 @@ namespace StarkBank
             ).ToList().ConvertAll(o => (PaymentPreview)o);
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "PaymentPreview", resourceMaker: ResourceMaker);
         }
 
-        public static SubResource ResourceMaker(dynamic json)
+        public static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
         {
             string id = json.id;
             string scheduledString = json.scheduled;
-            DateTime? scheduled = Checks.CheckNullableDateTime(scheduledString);
+            DateTime? scheduled = StarkCore.Utils.Checks.CheckNullableDateTime(scheduledString);
             string type = json.type;
             object payment = json.payment;
 

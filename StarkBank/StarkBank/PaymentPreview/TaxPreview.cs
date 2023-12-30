@@ -1,4 +1,6 @@
-﻿namespace StarkBank
+﻿using StarkBank.Utils;
+
+namespace StarkBank
 {
     public partial class PaymentPreview
     {
@@ -15,7 +17,7 @@
         ///     <item>Line [string]: Number sequence that identifies the payment. ex: "85660000006 6 67940064007 5 41190025511 7 00010601813 8"</item>
         ///     <item>BarCode [string]: Bar code number that identifies the payment. ex: "85660000006679400640074119002551100010601813"</item>        /// </list>
         /// </summary>
-        public class TaxPreview : Utils.SubResource
+        public class TaxPreview : StarkCore.Utils.SubResource
         {
             public long Amount { get; }
             public string Name { get; }
@@ -46,12 +48,12 @@
                 BarCode = barCode;
             }
 
-            internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) SubResource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) SubResource()
             {
                 return (resourceName: "TaxPreview", resourceMaker: ResourceMaker);
             }
 
-            public static Utils.SubResource ResourceMaker(dynamic json)
+            public static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
             {
                 long amount = json.amount;
                 string name = json.name;

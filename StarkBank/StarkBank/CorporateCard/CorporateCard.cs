@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -150,16 +149,16 @@ namespace StarkBank
         /// </summary>
         public static CorporateCard Create(CorporateCard card, Dictionary<string, object> parameters = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
 
-            string path = $"{Api.Endpoint(resourceName)}/token";
+            string path = $"{StarkCore.Utils.Api.Endpoint(resourceName)}/token";
             dynamic json = Rest.PostRaw(
                 path: path,
-                payload: Api.ApiJson(card),
+                payload: StarkCore.Utils.Api.ApiJson(card),
                 query: parameters,
                 user: user
-            )[Api.LastName(resourceName)];
-            return Api.FromApiJson(resourceMaker, json);
+            )[StarkCore.Utils.Api.LastName(resourceName)];
+            return StarkCore.Utils.Api.FromApiJson(resourceMaker, json);
         }
 
         /// <summary>
@@ -189,16 +188,16 @@ namespace StarkBank
         /// </summary>
         public static List<CorporateCard> Create(Dictionary<string, object> card, Dictionary<string, object> parameters = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
 
-            string path = $"{Api.Endpoint(resourceName)}/token";
+            string path = $"{StarkCore.Utils.Api.Endpoint(resourceName)}/token";
             dynamic json = Rest.PostRaw(
                 path: path,
-                payload: Api.ApiJson(resourceMaker(card)),
+                payload: StarkCore.Utils.Api.ApiJson(resourceMaker(card)),
                 query: parameters,
                 user: user
-            )[Api.LastName(resourceName)];
-            return Api.FromApiJson(resourceMaker, json);
+            )[StarkCore.Utils.Api.LastName(resourceName)];
+            return StarkCore.Utils.Api.FromApiJson(resourceMaker, json);
         }
 
         /// <summary>
@@ -227,7 +226,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateCard Get(string id, Dictionary<string, object> parameters = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -267,7 +266,7 @@ namespace StarkBank
             List<string> expand = null, User user = null
         )
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -319,8 +318,8 @@ namespace StarkBank
             List<string> holderIds = null,List<string> tags = null, List<string> expand = null, 
             User user = null
         ) {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -337,7 +336,7 @@ namespace StarkBank
                 user: user
             );
             List<CorporateCard> cards = new List<CorporateCard>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 cards.Add(subResource as CorporateCard);
             }
@@ -371,7 +370,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateCard Update(string id, Dictionary<string, object> patchData, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.PatchId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -403,7 +402,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateCard Cancel(string id, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -412,7 +411,7 @@ namespace StarkBank
             ) as CorporateCard;
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "CorporateCard", resourceMaker: ResourceMaker);
         }
@@ -436,11 +435,11 @@ namespace StarkBank
             string securityCode = json.securityCode;
             string expirationString = json.expiration;
             DateTime? expiration = null;
-            if (expirationString[0] != '*') expiration = Checks.CheckDateTime(expirationString);
+            if (expirationString[0] != '*') expiration = StarkCore.Utils.Checks.CheckDateTime(expirationString);
             string updatedString = json.updated;
-            DateTime updated = Checks.CheckDateTime(updatedString);
+            DateTime updated = StarkCore.Utils.Checks.CheckDateTime(updatedString);
             string createdString = json.created;
-            DateTime created = Checks.CheckDateTime(createdString);
+            DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
 
             return new CorporateCard(
                 holderID: holderID, displayName: displayName, rules: rules, tags: tags, 

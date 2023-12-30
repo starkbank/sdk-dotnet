@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -79,7 +78,7 @@ namespace StarkBank
         /// </summary>
         public static CorporateTransaction Get(string id, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -114,7 +113,7 @@ namespace StarkBank
             DateTime? after = null, DateTime? before = null, string status = null, List<string> ids = null, int? limit = 1, 
             User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -160,8 +159,8 @@ namespace StarkBank
             List<string> externalIds = null, DateTime? after = null, DateTime? before = null, string status = null,
             List<string> ids = null, string cursor = null, int? limit = 1, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -177,14 +176,14 @@ namespace StarkBank
                 user: user
             );
             List<CorporateTransaction> transactions = new List<CorporateTransaction>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 transactions.Add(subResource as CorporateTransaction);
             }
             return (transactions, pageCursor);
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "CorporateTransaction", resourceMaker: ResourceMaker);
         }
@@ -198,7 +197,7 @@ namespace StarkBank
             string source = json.source;
             List<string> tags = json.tags?.ToObject<List<string>>();
             string createdString = json.created;
-            DateTime created = Checks.CheckDateTime(createdString);
+            DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
 
             return new CorporateTransaction(
                 id: id, amount: amount, balance: balance, description: description, source: source, 

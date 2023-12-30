@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -18,7 +17,7 @@ namespace StarkBank
     ///     <item>Number [string]: method's number. ex: "81"</item>
     /// </list>
     /// </summary>
-    public partial class CardMethod : SubResource
+    public partial class CardMethod : StarkCore.Utils.SubResource
     {
         public string Code { get; }
         public string Name { get; }
@@ -64,7 +63,7 @@ namespace StarkBank
         /// </summary>
         public static IEnumerable<CardMethod> Query(string search = null, User user = null)
         {
-            (string resourceName, Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
@@ -88,12 +87,12 @@ namespace StarkBank
             return methods;
         }
 
-        internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "CardMethod", resourceMaker: ResourceMaker);
         }
 
-        internal static SubResource ResourceMaker(dynamic json)
+        internal static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
         {
             string code = json.code;
             string name = json.name;

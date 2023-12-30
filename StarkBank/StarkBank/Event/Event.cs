@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -23,9 +22,9 @@ namespace StarkBank
     ///     <item>WorkspaceId [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: "4545454545454545"</item>
     /// </list>
     /// </summary>
-    public partial class Event : Utils.Resource
+    public partial class Event : Resource
     {
-        public Utils.Resource Log { get; }
+        public Resource Log { get; }
         public bool? IsDelivered { get; }
         public string Subscription { get; }
         public DateTime? Created { get; }
@@ -48,7 +47,7 @@ namespace StarkBank
         ///     <item>workspaceId [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: "4545454545454545"</item>
         /// </list>
         /// </summary>
-        public Event(string id, Utils.Resource log, bool? isDelivered, string subscription, string workspaceId, DateTime? created = null) : base(id)
+        public Event(string id, Resource log, bool? isDelivered, string subscription, string workspaceId, DateTime? created = null) : base(id)
         {
             Log = log;
             IsDelivered = isDelivered;
@@ -79,8 +78,8 @@ namespace StarkBank
         /// </summary>
         public static Event Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -110,14 +109,14 @@ namespace StarkBank
         public static IEnumerable<Event> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             bool? isDelivered = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "isDelivered", isDelivered }
                 },
                 user: user
@@ -148,21 +147,21 @@ namespace StarkBank
         public static (List<Event> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, bool? isDelivered = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "isDelivered", isDelivered }
                 },
                 user: user
             );
             List<Event> events = new List<Event>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 events.Add(subResource as Event);
             }
@@ -191,8 +190,8 @@ namespace StarkBank
         /// </summary>
         public static Event Delete(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.DeleteId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -224,8 +223,8 @@ namespace StarkBank
         /// </summary>
         public static Event Update(string id, bool isDelivered, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.PatchId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.PatchId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -261,25 +260,25 @@ namespace StarkBank
         /// </summary>
         public static Event Parse(string content, string signature, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return (Event)Utils.Parse.ParseAndVerify(content, signature, resourceName, resourceMaker, user, "event");
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Event", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             bool? isDelivered = json.isDelivered;
             string subscription = json.subscription;
             string createdString = json.created;
             string workspaceId = json.workspaceId;
-            DateTime? created = Utils.Checks.CheckDateTime(createdString);
+            DateTime? created = StarkCore.Utils.Checks.CheckDateTime(createdString);
 
-            Utils.Resource log = null;
+            Resource log = null;
             if (subscription == "transfer") {
                 log = Transfer.Log.ResourceMaker(json.log);
             } else if (subscription == "invoice") {

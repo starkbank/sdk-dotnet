@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -23,7 +22,7 @@ namespace StarkBank
         ///     <item>Created [DateTime]: creation DateTime for the Permission. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
-        public partial class Permission : SubResource
+        public partial class Permission : StarkCore.Utils.SubResource
         {
             public string OwnerId { get; }
             public string OwnerType { get; }
@@ -79,7 +78,7 @@ namespace StarkBank
                 return permissions;
             }
 
-            internal static (string resourceName, Api.ResourceMaker resourceMaker) Resource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "Permission", resourceMaker: ResourceMaker);
             }
@@ -93,7 +92,7 @@ namespace StarkBank
                 string ownerPictureUrl = json.ownerPictureUrl;
                 string ownerStatus = json.ownerStatus;
                 string createdString = json.created;
-                DateTime created = Checks.CheckDateTime(createdString);
+                DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
 
                 return new Permission(
                     ownerId: ownerId, ownerType: ownerType, ownerEmail: ownerEmail, ownerName: ownerName, ownerPictureUrl: ownerPictureUrl,

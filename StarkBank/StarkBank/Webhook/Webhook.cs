@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using StarkBank.Utils;
-using System;
+using System.Collections.Generic;
 
 
 namespace StarkBank
@@ -20,7 +20,7 @@ namespace StarkBank
     ///     <item>ID [string]: unique id returned when the Webhook is created. ex: "5656565656565656"</item>
     /// </list>
     /// </summary>
-    public partial class Webhook : Utils.Resource
+    public partial class Webhook : Resource
     {
         public string Url { get; }
         public List<string> Subscriptions { get; }
@@ -72,8 +72,8 @@ namespace StarkBank
         /// </summary>
         public static Webhook Create(string url, List<string> subscriptions, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.PostSingle(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.PostSingle(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entity: new Webhook(url: url, subscriptions: subscriptions),
@@ -103,8 +103,8 @@ namespace StarkBank
         /// </summary>
         public static Webhook Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -130,8 +130,8 @@ namespace StarkBank
         /// </summary>
         public static IEnumerable<Webhook> Query(int? limit = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -161,8 +161,8 @@ namespace StarkBank
         /// </summary>
         public static (List<Webhook> page, string pageCursor) Page(string cursor = null, int? limit = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
@@ -172,7 +172,7 @@ namespace StarkBank
                 user: user
             );
             List<Webhook> webhooks = new List<Webhook>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 webhooks.Add(subResource as Webhook);
             }
@@ -201,8 +201,8 @@ namespace StarkBank
         /// </summary>
         public static Webhook Delete(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.DeleteId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -210,12 +210,12 @@ namespace StarkBank
             ) as Webhook;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Webhook", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string url = json.url;
             List<string> subscriptions = json.subscriptions.ToObject<List<string>>();

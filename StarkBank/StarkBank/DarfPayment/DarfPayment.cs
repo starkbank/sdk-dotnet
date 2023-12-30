@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using StarkBank.Utils;
-
+using System.Collections.Generic;
 
 namespace StarkBank
 {
@@ -35,7 +34,7 @@ namespace StarkBank
     ///     <item>Created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     /// </list>
     /// </summary>
-    public partial class DarfPayment : Utils.Resource
+    public partial class DarfPayment : Resource
     {
         public string Description { get; }
         public string RevenueCode { get; }
@@ -137,8 +136,8 @@ namespace StarkBank
         /// </summary>
         public static List<DarfPayment> Create(List<DarfPayment> payments, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: payments,
@@ -168,8 +167,8 @@ namespace StarkBank
         /// </summary>
         public static List<DarfPayment> Create(List<Dictionary<string, object>> payments, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.Post(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.Post(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 entities: payments,
@@ -199,8 +198,8 @@ namespace StarkBank
         /// </summary>
         public static DarfPayment Get(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -231,8 +230,8 @@ namespace StarkBank
         /// </summary>
         public static byte[] Pdf(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetContent(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetContent(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 subResourceName: "pdf",
@@ -265,14 +264,14 @@ namespace StarkBank
         public static IEnumerable<DarfPayment> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             List<string> tags = null, List<string> ids = null, string status = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.GetList(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.GetList(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids },
                     { "status", status }
@@ -307,15 +306,15 @@ namespace StarkBank
         public static (List<DarfPayment> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
             DateTime? before = null, List<string> tags = null, List<string> ids = null, string status = null, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (List<SubResource> page, string pageCursor) = Utils.Rest.GetPage(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 query: new Dictionary<string, object> {
                     { "cursor", cursor },
                     { "limit", limit },
-                    { "after", new Utils.StarkDate(after) },
-                    { "before", new Utils.StarkDate(before) },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
                     { "tags", tags },
                     { "ids", ids },
                     { "status", status }
@@ -323,7 +322,7 @@ namespace StarkBank
                 user: user
             );
             List<DarfPayment> darfPayments = new List<DarfPayment>();
-            foreach (SubResource subResource in page)
+            foreach (StarkCore.Utils.SubResource subResource in page)
             {
                 darfPayments.Add(subResource as DarfPayment);
             }
@@ -352,8 +351,8 @@ namespace StarkBank
         /// </summary>
         public static DarfPayment Delete(string id, User user = null)
         {
-            (string resourceName, Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Utils.Rest.DeleteId(
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
                 resourceName: resourceName,
                 resourceMaker: resourceMaker,
                 id: id,
@@ -361,12 +360,12 @@ namespace StarkBank
             ) as DarfPayment;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) Resource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "DarfPayment", resourceMaker: ResourceMaker);
         }
 
-        internal static Utils.Resource ResourceMaker(dynamic json)
+        internal static Resource ResourceMaker(dynamic json)
         {
             string id = json.id;
             string description = json.description;
@@ -385,15 +384,15 @@ namespace StarkBank
                 tags = json.tags.ToObject<List<string>>();
             }
             string competenceString = json.competence;
-            DateTime competence = Utils.Checks.CheckDateTime(competenceString);
+            DateTime competence = StarkCore.Utils.Checks.CheckDateTime(competenceString);
             string dueString = json.scheduled;
-            DateTime due = Utils.Checks.CheckDateTime(dueString);
+            DateTime due = StarkCore.Utils.Checks.CheckDateTime(dueString);
             string scheduledString = json.scheduled;
-            DateTime? scheduled = Utils.Checks.CheckNullableDateTime(scheduledString);
+            DateTime? scheduled = StarkCore.Utils.Checks.CheckNullableDateTime(scheduledString);
             string createdString = json.created;
-            DateTime? created = Utils.Checks.CheckNullableDateTime(createdString);
+            DateTime? created = StarkCore.Utils.Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
-            DateTime? updated = Utils.Checks.CheckNullableDateTime(updatedString);
+            DateTime? updated = StarkCore.Utils.Checks.CheckNullableDateTime(updatedString);
 
             return new DarfPayment(
                 description: description, revenueCode: revenueCode, taxID: taxID, competence: competence,

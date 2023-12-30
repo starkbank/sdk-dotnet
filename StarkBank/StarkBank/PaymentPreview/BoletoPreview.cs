@@ -1,4 +1,5 @@
 ﻿using System;
+using StarkBank.Utils;
 
 namespace StarkBank
 {
@@ -28,7 +29,7 @@ namespace StarkBank
         ///     <item>BarCode [string]: Bar code number that identifies the payment. ex: "34195819600000000621090063571277307144464000"</item>
         /// </list>
         /// </summary>
-        public class BoletoPreview : Utils.SubResource
+        public class BoletoPreview : StarkCore.Utils.SubResource
         {
             public string Status { get; }
             public long Amount { get; }
@@ -92,12 +93,12 @@ namespace StarkBank
                 BarCode = barCode;
             }
 
-            internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) SubResource()
+            internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) SubResource()
             {
                 return (resourceName: "BoletoPreview", resourceMaker: ResourceMaker);
             }
 
-            public static Utils.SubResource ResourceMaker(dynamic json)
+            public static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
             {
                 string status = json.status;
                 long amount = json.amount;
@@ -105,9 +106,9 @@ namespace StarkBank
                 long fineAmount = json.fineAmount;
                 long interestAmount = json.interestAmount;
                 string dueString = json.due;
-                DateTime due = Utils.Checks.CheckDateTime(dueString);
+                DateTime due = StarkCore.Utils.Checks.CheckDateTime(dueString);
                 string expirationString = json.expiration;
-                DateTime expiration = Utils.Checks.CheckDateTime(expirationString);
+                DateTime expiration = StarkCore.Utils.Checks.CheckDateTime(expirationString);
                 string name = json.name;
                 string taxID = json.taxId;
                 string receiverName = json.receiverName;

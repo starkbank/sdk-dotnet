@@ -1,4 +1,5 @@
 ﻿using System;
+using StarkBank.Utils;
 
 namespace StarkBank
 {
@@ -21,7 +22,7 @@ namespace StarkBank
     ///     <item>Method [string]: payment method that was used. ex: "pix"</item>    
     /// </list>
     /// </summary>
-    public class InvoicePayment : Utils.SubResource
+    public class InvoicePayment : StarkCore.Utils.SubResource
     {
         public long Amount { get; }
         public string Name { get; }
@@ -65,12 +66,12 @@ namespace StarkBank
             Method = method;
         }
 
-        internal static (string resourceName, Utils.Api.ResourceMaker resourceMaker) SubResource()
+        internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) SubResource()
         {
             return (resourceName: "Payment", resourceMaker: ResourceMaker);
         }
 
-        public static Utils.SubResource ResourceMaker(dynamic json)
+        public static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
         {
             long amount = json.amount;
             string name = json.name;
