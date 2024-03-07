@@ -11,7 +11,7 @@ namespace StarkBank.Utils
 
         static string host = StarkHost.bank;
         static string apiVersion = "v2";
-        static string sdkVersion = "0.2.0";
+        static string sdkVersion = "2.11.0";
 
         public static SubResource ParseAndVerify(string content, string signature, string resourceName, Api.ResourceMaker resourceMaker, User user, string key = null)
         {

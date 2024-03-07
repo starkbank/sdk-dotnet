@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.11.0] - 2024-03-01
 ### Added
 - starkcore as dependency
 ### Changed
