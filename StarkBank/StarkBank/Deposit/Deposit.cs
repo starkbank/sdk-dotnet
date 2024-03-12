@@ -247,6 +247,41 @@ namespace StarkBank
             return (deposits, pageCursor);
         }
 
+        /// <summary>
+        /// Update Deposit entity
+        /// <br/>
+        /// Update the Deposit by passing its id to be partially or fully reversed.
+        /// <br/>
+        /// Parameters(required):
+        /// <list>
+        ///     <item>id[string]: object unique id. ex: "5656565656565656"</item>
+        /// </list>
+        /// <br/>
+        /// Parameters (optional):
+        /// <list>
+        ///     <item>amount [long integer]: The new amount of the Deposit. If the amount = 0 the Deposit will be fully reversed</item>
+        ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+        /// </list>
+        /// <br/>
+        /// Return:
+        /// <list>
+        ///     <item>target Deposit with updated attributes</item>
+        /// </list>
+        /// </summary>
+        public static Deposit Update(string id, long? amount = null, User user = null)
+        {
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Utils.Rest.PatchId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                payload: new Dictionary<string, object> {
+                    { "amount", amount },
+                },
+                user: user
+            ) as Deposit;
+        }
+
         internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
             return (resourceName: "Deposit", resourceMaker: ResourceMaker);
