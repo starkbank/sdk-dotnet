@@ -2,10 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netCoreApp2.0</TargetFramework>
-    <VersionPrefix>2.11.0</VersionPrefix>
-    <Version>2.11.0</Version>
-    <ReleaseVersion>2.11.0</ReleaseVersion>
-    <PackageVersion>2.11.0</PackageVersion>
+    <ReleaseVersion>2.12.0</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
