@@ -145,19 +145,6 @@ namespace StarkBank.Utils
             );
         }
 
-        static public JObject PostRaw(Dictionary<string, object> payload, string path, Dictionary<string, object> query, User user)
-        {
-            return StarkCore.Utils.Rest.PostRaw(
-                host: host,
-                apiVersion: apiVersion,
-                sdkVersion: sdkVersion,
-                path: path,
-                payload: payload,
-                query: query,
-                user: user
-            );
-        }
-
         public static SubResource PostSingle(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, SubResource entity = null)
         {
             return StarkCore.Utils.Rest.PostSingle(
@@ -184,5 +171,78 @@ namespace StarkBank.Utils
             );
         }
 
+        static public Response GetRaw(string path, Dictionary<string, object> query, User user, string prefix = null, bool raiseException = true)
+        {
+            return StarkCore.Utils.Rest.GetRaw(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                path: path,
+                query: query,
+                user: user,
+                prefix: prefix,
+                raiseException: raiseException
+            );
+        }
+
+        static public Response PostRaw(Dictionary<string, object> payload, string path, Dictionary<string, object> query, User user, string prefix = null, bool raiseException = true)
+        {
+            return StarkCore.Utils.Rest.PostRaw(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                path: path,
+                payload: payload,
+                query: query,
+                user: user,
+                prefix: prefix,
+                raiseException: raiseException
+            );
+        }
+
+        static public Response PatchRaw(Dictionary<string, object> payload, string path, Dictionary<string, object> query, User user, string prefix = null, bool raiseException = true)
+        {
+            return StarkCore.Utils.Rest.PatchRaw(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                path: path,
+                payload: payload,
+                query: query,
+                user: user,
+                prefix: prefix,
+                raiseException: raiseException
+            );
+        }
+
+        static public Response PutRaw(Dictionary<string, object> payload, string path, Dictionary<string, object> query, User user, string prefix = null, bool raiseException = true)
+        {
+            return StarkCore.Utils.Rest.PutRaw(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                path: path,
+                payload: payload,
+                query: query,
+                user: user,
+                prefix: prefix,
+                raiseException: raiseException
+            );
+        }
+
+        static public Response DeleteRaw(Dictionary<string, object> payload, string path, Dictionary<string, object> query, User user, string prefix = null, bool raiseException = true)
+        {
+            return StarkCore.Utils.Rest.DeleteRaw(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                path: path,
+                payload: payload,
+                query: query,
+                user: user,
+                prefix: prefix,
+                raiseException: raiseException
+            );
+        }
     }
 }

@@ -40,6 +40,7 @@
     <None Remove="Webhook\" />
     <None Remove="Workspace\" />
     <None Remove="Utils\" />
+    <None Remove="Request\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Balance\" />
@@ -74,6 +75,7 @@
     <Folder Include="Webhook\" />
     <Folder Include="Workspace\" />
     <Folder Include="Utils\" />
+    <Folder Include="Request\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

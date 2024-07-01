@@ -53,6 +53,7 @@ is as easy as sending a text message to your client!
     - [WebhookEvents](#process-webhook-events): Manage webhook events
     - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
     - [Workspaces](#create-a-new-workspace): Manage your accounts
+    - [Request](#request): Send a custom request to Stark Bank. This can be used to access features that haven't been mapped yet.
 - [Handling errors](#handling-errors)
 - [Help and Feedback](#help-and-feedback)
 
@@ -2608,6 +2609,187 @@ Workspace updatedWorkspace = Workspace.Update(
 );
 
 Console.WriteLine(updatedWorkspace);
+```
+
+# Request
+
+This resource allows you to send HTTP requests to StarkBank routes.
+
+## GET
+
+You can perform a GET request to any StarkBank route.
+
+It's possible to get a single resource using its id in the path.
+
+```c#
+using StarkBank;
+
+string exampleId = "5155165527080960"
+JObejct request = Request.Get(
+    path="/invoice/" + exampleId
+).Json();
+
+Console.WriteLine(request.ToString());
+```
+
+You can also get the specific resource log,
+
+```c#
+using StarkBank;
+
+string exampleId = "5155165527080960";
+JObejct request = Request.Get(
+    path="/invoice/log/" + exampleId
+).Json();
+
+Console.WriteLine(request.ToString());
+```
+
+This same method will be used to list all created items for the requested resource.
+
+```c#
+using StarkBank;
+
+string after = "2024-01-01";
+string before = "2024-02-01";
+string cursor = "";
+
+JObject request = Request.Get(
+        path="/invoice/",
+        query={
+            "after": after,
+            "before": before,
+            "cursor": cursor
+        }
+    ).Json();
+
+Console.WriteLine(request.ToString());
+```
+
+To list logs, you will use the same logic as for getting a single log.
+
+```c#
+using StarkBank;
+
+string after = "2024-01-01";
+string before = "2024-02-01";
+string cursor = "";
+
+JObject request = Request.Get(
+        path="/invoice/log",
+        query={
+            "after": after,
+            "before": before,
+            "cursor": cursor
+        }
+    ).Json();
+
+Console.WriteLine(request.ToString());
+```
+
+
+You can get a resource file using this method.
+
+```c#
+using StarkBank;
+
+string exampleId = "5155165527080960";
+[]byte pdf = Request.Get(
+    path="/invoice/" + exampleId + "/pdf",
+).ByteContent;
+
+System.IO.File.WriteAllBytes("request.pdf", pdf);
+```
+
+## POST
+
+You can perform a POST request to any StarkBank route.
+
+This will create an object for each item sent in your request
+
+**Note**: It's not possible to create multiple resources simultaneously. You need to send separate requests if you want to create multiple resources, such as invoices and boletos.
+
+```c#
+using StarkBank;
+
+Dictionary<string, object> data = new Dictionary<string, object>() {
+    {
+        "invoices", new List<Dictionary<string, object>>() { new Dictionary<string, object>()
+            {
+                { "amount", 100 },
+                { "name", "Iron Bank S.A." },
+                { "taxId", "20.018.183/0001-80" }
+            },
+
+        }
+    }
+};
+
+JObject request = Request.Post(
+    path="/invoice",
+    body=data,
+).Json();
+Console.WriteLine(request.ToString())
+```
+
+## PATCH
+
+You can perform a PATCH request to any StarkBank route.
+
+It's possible to update a single item of a StarkBank resource.
+```c#
+using StarkBank;
+
+string exampleId = "5155165527080960"
+
+Dictionary<string, object> data = new Dictionary<string, object>() { { "amount", 0 } };
+
+JObject request = Request.Patch(
+    path="/invoice/" + exampleId,
+    body=data,
+).Json();
+Console.WriteLine(request.ToString());
+```
+
+## PUT
+
+You can perform a PUT request to any StarkBank route.
+
+It's possible to put a single item of a StarkBank resource.
+```c#
+using StarkBank;
+
+Dictionary<string, object> data = new Dictionary<string, object>() {
+    {
+        "profiles", new List<Dictionary<string, object>>() {
+            new Dictionary<string, object>()
+            {
+                { "interval", "day" },
+                { "delay", 0 }
+            }
+        }
+    }
+};
+JObject request = Request.Put(
+    path="/split-profile",
+    body=data,
+).Json();
+Console.WriteLine(request.ToJson());
+```
+
+## DELETE
+
+You can perform a DELETE request to any StarkBank route.
+
+It's possible to delete a single item of a StarkBank resource.
+```c#
+using StarkBank;
+
+string exampleId = "5155165527080960"
+JObject request = Request.Delete(
+    path="/transfer/" + exampleId,
+).Json();
+Console.WriteLine(request.ToString());        
 ```
 
 # Handling errors
