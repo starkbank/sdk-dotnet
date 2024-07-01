@@ -157,7 +157,7 @@ namespace StarkBank
                 payload: StarkCore.Utils.Api.ApiJson(card),
                 query: parameters,
                 user: user
-            )[StarkCore.Utils.Api.LastName(resourceName)];
+            ).Json()[StarkCore.Utils.Api.LastName(resourceName)];
             return StarkCore.Utils.Api.FromApiJson(resourceMaker, json);
         }
 
@@ -196,7 +196,7 @@ namespace StarkBank
                 payload: StarkCore.Utils.Api.ApiJson(resourceMaker(card)),
                 query: parameters,
                 user: user
-            )[StarkCore.Utils.Api.LastName(resourceName)];
+            ).Json()[StarkCore.Utils.Api.LastName(resourceName)];
             return StarkCore.Utils.Api.FromApiJson(resourceMaker, json);
         }
 
