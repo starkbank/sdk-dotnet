@@ -13,6 +13,11 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- request methods
+### Changed
+- core version
+
 ## [2.12.0] - 2024-03-19
 ### Added
 - update function to Deposit resource
