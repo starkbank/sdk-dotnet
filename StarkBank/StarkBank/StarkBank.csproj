@@ -41,6 +41,10 @@
     <None Remove="Workspace\" />
     <None Remove="Utils\" />
     <None Remove="Request\" />
+    <None Remove="MerchantSession\" />
+    <None Remove="MerchantPurchase\" />
+    <None Remove="MerchantCard\" />
+    <None Remove="MerchantInstallment\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Balance\" />
@@ -76,6 +80,10 @@
     <Folder Include="Workspace\" />
     <Folder Include="Utils\" />
     <Folder Include="Request\" />
+    <Folder Include="MerchantSession\" />
+    <Folder Include="MerchantPurchase\" />
+    <Folder Include="MerchantCard\" />
+    <Folder Include="MerchantInstallment\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

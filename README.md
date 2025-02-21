@@ -49,6 +49,10 @@ is as easy as sending a text message to your client!
     - [CorporateBalance](#get-your-corporatebalance): View your corporate balance
     - [CorporateTransactions](#query-corporatetransactions): View the transactions that have affected your corporate balance
     - [CorporateEnums](#corporate-enums): Query enums related to the corporate purchases, such as merchant categories, countries and card purchase methods
+    - [MerchantSession](#merchant-session): The Merchant Session allows you to create a session prior to a purchase. Sessions are essential for defining the parameters of a purchase, including funding type, expiration, 3DS, and more.
+    - [MerchantCard](#merchant-card): The Merchant Card resource stores information about cards used in approved purchases.
+    - [MerchantInstallment](#merchant-installment): Merchant Installments are created for every installment in a purchase.
+    - [MerchantPurchase](#merchant-purchase): The Merchant Purchase section allows users to retrieve detailed information of the purchases.
     - [Webhooks](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
     - [WebhookEvents](#process-webhook-events): Manage webhook events
     - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
@@ -2344,6 +2348,178 @@ foreach (StarkBank.CardMethod method in methods)
 {
     Console.Write(method);
 }
+```
+
+## Merchant Session
+
+The Merchant Session allows you to create a session prior to a purchase.
+Sessions are essential for defining the parameters of a purchase, including funding type, expiration, 3DS, and more.
+
+## Create a MerchantSession
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+MerchantSession.AllowedInstallment installement = new MerchantSession.AllowedInstallment(
+    totalAmount: 1000,
+    count: 1
+);
+
+MerchantSession example = new MerchantSession(
+    allowedFundingTypes: new List<string> { "credit" },
+    allowedInstallments: new List<MerchantSession.AllowedInstallment> { installement },
+    challengeMode: "disabled",
+    expiration: 3600,
+    tags: new List<string> { "yourTags" }
+);
+
+MerchantSession session = MerchantSession.Create(example);
+
+Console.WriteLine(session);
+```
+
+You can create a MerchantPurchase through a MerchantSession by passing its UUID.
+**Note**: This method must be implemented in your front-end to ensure that sensitive card data does not pass through the back-end of the integration.
+
+### Create a MerchantSession Purchase
+
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+MerchantSession.Purchase purchaseExample = new MerchantSession.Purchase(
+    amount: 1000,
+    installmentCount: 1,
+    cardExpiration: "2035-01",
+    cardNumber: "5102589999999954",
+    cardSecurityCode: "123",
+    holderName: "Holder Name",
+    holderEmail: "holdeName@email.com",
+    holderPhone: "11111111111",
+    fundingType: "credit",
+    billingCountryCode: "BRA",
+    billingCity: "São Paulo",
+    billingStateCode: "SP",
+    billingStreetLine1: "Rua do Holder Name, 123",
+    billingStreetLine2: "",
+    billingZipCode: "11111-111",
+    metadata: new Dictionary<string, object> {
+        { "userAgent", "Postman" },
+        { "userIp", "255.255.255.255" },
+        { "language", "pt-BR" },
+        { "timezoneOffset", 3 },
+        { "extraData", "extraData" }
+    }
+);
+
+MerchantSession.Purchase purchase = MerchantSession.PostPurchase(id: "c32f9d2385974957a777f8351921afd7", purchaseExample);
+
+Console.WriteLine(purchase);
+```
+
+### Query MerchantSessions
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+List<MerchantSession> sessions = MerchantSession.Query(limit: 2).ToList();
+foreach (MerchantSession session in sessions)
+{
+    Console.WriteLine(session);
+}
+```
+
+### Get a MerchantSession
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+MerchantSession session = MerchantSession.Get("5911980657344512");
+Console.WriteLine(session);
+```
+## Merchant Purchase
+The Merchant Purchase section allows users to retrieve detailed information of the purchases.
+### Query MerchantPurchases
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+List<MerchantPurchase> purchases = MerchantPurchase.Query(limit: 2).ToList();
+foreach (MerchantPurchase purchase in purchases)
+{
+    Console.WriteLine(purchase);
+}
+```
+### Get a MerchantPurchase
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+MerchantPurchase purchase = MerchantPurchase.Get("5911980657344512");
+Console.WriteLine(purchase);
+```
+
+## Merchant Card
+
+The Merchant Card resource stores information about cards used in approved purchases.
+These cards can be used in new purchases without the need to create a new session.
+
+### Query MerchantCards
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+List<MerchantCard> cards = MerchantCard.Query(limit: 2).ToList();
+foreach (MerchantCard card in cards)
+{
+    Console.WriteLine(card);
+}
+```
+
+### Get a MerchantCard
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+MerchantCard card = MerchantCard.Get("5911980657344512");
+Console.WriteLine(card);
+```
+
+## Merchant Installment
+
+Merchant Installments are created for every installment in a purchase.
+These resources will track its own due payment date and settlement lifecycle.
+
+### Query MerchantInstallments
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+List<MerchantInstallment> installments = MerchantInstallment.Query(limit: 2).ToList();
+foreach (MerchantInstallment installment in installments)
+{
+    Console.WriteLine(installment);
+}
+```
+
+### Get a MerchantInstallment
+```c#
+using System;
+using System.Collections.Generic;
+using StarkBank;
+
+MerchantInstallment installment = MerchantInstallment.Get("5911980657344512");
+Console.WriteLine(installment);
 ```
 
 ## Create a webhook subscription
