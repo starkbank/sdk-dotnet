@@ -16,7 +16,7 @@ namespace StarkBank.Utils
 
         static string host = StarkHost.bank;
         static string apiVersion = "v2";
-        static string sdkVersion = "2.12.0";
+        static string sdkVersion = "2.13.0";
 
         public static IEnumerable<SubResource> GetList(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> query = null)
         {
@@ -128,6 +128,21 @@ namespace StarkBank.Utils
                 sdkVersion: sdkVersion,
                 id: id,
                 payload: payload,
+                user: user
+            );
+        }
+
+        public static SubResource PostSubResource(string id, SubResource entity = null, string resourceName = null, User user = null, string subResourceName = null, Api.ResourceMaker subResourceMaker = null)
+        {
+            return StarkCore.Utils.Rest.PostSubResource(
+                resourceName: resourceName,
+                subResourceMaker: subResourceMaker,
+                subResourceName: subResourceName,
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                id: id,
+                entity: entity,
                 user: user
             );
         }

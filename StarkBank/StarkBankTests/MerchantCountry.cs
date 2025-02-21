@@ -15,7 +15,7 @@ namespace StarkBankTests
         [Fact]
         public void Query()
         {
-            List<MerchantCountry> countries = MerchantCountry.Query(search: "token").ToList();
+            List<StarkBank.MerchantCountry> countries = MerchantCountry.Query(search: "token").ToList();
             foreach (MerchantCountry country in countries)
             {
                 Assert.NotNull(country.Code);
