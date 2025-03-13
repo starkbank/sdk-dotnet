@@ -61,7 +61,15 @@ namespace StarkBankTests
         {
             return new DynamicBrcode(
                 amount: 1000000,
+                displayDescription: "Payment for service #1234",
+                rules: new List<DynamicBrcode.Rule>() {
+                    new DynamicBrcode.Rule(
+                        key: "allowedTaxIds",
+                        value: new List<string> {"012.345.678-90"}
+                    )
+                },
                 tags: new List<string> { "custom", "tags" }
+                
             );
         }
     }

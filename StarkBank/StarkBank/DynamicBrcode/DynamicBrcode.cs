@@ -35,6 +35,8 @@ namespace StarkBank
         public List<string> Tags { get; }
         public string Uuid { get; }
         public string PictureUrl { get; }
+        public string DisplayDescription { get; }
+        public List<Rule> Rules { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
 
@@ -70,8 +72,9 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public DynamicBrcode(
-            long amount, long? expiration = null, List<string> tags = null, string id = null, string uuid = null,
-            string pictureUrl = null, DateTime? created = null, DateTime? updated = null
+            long amount, long? expiration = null, List<string> tags = null, string id = null, string uuid = null, 
+            string displayDescription = null, List<Rule> rules = null, string pictureUrl = null, 
+            DateTime? created = null, DateTime? updated = null
         ) : base(id)
         {
             Amount = amount;
@@ -79,6 +82,8 @@ namespace StarkBank
             Tags = tags;
             Uuid = uuid;
             PictureUrl = pictureUrl;
+            DisplayDescription = displayDescription;
+            Rules = rules;
             Created = created;
             Updated = updated;
         }
@@ -278,6 +283,8 @@ namespace StarkBank
             string id = json.id;
             string uuid = json.uuid;
             string pictureUrl = json.pictureUrl;
+            string displayDescription = json.displayDescription;
+            List<Rule> rules = ParseRule(json.rules);
             string createdString = json.created;
             string updatedString = json.updated;
             DateTime? created = StarkCore.Utils.Checks.CheckDateTime(createdString);
@@ -285,8 +292,21 @@ namespace StarkBank
 
             return new DynamicBrcode( 
                 amount: amount, expiration: expiration, tags: tags, id: id, uuid: uuid, pictureUrl: pictureUrl, 
-                created: created, updated: updated
+                displayDescription: displayDescription, rules: rules, created: created, updated: updated
             );
+        }
+        
+        private static List<Rule> ParseRule(dynamic json)
+        {
+            if(json is null) return null;
+
+            List<Rule> rules = new List<Rule>();
+
+            foreach (dynamic rule in json)
+            {
+                rules.Add(Rule.ResourceMaker(rule));
+            }
+            return rules;
         }
     }
 }
