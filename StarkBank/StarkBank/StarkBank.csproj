@@ -83,4 +83,12 @@
     <PackageReference Include="starkbank-ecdsa" Version="1.3.3" />
     <PackageReference Include="starkcore" Version="0.1.0" />
   </ItemGroup>
+
+  <PropertyGroup>
+        <PackageReadmeFile>NuGetREADME.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+        <None Include="../../NuGetREADME.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
 </Project>

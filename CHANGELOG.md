@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- rules and displayDescription parameters to DynamicBrcode resource
+- NuGetREADME.md file to build
 
 ## [2.13.0] - 2024-07-02
 ### Added
