@@ -22,6 +22,8 @@ namespace StarkBank
     ///     <item>Amount [integer]: DynamicBrcode value in cents. Minimum = 0 (any value will be accepted). ex: 1234 (= R$ 12.34)</item>
     ///     <item>Expiration [integer, default 3600 (1 hour)]: time interval in seconds between due date and expiration date. ex 123456789</item>
     ///     <item>Tags [list of strings, default []]: list of strings for tagging, these will be passed to the respective Deposit resource when paid</item>
+    ///     <item>DisplayDescription [string, default null]: optional description to be shown in the receiver bank interface. ex: "Payment for service #1234"</item>
+    ///     <item>Rules [List of Rules, default []]: list of dynamic brcode rules to be applied to this brcode. ex: new List<DynamicBrCode.Rule>(){new DynamicBrCode.Rule(Key: "allowedTaxIds", Value: new List<string>(){"012.345.678-90", "20.018.183/0001-80"})}</item>
     ///     <item>Uuid [string]: unique uuid returned when the DynamicBrcode is created. ex: "4e2eab725ddd495f9c98ffd97440702d"</item>
     ///     <item>PictureUrl [string]: public QR Code (png image) URL. "https://sandbox.api.starkbank.com/v2/dynamic-brcode/d3ebb1bd92024df1ab6e5a353ee799a4.png"</item>
     ///     <item>Created [DateTime]: creation datetime for the DynamicBrcode. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
@@ -35,6 +37,8 @@ namespace StarkBank
         public List<string> Tags { get; }
         public string Uuid { get; }
         public string PictureUrl { get; }
+        public string DisplayDescription { get; }
+        public List<Rule> Rules { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
 
@@ -58,6 +62,8 @@ namespace StarkBank
         /// <list>
         ///     <item>expiration [integer, default 3600 (1 hour)]: time interval in seconds between due date and expiration date. ex 123456789</item>
         ///     <item>tags [list of strings, default []]: list of strings for tagging, these will be passed to the respective Deposit resource when paid</item>
+        ///     <item>displayDescription [string, default null]: optional description to be shown in the receiver bank interface. ex: "Payment for service #1234"</item>
+        ///     <item>rules [List of Rules, default []]: list of dynamic brcode rules to be applied to this brcode. ex: new List<DynamicBrCode.Rule>(){new DynamicBrCode.Rule(Key: "allowedTaxIds", Value: new List<string>(){"012.345.678-90", "20.018.183/0001-80"})}</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
@@ -70,8 +76,9 @@ namespace StarkBank
         /// </list>
         /// </summary>
         public DynamicBrcode(
-            long amount, long? expiration = null, List<string> tags = null, string id = null, string uuid = null,
-            string pictureUrl = null, DateTime? created = null, DateTime? updated = null
+            long amount, long? expiration = null, List<string> tags = null, string id = null, string uuid = null, 
+            string displayDescription = null, List<Rule> rules = null, string pictureUrl = null, 
+            DateTime? created = null, DateTime? updated = null
         ) : base(id)
         {
             Amount = amount;
@@ -79,6 +86,8 @@ namespace StarkBank
             Tags = tags;
             Uuid = uuid;
             PictureUrl = pictureUrl;
+            DisplayDescription = displayDescription;
+            Rules = rules;
             Created = created;
             Updated = updated;
         }
@@ -278,6 +287,8 @@ namespace StarkBank
             string id = json.id;
             string uuid = json.uuid;
             string pictureUrl = json.pictureUrl;
+            string displayDescription = json.displayDescription;
+            List<Rule> rules = ParseRule(json.rules);
             string createdString = json.created;
             string updatedString = json.updated;
             DateTime? created = StarkCore.Utils.Checks.CheckDateTime(createdString);
@@ -285,8 +296,21 @@ namespace StarkBank
 
             return new DynamicBrcode( 
                 amount: amount, expiration: expiration, tags: tags, id: id, uuid: uuid, pictureUrl: pictureUrl, 
-                created: created, updated: updated
+                displayDescription: displayDescription, rules: rules, created: created, updated: updated
             );
+        }
+        
+        private static List<Rule> ParseRule(dynamic json)
+        {
+            if(json is null) return null;
+
+            List<Rule> rules = new List<Rule>();
+
+            foreach (dynamic rule in json)
+            {
+                rules.Add(Rule.ResourceMaker(rule));
+            }
+            return rules;
         }
     }
 }
