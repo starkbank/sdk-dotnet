@@ -132,6 +132,21 @@ namespace StarkBank.Utils
             );
         }
 
+        public static SubResource PostSubResource(string id, SubResource entity = null, string resourceName = null, User user = null, string subResourceName = null, Api.ResourceMaker subResourceMaker = null)
+        {
+            return StarkCore.Utils.Rest.PostSubResource(
+                resourceName: resourceName,
+                subResourceMaker: subResourceMaker,
+                subResourceName: subResourceName,
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                id: id,
+                entity: entity,
+                user: user
+            );
+        }
+
         public static SubResource DeleteId(string id, User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null)
         {
             return StarkCore.Utils.Rest.DeleteId(
