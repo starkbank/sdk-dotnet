@@ -16,6 +16,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ### Added
 - rules and displayDescription parameters to DynamicBrcode resource
 - NuGetREADME.md file to build
+- MerchantPurchase, MerchantSession, MerchantInstallment, MerchantCard resources
 
 ## [2.13.0] - 2024-07-02
 ### Added
