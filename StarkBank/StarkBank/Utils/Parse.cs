@@ -2,7 +2,6 @@
 using StarkCore;
 using EllipticCurve;
 using StarkCore.Utils;
-using System.Reflection.Metadata;
 
 namespace StarkBank.Utils
 {
