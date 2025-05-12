@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.15.0] - 2025-04-23
 ### Changed
 - netcore2.0 to netstandard2.0 and netstandard2.1
 

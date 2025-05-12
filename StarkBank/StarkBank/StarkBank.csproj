@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.14.0</Version>
-    <ReleaseVersion>2.14.0</ReleaseVersion>
-    <PackageVersion>2.14.0</PackageVersion>
+    <Version>2.15.0</Version>
+    <ReleaseVersion>2.15.0</ReleaseVersion>
+    <PackageVersion>2.15.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
