@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- Rule to parse string values
 
 ## [2.15.0] - 2025-04-23
 ### Changed

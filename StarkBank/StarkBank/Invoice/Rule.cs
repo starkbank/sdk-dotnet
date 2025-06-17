@@ -21,7 +21,7 @@ namespace StarkBank
         public partial class Rule : StarkCore.Utils.SubResource
         {
             public string Key { get; }
-            public List<string> Value { get; }
+            public object Value { get; }
 
             /// <summary>
             /// Invoice.Rule object
@@ -35,7 +35,7 @@ namespace StarkBank
             /// </list>
             /// </summary>
             ///
-            public Rule(String key, List<string> value)
+            public Rule(String key, object value)
             {
                 Key = key;
                 Value = value;
@@ -49,12 +49,22 @@ namespace StarkBank
             internal static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
             {
                 string key = json.key;
-                List<string> value = json.value?.ToObject<List<string>>();
+                object value = ParseRules(json.value);
 
                 return new Rule(
                     key: key,
                     value: value
                 );
+            }
+
+            internal static object ParseRules(object jsonValue)
+            {
+                var value = Newtonsoft.Json.Linq.JToken.FromObject(jsonValue);
+                object parsedValue = (value.Type == Newtonsoft.Json.Linq.JTokenType.String)
+                    ? (object)value.ToString()
+                    : (object)value.ToObject<List<string>>();
+
+                return parsedValue;
             }
         }
     }
