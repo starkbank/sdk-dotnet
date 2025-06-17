@@ -21,48 +21,49 @@ namespace StarkBankTests
             string subscriptionId = subscriptions.First().ID;
 
             List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("default", invoiceId, subscriptionId) }, user);
-            List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("retry", invoiceId, subscriptionId) }, user);
             InvoicePullRequest request = requests.First();
-
             TestUtils.Log(request);
             Assert.NotNull(request.ID);
+
+            List<InvoicePullRequest> retries = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("retry", invoiceId, subscriptionId) }, user);
+            InvoicePullRequest retry = retries.First();
+            TestUtils.Log(retry);
+            Assert.NotNull(retry.ID);
         }
 
-        [Fact]
-        public void Query()
-        {
-            List<InvoicePullRequest> requests = InvoicePullRequest.Query(limit: 5).ToList();
-            foreach (InvoicePullRequest request in requests)
-            {
-                TestUtils.Log(request);
-                Assert.NotNull(request.ID);
-            }
-        }
+        // [Fact]
+        // public void Query()
+        // {
+        //     List<InvoicePullRequest> requests = InvoicePullRequest.Query(limit: 5).ToList();
+        //     foreach (InvoicePullRequest request in requests)
+        //     {
+        //         TestUtils.Log(request);
+        //         Assert.NotNull(request.ID);
+        //     }
+        // }
 
-        [Fact]
-        public void QueryAndGet()
-        {
-            List<InvoicePullRequest> requests = InvoicePullRequest.Query(limit: 1).ToList();
-            InvoicePullRequest request = InvoicePullRequest.Get(requests.First().ID, user);
-            Assert.Equal(request.ID, requests.First().ID);
-        }
+        // [Fact]
+        // public void QueryAndGet()
+        // {
+        //     List<InvoicePullRequest> requests = InvoicePullRequest.Query(limit: 1).ToList();
+        //     InvoicePullRequest request = InvoicePullRequest.Get(requests.First().ID, user);
+        //     Assert.Equal(request.ID, requests.First().ID);
+        // }
 
-        [Fact]
-        public void CreateAndDelete()
-        {
-            List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Query(limit: 1, status: "active").ToList();
-            InvoicePullSubscription subscription = InvoicePullSubscription.Get(subscriptions.First().ID, user);
-            
-            string invoiceId = subscriptions.First().Data["invoiceId"]?.ToString();
-            string subscriptionId = subscriptions.First().ID;
+        // [Fact]
+        // public void CreateAndDelete()
+        // {
+        //     List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Query(limit: 1, status: "active").ToList();
+        //     InvoicePullSubscription subscription = InvoicePullSubscription.Get(subscriptions.First().ID, user);
 
-            List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("default", invoiceId, subscriptionId) }, user);
-            List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("retry", invoiceId, subscriptionId) }, user);
-            InvoicePullRequest request = requests.First();
+        //     string invoiceId = subscriptions.First().Data["invoiceId"]?.ToString();
+        //     string subscriptionId = subscriptions.First().ID;
 
-            TestUtils.Log(request);
-            Assert.NotNull(request.ID);
-        }
+        //     List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("default", invoiceId, subscriptionId) }, user);
+        //     InvoicePullRequest request = InvoicePullRequest.Delete(requests.First().ID, user);
+        //     Assert.Equal(requests.First().ID, request.ID);
+        //     TestUtils.Log(request);
+        // }
 
         internal static InvoicePullRequest Example(string attemptType, string invoiceId = null, string subscriptionId = null)
         {

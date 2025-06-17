@@ -58,6 +58,17 @@ namespace StarkBank
                 user: user
             ) as InvoicePullRequest;
         }
+
+        public static InvoicePullRequest Delete(string id, User user = null)
+        {
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                user: user
+            ) as InvoicePullRequest;
+        }
         
         public static IEnumerable<InvoicePullRequest> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
             string status = null, List<string> tags = null, List<string> ids = null, User user = null)
