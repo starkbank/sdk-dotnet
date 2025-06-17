@@ -47,6 +47,23 @@ namespace StarkBankTests
             Assert.Equal(request.ID, requests.First().ID);
         }
 
+        [Fact]
+        public void CreateAndDelete()
+        {
+            List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Query(limit: 1, status: "active").ToList();
+            InvoicePullSubscription subscription = InvoicePullSubscription.Get(subscriptions.First().ID, user);
+            
+            string invoiceId = subscriptions.First().Data["invoiceId"]?.ToString();
+            string subscriptionId = subscriptions.First().ID;
+
+            List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("default", invoiceId, subscriptionId) }, user);
+            List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("retry", invoiceId, subscriptionId) }, user);
+            InvoicePullRequest request = requests.First();
+
+            TestUtils.Log(request);
+            Assert.NotNull(request.ID);
+        }
+
         internal static InvoicePullRequest Example(string attemptType, string invoiceId = null, string subscriptionId = null)
         {
             InvoicePullRequest example = null;
