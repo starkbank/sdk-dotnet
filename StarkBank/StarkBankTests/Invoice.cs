@@ -17,6 +17,10 @@ namespace StarkBankTests
             List<Invoice> invoices = Invoice.Create(new List<Invoice>() { Example(), Example(), Example() });
             Invoice invoice = invoices.First();
             TestUtils.Log(invoice);
+            foreach (Invoice.Rule rule in invoice.Rules)
+            {
+                TestUtils.Log(rule);
+            }
             Assert.NotNull(invoices.First().ID);
             Invoice getInvoice = Invoice.Get(id: invoice.ID);
             Assert.Equal(getInvoice.ID, invoice.ID);
@@ -34,6 +38,16 @@ namespace StarkBankTests
             Invoice cancelInvoice = Invoice.Update(id: invoice.ID, status: "canceled");
             Assert.Equal(cancelInvoice.ID, invoice.ID);
             TestUtils.Log(invoice);
+        }
+
+        [Fact]
+        public void GetAndParseRules()
+        {
+            Invoice invoiceWithListRule = Invoice.Get(id: "6591209967452160");
+            Assert.Equal(typeof(List<string>), invoiceWithListRule.Rules[0].Value.GetType());
+
+            Invoice invoiceWithStringRule = Invoice.Get(id: "6582949512216576");
+            Assert.Equal(typeof(string), invoiceWithStringRule.Rules[0].Value.GetType());
         }
 
         [Fact]
