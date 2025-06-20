@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace StarkBank
 {
     /// Check out our API Documentation at https://starkbank.com/docs/api#invoice-pull-subscription
+
     public partial class InvoicePullSubscription : Resource
     {
         public long? Amount { get; }
@@ -107,6 +108,43 @@ namespace StarkBank
                 },
                 user: user
             ).Cast<InvoicePullSubscription>();
+        }
+        
+        public static (List<InvoicePullSubscription> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null, DateTime? before = null,
+                    string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+        {
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
+                    { "status", status },
+                    { "tags", tags },
+                    { "ids", ids }
+                },
+                user: user
+            );
+            List<InvoicePullSubscription> invoicePullSubscriptions = new List<InvoicePullSubscription>();
+            foreach (StarkCore.Utils.SubResource subResource in page)
+            {
+                invoicePullSubscriptions.Add(subResource as InvoicePullSubscription);
+            }
+            return (invoicePullSubscriptions, pageCursor);
+        }
+
+        public static InvoicePullSubscription Delete(string id, User user = null)
+        {
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                user: user
+            ) as InvoicePullSubscription;
         }
 
         internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()

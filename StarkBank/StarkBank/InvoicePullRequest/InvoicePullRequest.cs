@@ -58,20 +58,8 @@ namespace StarkBank
                 user: user
             ) as InvoicePullRequest;
         }
-
-        public static InvoicePullRequest Delete(string id, User user = null)
-        {
-            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.DeleteId(
-                resourceName: resourceName,
-                resourceMaker: resourceMaker,
-                id: id,
-                user: user
-            ) as InvoicePullRequest;
-        }
         
-        public static IEnumerable<InvoicePullRequest> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+        public static IEnumerable<InvoicePullRequest> Query(int? limit = null, DateTime? after = null, DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
         {
             (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
@@ -87,6 +75,42 @@ namespace StarkBank
                 },
                 user: user
             ).Cast<InvoicePullRequest>();
+        }
+
+        public static (List<InvoicePullRequest> page, string pageCursor) Page (string cursor = null, int? limit = null, DateTime? after = null, DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+        {
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: new Dictionary<string, object> {
+                    { "cursor", cursor },
+                    { "limit", limit },
+                    { "after", new StarkCore.Utils.StarkDate(after) },
+                    { "before", new StarkCore.Utils.StarkDate(before) },
+                    { "status", status },
+                    { "tags", tags },
+                    { "ids", ids }
+                },
+                user: user
+            );
+            List<InvoicePullRequest> invoicePullRequests = new List<InvoicePullRequest>();
+            foreach (StarkCore.Utils.SubResource subResource in page)
+            {
+                invoicePullRequests.Add(subResource as InvoicePullRequest);
+            }
+            return (invoicePullRequests, pageCursor);
+        }
+
+        public static InvoicePullRequest Delete(string id, User user = null)
+        {
+            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+            return Rest.DeleteId(
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                id: id,
+                user: user
+            ) as InvoicePullRequest;
         }
 
         internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
