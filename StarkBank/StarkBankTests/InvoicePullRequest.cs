@@ -14,11 +14,17 @@ namespace StarkBankTests
         [Fact]
         public void CreateAndRetry()
         {
-            List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Query(limit: 1, status: "active").ToList();
-            InvoicePullSubscription subscription = InvoicePullSubscription.Get(subscriptions.First().ID, user);
-            
-            string invoiceId = subscriptions.First().Data["invoiceId"]?.ToString();
+            List<Invoice> invoices = Invoice.Create(new List<Invoice>() { Example() });
+            string invoiceId = invoices.First().ID;
+            Console.WriteLine("===========================================================");
+            Console.WriteLine($"Created invoice with ID: {invoiceId}");
+            Console.WriteLine("===========================================================");
+
+            List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Create(new List<InvoicePullSubscription> { Example("push") }, user);
             string subscriptionId = subscriptions.First().ID;
+            Console.WriteLine("===========================================================");
+            Console.WriteLine($"Created subscription with ID: {subscriptionId}");
+            Console.WriteLine("===========================================================");
 
             List<InvoicePullRequest> requests = InvoicePullRequest.Create(new List<InvoicePullRequest> { Example("default", invoiceId, subscriptionId) }, user);
             InvoicePullRequest request = requests.First();
@@ -89,6 +95,71 @@ namespace StarkBankTests
                 );
             }
             return example;
+        }
+
+        internal static Invoice Example()
+        {
+            return new Invoice(
+                amount: 0,
+                due: DateTime.Now.AddDays(10),
+                name: "Random Company",
+                taxID: "012.345.678-90",
+                fine: 0.00,
+                interest: 0.00,
+                tags: new List<string> { "custom", "tags" },
+                descriptions: new List<Dictionary<string, object>>() {
+                    new Dictionary<string, object> {
+                        {"key", "product A"},
+                        {"value", "small"}
+                    },
+                    new Dictionary<string, object> {
+                        {"key", "product B"},
+                        {"value", "medium"}
+                    }
+                },
+                discounts: new List<Dictionary<string, object>>() {
+                    new Dictionary<string, object> {
+                        {"percentage", 5},
+                        {"due", DateTime.Now.AddDays(1)}
+                    },
+                    new Dictionary<string, object> {
+                        {"percentage", 3.5},
+                        {"due", DateTime.Now.AddDays(2)}
+                    }
+                },
+                rules: new List<Invoice.Rule>() {
+                    new Invoice.Rule(
+                        key: "allowedTaxIds",
+                        value: new List<string> {"012.345.678-90", "45.059.493/0001-73"}
+                    )
+                }
+            );
+        }
+
+        internal static InvoicePullSubscription Example(string type)
+        {
+            return new InvoicePullSubscription(
+                amount: 0,
+                amountMinLimit: 5000,
+                data: new Dictionary<string, object> {
+                {"accountNumber", "9123900000"},
+                {"bankCode", "05097757"},
+                {"branchCode", "1126"},
+                {"taxId", "20.018.183/0001-80"}
+                },
+                displayDescription: "Dragon Travel Fare",
+                externalID: Guid.NewGuid().ToString(),
+                interval: "month",
+                name: "John Snow",
+                pullMode: "manual",
+                pullRetryLimit: 3,
+                start: DateTime.Today.Date.AddDays(1),
+                end: DateTime.Today.Date.AddDays(31),
+                referenceCode: "contract-12345",
+                tags: new List<string>(),
+                taxID: "012.345.678-90",
+                type: type
+            );
         }
     }
 }

@@ -14,57 +14,63 @@ namespace StarkBankTests
         [Fact]
         public void CreatePush()
         {
-            List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Create(new List<InvoicePullSubscription> { Example("push") }, user);
+            string type = "push";
+            List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Create(new List<InvoicePullSubscription> { Example(type) }, user);
             InvoicePullSubscription subscription = subscriptions.First();
-            TestUtils.Log(subscription);
             Assert.NotNull(subscription.ID);
             Assert.NotNull(subscription.Name);
             Assert.NotNull(subscription.TaxID);
+            Assert.Equal(type, subscription.Type);
+            Console.WriteLine($"Created (type = \"{type}\")");
         }
 
         [Fact]
         public void CreateQrCode()
         {
+            string type = "qrcode";
             List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Create(new List<InvoicePullSubscription> { Example("qrcode") }, user);
             InvoicePullSubscription subscription = subscriptions.First();
-            TestUtils.Log(subscription);
             Assert.NotNull(subscription.ID);
             Assert.NotNull(subscription.Name);
             Assert.NotNull(subscription.TaxID);
+            Console.WriteLine($"Created (type = \"{type}\")");
         }
 
         [Fact]
         public void CreateQrCodeAndPayment()
         {
+            string type = "qrcodeAndPayment";
             List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Create(new List<InvoicePullSubscription> { Example("qrcodeAndPayment") }, user);
             InvoicePullSubscription subscription = subscriptions.First();
-            TestUtils.Log(subscription);
             Assert.NotNull(subscription.ID);
             Assert.NotNull(subscription.Name);
             Assert.NotNull(subscription.TaxID);
+            Console.WriteLine($"Created (type = \"{type}\")");
         }
 
         [Fact]
         public void CreatePaymentAndOrQrCode()
         {
+            string type = "paymentAndOrQrcode";
             List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Create(new List<InvoicePullSubscription> { Example("paymentAndOrQrcode") }, user);
             InvoicePullSubscription subscription = subscriptions.First();
-            TestUtils.Log(subscription);
             Assert.NotNull(subscription.ID);
             Assert.NotNull(subscription.Name);
             Assert.NotNull(subscription.TaxID);
+            Console.WriteLine($"Created (type = \"{type}\")");
         }
 
         [Fact]
         public void Query()
         {
             List<InvoicePullSubscription> subscriptions = InvoicePullSubscription.Query(limit: 5).ToList();
+            Console.WriteLine("List of IDs:");
             foreach (InvoicePullSubscription subscription in subscriptions)
             {
-                TestUtils.Log(subscription);
                 Assert.NotNull(subscription.ID);
                 Assert.NotNull(subscription.Name);
                 Assert.NotNull(subscription.TaxID);
+                Console.WriteLine($"- " + subscription.ID);
             }
         }
 
@@ -76,6 +82,7 @@ namespace StarkBankTests
             Assert.Equal(subscription.ID, subscriptions.First().ID);
             Assert.Equal(subscription.Name, subscriptions.First().Name);
             Assert.Equal(subscription.TaxID, subscriptions.First().TaxID);
+            Console.WriteLine("ID: " + subscription.ID);
         }
 
         internal static InvoicePullSubscription Example(string type)
@@ -99,7 +106,7 @@ namespace StarkBankTests
                     pullMode: "manual",
                     pullRetryLimit: 3,
                     start: DateTime.Today.Date.AddDays(1),
-                    end: DateTime.Today.Date.AddDays(10),
+                    end: DateTime.Today.Date.AddDays(31),
                     referenceCode: "contract-12345",
                     tags: new List<string>(),
                     taxID: "012.345.678-90",
@@ -118,7 +125,7 @@ namespace StarkBankTests
                     pullMode: "manual",
                     pullRetryLimit: 3,
                     start: DateTime.Today.Date.AddDays(1),
-                    end: DateTime.Today.Date.AddDays(10),
+                    end: DateTime.Today.Date.AddDays(31),
                     referenceCode: "contract-12345",
                     tags: new List<string>(),
                     taxID: "012.345.678-90",
@@ -140,7 +147,7 @@ namespace StarkBankTests
                     pullMode: "manual",
                     pullRetryLimit: 3,
                     start: DateTime.Today.Date.AddDays(1),
-                    end: DateTime.Today.Date.AddDays(10),
+                    end: DateTime.Today.Date.AddDays(31),
                     referenceCode: "contract-12345",
                     tags: new List<string>(),
                     taxID: "012.345.678-90",
@@ -165,7 +172,7 @@ namespace StarkBankTests
                     pullMode: "manual",
                     pullRetryLimit: 3,
                     start: DateTime.Today.Date.AddDays(1),
-                    end: DateTime.Today.Date.AddDays(10),
+                    end: DateTime.Today.Date.AddDays(31),
                     referenceCode: "contract-12345",
                     tags: new List<string>(),
                     taxID: "012.345.678-90",
