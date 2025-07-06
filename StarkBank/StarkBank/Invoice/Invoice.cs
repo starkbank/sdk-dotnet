@@ -40,6 +40,7 @@ namespace StarkBank
     ///     <item>TransactionIds [list of strings]: ledger transaction ids linked to this Invoice (if there are more than one, all but the first are reversals or failed reversal chargebacks). ex: ["19827356981273"]</item>
     ///     <item>Created [DateTime]: creation datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
     ///     <item>Updated [DateTime]: latest update datetime for the Invoice. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Splits [list of StarkBank.Split]: Array of Split objects to indicate payment receivers</item>
     /// </list>
     /// </summary>
     public partial class Invoice : Resource
@@ -67,6 +68,7 @@ namespace StarkBank
         public List<string> TransactionIds { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
+        public List<Split> Splits { get; }
 
         /// <summary>
         /// Invoice object
@@ -94,6 +96,7 @@ namespace StarkBank
         ///     <item>rules [list of StarkBank.Invoice.Rule objects, default null]: list of Invoice.Rule objects for modifying invoice behavior. ex: [Invoice.Rule(key="allowedTaxIds", value=["012.345.678-90", "45.059.493/0001-73"])]</item>
         ///     <item>tags [list of strings, default null]: list of strings for tagging</item>
         ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
+        ///     <item>splits [list of Split]: array of Split objects to indicate payment receivers</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
@@ -116,7 +119,7 @@ namespace StarkBank
         public Invoice(long amount, string name, string taxID, DateTime? due = null, long? expiration = null, double? fine = null, double? interest = null,
             List<string> tags = null, List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null, List<Rule> rules = null,
             long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null,
-            string id = null, string brcode = null, string pdfUrl = null, string link = null, int? fee = null, string status = null, List<string> transactionIds = null, DateTime? created = null, DateTime? updated = null) : base(id)
+            string id = null, string brcode = null, string pdfUrl = null, string link = null, int? fee = null, string status = null, List<string> transactionIds = null, DateTime? created = null, DateTime? updated = null, List<Split> splits = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -141,6 +144,7 @@ namespace StarkBank
             TransactionIds = transactionIds;
             Created = created;
             Updated = updated;
+            Splits = splits;
         }
 
         internal new Dictionary<string, object> ToJson()
@@ -514,16 +518,29 @@ namespace StarkBank
             List<string> transactionIds = json.transactionIds.ToObject<List<string>>();
             DateTime? created = StarkCore.Utils.Checks.CheckDateTime(createdString);
             DateTime? updated = StarkCore.Utils.Checks.CheckDateTime(updatedString);
+            List<Split> splits = ParseSplits(json.splits);
 
             return new Invoice(
                 amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine, interest: interest,
                 tags: tags, descriptions: descriptions, discounts: discounts, nominalAmount: nominalAmount, fineAmount: fineAmount,
                 interestAmount: interestAmount, discountAmount: discountAmount, id: id, brcode: brcode, pdfUrl: pdf, link: link,
-                rules: rules, fee: fee, status: status, transactionIds: transactionIds, created: created, updated: updated
+                rules: rules, fee: fee, status: status, transactionIds: transactionIds, created: created, updated: updated, splits: splits
             );
 
         }
 
+        private static List<Split> ParseSplits(dynamic json)
+        {
+            if (json is null) return null;
+
+            List<Split> splits = new List<Split>();
+
+            foreach (dynamic split in json)
+            {
+                splits.Add(Split.ResourceMaker(split));
+            }
+            return splits;
+        }
         private static List<Rule> ParseRule(dynamic json)
         {
             if(json is null) return null;
