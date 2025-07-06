@@ -43,6 +43,7 @@ namespace StarkBank
     ///     <item>WorkspaceID [string]: ID of the Workspace where this Boleto was generated. ex: "4545454545454545"</item>
     ///     <item>OurNumber [string]: Reference number registered at the settlement bank. ex:"10131474"</item>
     ///     <item>Created [DateTime]: creation datetime for the Boleto. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
+    ///     <item>Splits [list of StarkBank.Split]: Array of Split objects to indicate payment receivers</item>
     /// </list>
     /// </summary>
     public partial class Boleto : Resource
@@ -73,6 +74,7 @@ namespace StarkBank
         public string WorkspaceID { get; }
         public string OurNumber { get; }
         public DateTime? Created { get; }
+        public List<Split> Splits { get; }
 
         /// <summary>
         /// Boleto object
@@ -105,6 +107,7 @@ namespace StarkBank
         ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
         ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
         ///     <item>tags [list of strings]: list of strings for tagging</item>
+        ///     <item>splits [list of Split]: array of Split objects to indicate payment receivers</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
@@ -123,10 +126,10 @@ namespace StarkBank
         public Boleto(long amount, string name, string taxID, string streetLine1, string streetLine2, string district,
             string city, string stateCode, string zipCode, DateTime? due = null, double? fine = null, double? interest = null,
             int? overdueLimit = null, string receiverName = null, string receiverTaxID = null, List<string> tags = null,
-            List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null, 
-            string id = null, int? fee = null, string line = null, string barCode = null, string status = null, 
-            List<string> transactionIds = null, string workspaceID = null, DateTime? created = null, 
-            string ourNumber = null) : base(id)
+            List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null,
+            string id = null, int? fee = null, string line = null, string barCode = null, string status = null,
+            List<string> transactionIds = null, string workspaceID = null, DateTime? created = null,
+            string ourNumber = null, List<Split> splits = null) : base(id)
         {
             Amount = amount;
             Name = name;
@@ -154,6 +157,7 @@ namespace StarkBank
             WorkspaceID = workspaceID;
             OurNumber = ourNumber;
             Created = created;
+            Splits = splits;
         }
 
         internal new Dictionary<string, object> ToJson()
@@ -455,6 +459,7 @@ namespace StarkBank
             DateTime? created = StarkCore.Utils.Checks.CheckDateTime(createdString);
             string workspaceID = json.workspaceId;
             string ourNumber = json.ourNumber;
+            List<Split> splits = ParseSplits(json.splits);
 
             return new Boleto(
                 amount: amount, name: name, taxID: taxID, streetLine1: streetLine1, streetLine2: streetLine2,
@@ -462,8 +467,21 @@ namespace StarkBank
                 interest: interest, overdueLimit: overdueLimit, receiverName: receiverName, receiverTaxID: receiverTaxID,
                 tags: tags, descriptions: descriptions, discounts: discounts, id: id, fee: fee, line: line,
                 barCode: barCode, status: status, transactionIds: transactionIds, workspaceID: workspaceID,
-                created: created, ourNumber: ourNumber
+                created: created, ourNumber: ourNumber, splits: splits
             );
+        }
+
+        private static List<Split> ParseSplits(dynamic json)
+        {
+            if (json is null) return null;
+
+            List<Split> splits = new List<Split>();
+
+            foreach (dynamic split in json)
+            {
+                splits.Add(Split.ResourceMaker(split));
+            }
+            return splits;
         }
     }
 }
