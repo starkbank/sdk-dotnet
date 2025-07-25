@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.16.1] - 2025-07-25
 ### Fixed
 - end and due attribute to InvoicePullSubscription
 - webhook event parser for invoice-pull-request and invoice-pull-subscription types
