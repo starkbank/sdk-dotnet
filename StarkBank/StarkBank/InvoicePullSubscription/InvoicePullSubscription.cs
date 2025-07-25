@@ -347,13 +347,8 @@ namespace StarkBank
             List<string> tags = json.tags != null ? json.tags.ToObject<List<string>>() : null;
             string taxID = json.taxId;
             string type = json.type;
-            DateTime? due = null;
-
-            if (json.due != "")
-            {
-                due = StarkCore.Utils.Checks.CheckDateTime((string)json.due);
-            }
-            DateTime? end = StarkCore.Utils.Checks.CheckDateTime((string)json.end);
+            DateTime? due = (string)json.due == "" ? null : StarkCore.Utils.Checks.CheckNullableDateTime((string)json.due);
+            DateTime? end = (string)json.end == "" ? null : StarkCore.Utils.Checks.CheckNullableDateTime((string)json.end);
             DateTime? start = StarkCore.Utils.Checks.CheckDateTime((string)json.start);
             DateTime? updated = StarkCore.Utils.Checks.CheckDateTime((string)json.updated);
             DateTime? created = StarkCore.Utils.Checks.CheckDateTime((string)json.created);

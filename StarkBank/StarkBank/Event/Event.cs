@@ -299,6 +299,10 @@ namespace StarkBank
                 log = TaxPayment.Log.ResourceMaker(json.log);
             } else if (subscription == "darf-payment") {
                 log = DarfPayment.Log.ResourceMaker(json.log);
+            } else if (subscription == "invoice-pull-subscription") {
+                log = InvoicePullSubscription.Log.ResourceMaker(json.log);
+            } else if (subscription == "invoice-pull-request") {
+                log = InvoicePullRequest.Log.ResourceMaker(json.log);
             }
 
             return new Event(
