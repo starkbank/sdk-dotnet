@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- end and due attribute to InvoicePullSubscription
+- webhook event parser for invoice-pull-request and invoice-pull-subscription types
 
 ## [2.16.0] - 2025-07-08
 ### Added
