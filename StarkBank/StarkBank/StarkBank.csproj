@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.16.2</Version>
-    <ReleaseVersion>2.16.2</ReleaseVersion>
-    <PackageVersion>2.16.2</PackageVersion>
+    <PackageId>TarcBank</PackageId>
+    <Version>2.16.3</Version>
+    <ReleaseVersion>2.16.3</ReleaseVersion>
+    <PackageVersion>2.16.3</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
