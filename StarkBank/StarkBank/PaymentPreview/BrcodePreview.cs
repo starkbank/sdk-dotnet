@@ -25,6 +25,7 @@ namespace StarkBank
         ///     <item>ReductionAmount [long]: Current value reduction value in cents that this payment is expecting. ex: 123 (= R$1,23)</item>
         ///     <item>DiscountAmount [long]: Current discount value in cents that this payment is expecting. ex: 123 (= R$1,23)</item>
         ///     <item>ReconciliationID [string]: Reconciliation ID linked to this payment. ex: "txId", "payment-123"</item>
+        ///     <item>KeyID [string]: Payment receiver Pix key. ex: "tony@starkbank.com", "72246143004", "20018183000180", "+5511988887777", "b6295ee1-f054-47d1-9e90-ee57b74f60d9"</item>
         /// </list>
         /// </summary>
         public class BrcodePreview : StarkCore.Utils.SubResource
@@ -42,6 +43,7 @@ namespace StarkBank
             public long ReductionAmount { get; }
             public long DiscountAmount { get; }
             public string ReconciliationID { get; }
+            public string KeyID { get; }
 
             /// <summary>
             /// BrcodePreview object
@@ -65,10 +67,11 @@ namespace StarkBank
             ///     <item>ReconciliationID [string]: Reconciliation ID linked to this payment. ex: "txId", "payment-123"</item>
             /// </list>
             /// </summary>
-            public BrcodePreview(string status, string name, string taxID, string bankCode, 
+            public BrcodePreview(string status, string name, string taxID, string bankCode,
                 string accountType, bool allowChange, long amount, long nominalAmount, long interestAmount,
-                long fineAmount, long reductionAmount, long discountAmount, string reconciliationID
-            ) {
+                long fineAmount, long reductionAmount, long discountAmount, string reconciliationID, string keyID
+            )
+            {
                 Status = status;
                 Name = name;
                 TaxID = taxID;
@@ -82,6 +85,7 @@ namespace StarkBank
                 ReductionAmount = reductionAmount;
                 DiscountAmount = discountAmount;
                 ReconciliationID = reconciliationID;
+                KeyID = keyID;
             }
 
             internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) SubResource()
@@ -104,12 +108,14 @@ namespace StarkBank
                 long reductionAmount = json.reductionAmount;
                 long discountAmount = json.discountAmount;
                 string reconciliationID = json.reconciliationId;
+                string keyID = json.keyId;
 
                 return new BrcodePreview(
                     status: status, name: name, taxID: taxID, bankCode: bankCode,
                     accountType: accountType, allowChange: allowChange, amount: amount,
                     nominalAmount: nominalAmount, interestAmount: interestAmount, fineAmount: fineAmount,
-                    reductionAmount: reductionAmount, discountAmount: discountAmount, reconciliationID: reconciliationID
+                    reductionAmount: reductionAmount, discountAmount: discountAmount,
+                    reconciliationID: reconciliationID, keyID: keyID
                 );
             }
         }

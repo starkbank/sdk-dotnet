@@ -46,6 +46,7 @@ namespace StarkBank
         public string Type { get; }
         public List<string> TransactionIds { get; }
         public int? Fee { get; }
+        public Dictionary<string, object> Metadata { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
 
@@ -85,7 +86,7 @@ namespace StarkBank
         /// </summary>
         public BrcodePayment(string brcode, string taxID, string description, string id = null, long? amount = null,
             DateTime? scheduled = null, List<string> tags = null, List<Rule> rules = null, string name = null, 
-            string status = null, string type = null, List<string> transactionIds = null, int? fee = null, 
+            string status = null, string type = null, List<string> transactionIds = null, int? fee = null, Dictionary<string, object> metadata = null,
             DateTime? created = null, DateTime? updated = null
         ) : base(id)
         {
@@ -101,6 +102,7 @@ namespace StarkBank
             Type = type;
             TransactionIds = transactionIds;
             Fee = fee;
+            Metadata = metadata;
             Created = created;
             Updated = updated;
         }
@@ -377,6 +379,7 @@ namespace StarkBank
             List<string> transactionIds = new List<string>();
             transactionIds = json.transactionIds?.ToObject<List<string>>();
             int? fee = json.fee;
+            Dictionary<string, object> metadata = json.metadata.ToObject<Dictionary<string, object>>();
             string createdString = json.created;
             DateTime? created = StarkCore.Utils.Checks.CheckNullableDateTime(createdString);
             string updatedString = json.updated;
@@ -384,7 +387,7 @@ namespace StarkBank
 
             return new BrcodePayment(
                 id: id, brcode: brcode, taxID: taxID, description: description, amount: amount, scheduled: scheduled, tags: tags,
-                rules: rules, name: name, status: status, type: type, transactionIds: transactionIds, fee: fee, created: created, 
+                rules: rules, name: name, status: status, type: type, transactionIds: transactionIds, fee: fee, metadata: metadata, created: created,
                 updated: updated
             );
         }
