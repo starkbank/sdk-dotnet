@@ -22,6 +22,7 @@ namespace StarkBank
     ///     <item>Scheduled [DateTime]: payment scheduled datetime. ex: new DateTime(2020, 3, 10)</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>Rules [list of BrcodePayment.Rule objects, default null]: list of rules to overwrite default behavior. ex: new List<BrcodePayment.Rule>() {new BrcodePayment.Rule("resendingLimit", 5)}</item>
+    ///     <item>Metadata [Dictionary object]: object used to store additional information about the Transfer object.</item>
     ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
     ///     <item>Name [string]: receiver name. ex: "Jon Snow"</item>
     ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
@@ -41,6 +42,7 @@ namespace StarkBank
         public DateTime? Scheduled { get; }
         public List<string> Tags { get; }
         public List<Rule> Rules { get; }
+        public Dictionary<string, object> Metadata { get; }
         public string Name { get; }
         public string Status { get; }
         public string Type { get; }
@@ -79,13 +81,14 @@ namespace StarkBank
         ///     <item>type [string]: brcode type. ex: "static" or "dynamic"</item>
         ///     <item>fee [integer]: fee charged when BrcodePayment is created. ex: 200 (= R$ 2.00)</item>
         ///     <item>transactionIds [list of strings]: ledger transaction ids linked to this payment. ex: ["19827356981273"]</item>
+        ///     <item>Metadata [Dictionary object]: object used to store additional information about the Transfer object.</item>
         ///     <item>created [DateTime]: creation datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         ///     <item>updated [DateTime]: latest udpate datetime for the payment. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
         /// </list>
         /// </summary>
         public BrcodePayment(string brcode, string taxID, string description, string id = null, long? amount = null,
-            DateTime? scheduled = null, List<string> tags = null, List<Rule> rules = null, string name = null, 
-            string status = null, string type = null, List<string> transactionIds = null, int? fee = null, 
+            DateTime? scheduled = null, List<string> tags = null, List<Rule> rules = null, Dictionary<string, object> metadata = null,
+            string name = null, string status = null, string type = null, List<string> transactionIds = null, int? fee = null, 
             DateTime? created = null, DateTime? updated = null
         ) : base(id)
         {
@@ -96,6 +99,7 @@ namespace StarkBank
             Scheduled = scheduled;
             Tags = tags;
             Rules = rules;
+            Metadata = metadata;
             Name = name;
             Status = status;
             Type = type;
@@ -370,6 +374,7 @@ namespace StarkBank
             DateTime? scheduled = StarkCore.Utils.Checks.CheckNullableDateTime(scheduledString);
             List<string> tags = new List<string>();
             List<Rule> rules = ParseRule(json.rules);
+            Dictionary<string, object> metadata = json.metadata?.ToObject<Dictionary<string, object>>();
             string name = json.name;
             tags = json.tags?.ToObject<List<string>>();
             string status = json.status;
@@ -384,8 +389,8 @@ namespace StarkBank
 
             return new BrcodePayment(
                 id: id, brcode: brcode, taxID: taxID, description: description, amount: amount, scheduled: scheduled, tags: tags,
-                rules: rules, name: name, status: status, type: type, transactionIds: transactionIds, fee: fee, created: created, 
-                updated: updated
+                rules: rules, metadata: metadata, name: name, status: status, type: type, transactionIds: transactionIds, fee: fee,
+                created: created, updated: updated
             );
         }
 
