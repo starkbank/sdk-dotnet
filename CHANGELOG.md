@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.17.0] - 2025-08-27
 ### Added
 - metadata attribute to BrcodePayment
 
