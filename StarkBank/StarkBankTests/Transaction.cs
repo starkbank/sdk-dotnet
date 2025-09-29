@@ -12,18 +12,14 @@ namespace StarkBankTests
         public readonly User user = TestUser.SetDefaultProject();
 
         [Fact]
-        public void CreateAndGet()
+        public void Create()
         {
-            List<Transaction> transactions = Transaction.Create(new List<Transaction>() { Example() });
-            Transaction transaction = transactions.First();
-            Assert.NotNull(transactions.First().ID);
-            Transaction deleteTransaction = Transaction.Get(id: transaction.ID);
-            Assert.Equal(deleteTransaction.ID, transaction.ID);
-            TestUtils.Log(transaction);
+            var transaction = Assert.Throws<Exception>(() => Transaction.Create(new List<Transaction>() { Example() }));
+            Assert.Contains("Function deprecated since v2.18.0", transaction.Message);
         }
 
         [Fact]
-        public void Query()
+        public void QueryAndGet()
         {
             List<Transaction> transactions = Transaction.Query(limit: 101).ToList();
             Assert.Equal(101, transactions.Count);
@@ -32,6 +28,8 @@ namespace StarkBankTests
             {
                 TestUtils.Log(transaction);
                 Assert.NotNull(transaction.ID);
+                Transaction deleteTransaction = Transaction.Get(id: transaction.ID);
+                Assert.Equal(deleteTransaction.ID, transaction.ID);
             }
         }
 
