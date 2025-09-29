@@ -113,15 +113,10 @@ namespace StarkBank
         ///     <item>list of Transaction objects with updated attributes</item>
         /// </list>
         /// </summary>
+        [Obsolete("Function deprecated since v2.18.0")]
         public static List<Transaction> Create(List<Transaction> transactions, User user = null)
         {
-            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
-                resourceName: resourceName,
-                resourceMaker: resourceMaker,
-                entities: transactions,
-                user: user
-            ).ToList().ConvertAll(o => (Transaction)o);
+            throw new Exception("Function deprecated since v2.18.0");
         }
 
         /// <summary>
@@ -144,15 +139,10 @@ namespace StarkBank
         ///     <item>list of Transaction objects with updated attributes</item>
         /// </list>
         /// </summary>
+        [Obsolete("Function deprecated since v2.18.0")]
         public static List<Transaction> Create(List<Dictionary<string, object>> transactions, User user = null)
         {
-            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
-            return Rest.Post(
-                resourceName: resourceName,
-                resourceMaker: resourceMaker,
-                entities: transactions,
-                user: user
-            ).ToList().ConvertAll(o => (Transaction)o);
+            throw new Exception("Function deprecated since v2.18.0");
         }
 
         /// <summary>
