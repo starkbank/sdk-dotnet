@@ -16,7 +16,7 @@ namespace StarkBank.Utils
 
         static string host = StarkHost.bank;
         static string apiVersion = "v2";
-        static string sdkVersion = "2.17.0";
+        static string sdkVersion = "2.18.0";
 
         public static IEnumerable<SubResource> GetList(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, Dictionary<string, object> query = null)
         {
