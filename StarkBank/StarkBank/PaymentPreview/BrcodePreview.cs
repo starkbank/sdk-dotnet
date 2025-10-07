@@ -25,6 +25,11 @@ namespace StarkBank
         ///     <item>ReductionAmount [long]: Current value reduction value in cents that this payment is expecting. ex: 123 (= R$1,23)</item>
         ///     <item>DiscountAmount [long]: Current discount value in cents that this payment is expecting. ex: 123 (= R$1,23)</item>
         ///     <item>ReconciliationID [string]: Reconciliation ID linked to this payment. ex: "txId", "payment-123"</item>
+        ///     <item>CashAmount [long]: Amount to be withdrawn from the cashier in cents. Example: 1000 (= R$ 10.00)</item>
+        ///     <item>CashierBankCode [string]: Cashier's bank code. Example: "20018183"</item>
+        ///     <item>CashierType [string]: Cashier's type. Options: "merchant", "participant", and "other"</item>
+        ///     <item>Description [string]: Additional information presented in statement.</item>
+        ///     <item>KeyId [string]: Receiver's Pix Key id. Can be a taxId (CPF/CNPJ), a phone number, an email or an alphanumeric sequence (EVP). ex: "+5511989898989"</item>
         /// </list>
         /// </summary>
         public class BrcodePreview : StarkCore.Utils.SubResource
@@ -42,6 +47,11 @@ namespace StarkBank
             public long ReductionAmount { get; }
             public long DiscountAmount { get; }
             public string ReconciliationID { get; }
+            public long CashAmount { get; }
+            public string CashierBankCode { get; }
+            public string CashierType { get; }
+            public string Description { get; }
+            public string KeyId { get; }
 
             /// <summary>
             /// BrcodePreview object
@@ -63,12 +73,19 @@ namespace StarkBank
             ///     <item>ReductionAmount [long]: Current value reduction value in cents that this payment is expecting. ex: 123 (= R$1,23)</item>
             ///     <item>DiscountAmount [long]: Current discount value in cents that this payment is expecting. ex: 123 (= R$1,23)</item>
             ///     <item>ReconciliationID [string]: Reconciliation ID linked to this payment. ex: "txId", "payment-123"</item>
+            ///     <item>CashAmount [long]: Amount to be withdrawn from the cashier in cents. Example: 1000 (= R$ 10.00)</item>
+            ///     <item>CashierBankCode [string]: Cashier's bank code. Example: "20018183"</item>
+            ///     <item>CashierType [string]: Cashier's type. Options: "merchant", "participant", and "other"</item>
+            ///     <item>Description [string]: Additional information presented in statement.</item>
+            ///     <item>KeyId [string]: Receiver's Pix Key id. Can be a taxId (CPF/CNPJ), a phone number, an email or an alphanumeric sequence (EVP). ex: "+5511989898989"</item>
             /// </list>
             /// </summary>
-            public BrcodePreview(string status, string name, string taxID, string bankCode, 
-                string accountType, bool allowChange, long amount, long nominalAmount, long interestAmount,
-                long fineAmount, long reductionAmount, long discountAmount, string reconciliationID
-            ) {
+            public BrcodePreview(string status, string name, string taxID, string bankCode, string accountType,
+                bool allowChange, long amount, long nominalAmount, long interestAmount, long fineAmount,
+                long reductionAmount, long discountAmount, string reconciliationID, long cashAmount,
+                string cashierBankCode, string cashierType, string description, string keyId
+            )
+            {
                 Status = status;
                 Name = name;
                 TaxID = taxID;
@@ -82,6 +99,11 @@ namespace StarkBank
                 ReductionAmount = reductionAmount;
                 DiscountAmount = discountAmount;
                 ReconciliationID = reconciliationID;
+                CashAmount = cashAmount;
+                CashierBankCode = cashierBankCode;
+                CashierType = cashierType;
+                Description = description;
+                KeyId = keyId;
             }
 
             internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) SubResource()
@@ -104,12 +126,18 @@ namespace StarkBank
                 long reductionAmount = json.reductionAmount;
                 long discountAmount = json.discountAmount;
                 string reconciliationID = json.reconciliationId;
+                long cashAmount = json.cashAmount;
+                string cashierBankCode = json.cashierBankCode;
+                string cashierType = json.cashierType;
+                string description = json.description;
+                string keyId = json.keyId;
 
                 return new BrcodePreview(
-                    status: status, name: name, taxID: taxID, bankCode: bankCode,
-                    accountType: accountType, allowChange: allowChange, amount: amount,
-                    nominalAmount: nominalAmount, interestAmount: interestAmount, fineAmount: fineAmount,
-                    reductionAmount: reductionAmount, discountAmount: discountAmount, reconciliationID: reconciliationID
+                    status: status, name: name, taxID: taxID, bankCode: bankCode, accountType: accountType,
+                    allowChange: allowChange, amount: amount, nominalAmount: nominalAmount, interestAmount: interestAmount,
+                    fineAmount: fineAmount, reductionAmount: reductionAmount, discountAmount: discountAmount,
+                    reconciliationID: reconciliationID, cashAmount: cashAmount, cashierBankCode: cashierBankCode,
+                    cashierType: cashierType, description: description, keyId: keyId
                 );
             }
         }

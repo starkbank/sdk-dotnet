@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- CashAmount, CashierBankCode, CashierType, Description and KeyId properties to BrcodePreview
 
 ## [2.18.0] - 2025-10-15
 ### Changed
