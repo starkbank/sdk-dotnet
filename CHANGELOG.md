@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.18.0] - 2025-10-15
 ### Changed
 - The create method from the Transaction resource is now deprecated
 
