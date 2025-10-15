@@ -36,6 +36,6 @@ Global
 		$6.TabsToSpaces = True
 		$6.scope = text/plain
 		description = SDK to facilitate .NET integrations with Stark Bank
-		version = 2.17.0
+		version = 2.18.0
 	EndGlobalSection
 EndGlobal
