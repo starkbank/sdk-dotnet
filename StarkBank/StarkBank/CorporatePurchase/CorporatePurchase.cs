@@ -373,7 +373,7 @@ namespace StarkBank
             string description = json.description;
             long amount = json.amount;
             int? tax = json.tax;
-            long issuerAmount = json.issuerAmount;
+            long? issuerAmount = json.issuerAmount;
             string issuerCurrencyCode = json.issuerCurrencyCode;
             string issuerCurrencySymbol = json.issuerCurrencySymbol;
             long? merchantAmount = json.merchantAmount;

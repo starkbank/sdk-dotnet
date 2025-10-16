@@ -15,6 +15,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [Unreleased]
 ### Added
 - CashAmount, CashierBankCode, CashierType, Description and KeyId properties to BrcodePreview
+- webhook event parser for merchant and corporate resources
 
 ## [2.18.0] - 2025-10-15
 ### Changed

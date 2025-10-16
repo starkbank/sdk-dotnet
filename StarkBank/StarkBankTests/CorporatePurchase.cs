@@ -1,5 +1,6 @@
 ﻿using System;
 using StarkBank;
+using StarkCore;
 using Xunit;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace StarkBankTests
 {
     public class CorporatePurchaseTest
     {
-        public readonly User user = TestUser.SetDefaultProject();
+        public readonly StarkBank.User user = TestUser.SetDefaultProject();
 
         [Fact]
         public void Get()
@@ -73,7 +74,7 @@ namespace StarkBankTests
         {
             try {
                 CorporatePurchase parsedCorporatePurchase = CorporatePurchase.Parse(Content, BadSignature);
-            } catch (StarkBank.Error.InvalidSignatureError e) {
+            } catch (StarkCore.Error.InvalidSignatureError e) {
                 TestUtils.Log(e);
                 return;
             }
@@ -87,7 +88,7 @@ namespace StarkBankTests
             {
                 CorporatePurchase parsedCorporatePurchase = CorporatePurchase.Parse(Content, "Something is definitely wrong");
             }
-            catch (StarkBank.Error.InvalidSignatureError e)
+            catch (StarkCore.Error.InvalidSignatureError e)
             {
                 TestUtils.Log(e);
                 return;
@@ -100,6 +101,17 @@ namespace StarkBankTests
         {
             string response = CorporatePurchase.Response(status: "accepted");
             TestUtils.Log(response);
+        }
+
+        [Fact]
+        public void ParseCorporatePurchaseEvent()
+        {
+            string content = "{\"event\": {\"created\": \"2025-10-15T15:00:23.409774+00:00\", \"id\": \"5894409012903936\", \"log\": {\"corporateTransactionId\": \"\", \"created\": \"2025-10-15T15:00:21.705391+00:00\", \"description\": \"Purchase denied: This card was already linked to COMIDA NICE. Create a new virtual card to complete your purchase or keep on this card temporarily.\", \"errors\": [{\"code\": \"invalidMerchant\", \"message\": \"This card was already linked to COMIDA NICE. Create a new virtual card to complete your purchase or keep on this card temporarily.\"}], \"id\": \"4820678880526336\", \"installment\": null, \"purchase\": {\"amount\": 1000000, \"attachments\": [], \"cardEnding\": null, \"cardId\": \"5740780031311872\", \"centerId\": \"4830905268961280\", \"corporateTransactionIds\": [], \"created\": \"2025-10-15T15:00:21.684087+00:00\", \"description\": null, \"holderId\": \"6026968331976704\", \"holderName\": null, \"id\": \"5662785937604608\", \"installmentCount\": 1, \"issuerAmount\": null, \"issuerCurrencyCode\": null, \"issuerCurrencySymbol\": null, \"merchantAmount\": null, \"merchantCategoryCode\": null, \"merchantCategoryNumber\": null, \"merchantCategoryType\": null, \"merchantCountryCode\": null, \"merchantCurrencyCode\": null, \"merchantCurrencySymbol\": null, \"merchantDisplayName\": \"China in Box\", \"merchantDisplayUrl\": \"https://sandbox.api.starkbank.com/v2/corporate-icon/type/food.png\", \"merchantFee\": null, \"merchantName\": \"China in Box\", \"methodCode\": null, \"status\": \"denied\", \"tags\": [], \"tax\": null, \"updated\": \"2025-10-15T15:00:21.705427+00:00\"}, \"type\": \"denied\"}, \"subscription\": \"corporate-purchase\", \"workspaceId\": \"6341320293482496\"}}";
+            string validSignature = "MEYCIQCaqA7LOTVIfqYod1pdm6Fxgfw8n6db9+2pqRHOhF8FcgIhAI8Up+yubHFDx3sCwTEioEflnHyiAI/v4Vlrh4ycN8jd";
+            Event parsedEvent = Event.Parse(content, validSignature);
+
+            Assert.NotNull(parsedEvent.ID);
+            Assert.Equal(typeof(CorporatePurchase.Log), parsedEvent.Log.GetType());
         }
     }
 }
