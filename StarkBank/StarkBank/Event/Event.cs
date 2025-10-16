@@ -303,6 +303,16 @@ namespace StarkBank
                 log = InvoicePullSubscription.Log.ResourceMaker(json.log);
             } else if (subscription == "invoice-pull-request") {
                 log = InvoicePullRequest.Log.ResourceMaker(json.log);
+            } else if (subscription == "corporate-card") {
+                log = CorporateCard.Log.ResourceMaker(json.log);
+            } else if (subscription == "corporate-purchase") {
+                log = CorporatePurchase.Log.ResourceMaker(json.log);
+            } else if (subscription == "merchant-card") {
+                log = MerchantCard.Log.ResourceMaker(json.log);
+            } else if (subscription == "merchant-installment") {
+                log = MerchantInstallment.Log.ResourceMaker(json.log);
+            } else if (subscription == "merchant-purchase") {
+                log = MerchantPurchase.Log.ResourceMaker(json.log);
             }
 
             return new Event(

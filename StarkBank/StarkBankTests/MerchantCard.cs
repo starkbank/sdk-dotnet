@@ -55,5 +55,16 @@ namespace StarkBankTests
             }
             Assert.True(ids.Count == 10);
         }
+
+        [Fact]
+        public void ParseMerchantCardEvent()
+        {
+            string content = "{\"event\": {\"created\": \"2025-10-16T19:33:33.957137+00:00\", \"id\": \"4824539051589632\", \"log\": {\"card\": {\"created\": \"2025-10-16T19:33:33.667314+00:00\", \"ending\": \"9733\", \"expiration\": \"2035-02-01T02:59:59.999999+00:00\", \"fundingType\": \"debit\", \"holderName\": \"Kaladin Stormblessed\", \"id\": \"5596404638547968\", \"network\": \"mastercard\", \"status\": \"active\", \"tags\": [], \"updated\": \"2025-10-16T19:33:33.672774+00:00\"}, \"created\": \"2025-10-16T19:33:33.672780+00:00\", \"errors\": [], \"id\": \"6722304545390592\", \"type\": \"active\"}, \"subscription\": \"merchant-card\", \"workspaceId\": \"6314371953197056\"}}";
+            string validSignature = "MEQCIFj9Vg+QkC+oXYXirS0j2ZoLFChRw7khSWrfpOud7/q7AiBPD7aPWYbpT6t3qSfyj2ol8b0cFQwtUHXu0iBkp4zGTQ==";
+            Event parsedEvent = Event.Parse(content, validSignature);
+
+            Assert.NotNull(parsedEvent.ID);
+            Assert.Equal(typeof(MerchantCard.Log), parsedEvent.Log.GetType());
+        }
     }
 }

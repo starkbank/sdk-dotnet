@@ -148,6 +148,17 @@ namespace StarkBankTests
             Debug.WriteLine(purchase);
         }
 
+        [Fact]
+        public void ParseMerchantPurchaseEvent()
+        {
+            string content = "{\"event\": {\"created\": \"2025-10-14T20:46:00.300285+00:00\", \"id\": \"5454126009810944\", \"log\": {\"created\": \"2025-10-14T20:45:58.347434+00:00\", \"description\": \"Purchase approved.\", \"errors\": [], \"id\": \"5669171517980672\", \"purchase\": {\"amount\": 1000, \"billingCity\": \"\", \"billingCountryCode\": \"\", \"billingStateCode\": \"\", \"billingStreetLine1\": \"\", \"billingStreetLine2\": \"\", \"billingZipCode\": \"\", \"cardEnding\": \"1625\", \"cardId\": \"5113758527520768\", \"challengeMode\": \"disabled\", \"challengeUrl\": \"\", \"created\": \"2025-10-14T20:45:56.936238+00:00\", \"currencyCode\": \"BRL\", \"endToEndId\": \"f02b36d6-7872-4a81-b2ce-cd1a0b89da69\", \"fee\": 0, \"fundingType\": \"credit\", \"holderEmail\": \"\", \"holderName\": \"Margaery Tyrell\", \"holderPhone\": \"\", \"id\": \"5903823029665792\", \"installmentCount\": 1, \"metadata\": {}, \"network\": \"diners\", \"softDescriptor\": \"\", \"source\": \"merchant-session/5047053356892160\", \"status\": \"approved\", \"tags\": [\"yourtags\"], \"transactionIds\": [], \"updated\": \"2025-10-14T20:45:58.347478+00:00\"}, \"transactionId\": \"\", \"type\": \"approved\"}, \"subscription\": \"merchant-purchase\", \"workspaceId\": \"6341320293482496\"}}";
+            string validSignature = "MEYCIQCQ7cDmcaRxVpEwTbmGCiTKE6RiWHgtXvVs3sSITgF4wwIhAInXEEeRKoi3UuOm4BexLAG05RQiSG5iSZJW3UZ3jBE3";
+            Event parsedEvent = Event.Parse(content, validSignature);
+
+            Assert.NotNull(parsedEvent.ID);
+            Assert.Equal(typeof(MerchantPurchase.Log), parsedEvent.Log.GetType());
+        }
+
         public static MerchantPurchase Example(string cardId)
         {
             return new MerchantPurchase(
