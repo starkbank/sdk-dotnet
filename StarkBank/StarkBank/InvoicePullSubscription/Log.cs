@@ -27,6 +27,7 @@ namespace StarkBank
             public DateTime Created { get; }
             public string Type { get; }
             public List<string> Errors { get; }
+            public string Reason { get; }
             public InvoicePullSubscription InvoicePullSubscription { get; }
 
             /// <summary>
@@ -44,11 +45,12 @@ namespace StarkBank
             ///     <item>Created [DateTime]: creation datetime for the log. ex: DateTime(2020, 3, 10, 10, 30, 0, 0)
             /// </list>
             /// </summary>
-            public Log(string id, DateTime created, string type, List<string> errors, InvoicePullSubscription subscription) : base(id)
+            public Log(string id, DateTime created, string type, List<string> errors, string reason, InvoicePullSubscription subscription) : base(id)
             {
                 Created = created;
                 Type = type;
                 Errors = errors;
+                Reason = reason;
                 InvoicePullSubscription = subscription;
             }
 
@@ -181,9 +183,10 @@ namespace StarkBank
                 string createdString = json.created;
                 DateTime created = StarkCore.Utils.Checks.CheckDateTime(createdString);
                 string type = json.type;
+                string reason = json.reason;
                 InvoicePullSubscription subscription = InvoicePullSubscription.ResourceMaker(json.subscription);
 
-                return new Log(id: id, created: created, type: type, errors: errors, subscription: subscription);
+                return new Log(id: id, created: created, type: type, errors: errors, reason: reason, subscription: subscription);
             }
         }
     }

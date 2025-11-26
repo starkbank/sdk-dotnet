@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- reason field to InvoicePullSubscriptionLog and InvoicePullRequestLog
 
 ## [2.19.0] - 2025-10-16
 ### Added
