@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.21.0] - 2026-01-07
 ### Added
 - parse to Transfer Rule
 
