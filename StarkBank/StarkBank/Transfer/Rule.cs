@@ -16,13 +16,13 @@ namespace StarkBank
         /// Properties:
         /// <list>
         ///     <item>key [string]: Rule to be customized, describes what Transfer behavior will be altered. ex: "resendingLimit"</item>
-        ///     <item>value [integer]: Value of the rule. ex: 5</item>
+        ///     <item>value [integer or boolean]: Value of the rule. ex: 5</item>
         /// </list>
         /// </summary>
         public partial class Rule : StarkCore.Utils.SubResource
         {
             public string Key { get; }
-            public int Value { get; }
+            public object Value { get; }
 
             /// <summary>
             /// Transfer.Rule object
@@ -32,11 +32,11 @@ namespace StarkBank
             /// Parameters (required):
             /// <list>
             ///     <item>key [string]: Rule to be customized, describes what Transfer behavior will be altered. ex: "resendingLimit"</item>
-            ///     <item>value [integer]: Value of the rule. ex: 5</item>
+            ///     <item>value [integer or boolean]: Value of the rule. ex: 5</item>
             /// </list>
             /// </summary>
             ///
-            public Rule(String key, int value)
+            public Rule(String key, object value)
             {
                 Key = key;
                 Value = value;
@@ -50,11 +50,31 @@ namespace StarkBank
             internal static StarkCore.Utils.SubResource ResourceMaker(dynamic json)
             {
                 string key = json.key;
-                int value = json.value;
+                object value = ParseRules(json.value);
 
                 return new Rule(
                     key: key, value: value
                 );
+            }
+
+            internal static object ParseRules(object jsonValue)
+            {
+                var value = Newtonsoft.Json.Linq.JToken.FromObject(jsonValue);
+                object parsedValue;
+                switch (value.Type)
+                {
+                    case Newtonsoft.Json.Linq.JTokenType.Integer:
+                        parsedValue = value.ToObject<int>();
+                        break;
+                    case Newtonsoft.Json.Linq.JTokenType.Boolean:
+                        parsedValue = value.ToObject<bool>();
+                        break;
+                    default:
+                        parsedValue = null;
+                        break;
+                }
+
+                return parsedValue;
             }
         }
     }
