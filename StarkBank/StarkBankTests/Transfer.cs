@@ -94,11 +94,32 @@ namespace StarkBankTests
             transfersIdsResult.Sort();
             Assert.Equal(transfersIdsExpected, transfersIdsResult);
         }
-        internal static Transfer Example(bool schedule = true)
+
+        internal static Transfer Example(bool schedule = true, string ruleType = "resendingLimit")
         {
             DateTime? scheduled = null;
             if (schedule) {
                 scheduled = DateTime.Now.AddDays(1);
+            }
+            List<Transfer.Rule> rules = null;
+            switch (ruleType)
+            {
+                case "resendingLimit":
+                    rules = new List<Transfer.Rule>() {
+                        new Transfer.Rule(
+                            key: "resendingLimit",
+                            value: 5
+                        )
+                    };
+                    break;
+                case "isReversalAllowed":
+                    rules = new List<Transfer.Rule>() {
+                        new Transfer.Rule(
+                            key: "isReversalAllowed",
+                            value: true
+                        )
+                    };
+                    break;
             }
             return new Transfer(
                 amount: new Random().Next(1, 1000),
@@ -111,12 +132,7 @@ namespace StarkBankTests
                 externalID: Guid.NewGuid().ToString(),
                 scheduled: scheduled,
                 description: "Good description",
-                rules: new List<Transfer.Rule>() {
-                    new Transfer.Rule(
-                        key: "resendingLimit",
-                        value: 5
-                    )
-                }
+                rules: rules
             );
         }
     }
