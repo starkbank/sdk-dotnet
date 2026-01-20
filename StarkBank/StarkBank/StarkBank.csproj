@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Splits\**" />
+    <EmbeddedResource Remove="Splits\**" />
+    <None Remove="Splits\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Balance\" />
     <None Remove="Boleto\" />
     <None Remove="BoletoHolmes\" />
@@ -45,10 +51,11 @@
     <None Remove="MerchantPurchase\" />
     <None Remove="MerchantCard\" />
     <None Remove="MerchantInstallment\" />
+	<None Remove="Split\" />
+	<None Remove="SplitReceiver\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Balance\" />
-    <Folder Include="Boleto\" />
     <Folder Include="BoletoHolmes\" />
     <Folder Include="BoletoPayment\" />
     <Folder Include="BrcodePayment\" />
@@ -84,6 +91,7 @@
     <Folder Include="MerchantPurchase\" />
     <Folder Include="MerchantCard\" />
     <Folder Include="MerchantInstallment\" />
+    <Folder Include="Split\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -96,7 +104,7 @@
         <PackageReadmeFile>NuGetREADME.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
-        <None Include="../../NuGetREADME.md" Pack="true" PackagePath="\"/>
+        <None Include="../../NuGetREADME.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
