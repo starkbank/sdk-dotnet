@@ -4,6 +4,7 @@ using Xunit;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
 
 
 namespace StarkBankTests
@@ -71,31 +72,7 @@ namespace StarkBankTests
             MerchantSession sessionExample = Example();
             string sessionId = MerchantSession.Create(sessionExample).Uuid;
 
-            MerchantSession.Purchase purchaseExample = new MerchantSession.Purchase(
-                    amount: 1000,
-                    installmentCount: 1,
-                    cardExpiration: "2035-01",
-                    cardNumber: "5102589999999954",
-                    cardSecurityCode: "123",
-                    holderName: "Holder Name",
-                    holderEmail: "holdeName@email.com",
-                    holderPhone: "11111111111",
-                    fundingType: "credit",
-                    billingCountryCode: "BRA",
-                    billingCity: "São Paulo",
-                    billingStateCode: "SP",
-                    billingStreetLine1: "Rua do Holder Name, 123",
-                    billingStreetLine2: "",
-                    billingZipCode: "11111-111",
-                    metadata: new Dictionary<string, object>
-                    {
-                        { "userAgent", "Postman" },
-                        { "userIp", "255.255.255.255" },
-                        { "language", "pt-BR" },
-                        { "timezoneOffset", 3 },
-                        { "extraData", "extraData" }
-                    }
-                );
+            MerchantSession.Purchase purchaseExample = PurchaseExample();
 
             MerchantSession.Purchase purchase = MerchantSession.PostPurchase(id: sessionId, purchaseExample);
             Assert.NotNull(purchase);
@@ -112,9 +89,39 @@ namespace StarkBankTests
                 allowedInstallments: new List<MerchantSession.AllowedInstallment> { installement },
                 challengeMode: "disabled",
                 expiration: 3600,
-                tags: new List<string> { "yourTags" }
+                tags: new List<string> { "yourTags" }, 
+                holderId: "5656565435678",
+                softDescriptor: "softDescriptor"
             );
         }
 
+        internal static MerchantSession.Purchase PurchaseExample()
+        {
+            return new MerchantSession.Purchase(
+                amount: 1000,
+                installmentCount: 1,
+                cardExpiration: "2035-01",
+                cardNumber: "5102589999999954",
+                cardSecurityCode: "123",
+                holderName: "Holder Name",
+                holderEmail: "holderName@email.com",
+                holderPhone: "11111111111",
+                fundingType: "credit",
+                billingCountryCode: "BRA",
+                billingCity: "São Paulo",
+                billingStateCode: "SP",
+                billingStreetLine1: "Rua do Holder Name, 123",
+                billingStreetLine2: "",
+                billingZipCode: "11111-111",
+                metadata: new Dictionary<string, object>
+                {
+                    { "userAgent", "Postman" },
+                    { "userIp", "255.255.255.255" },
+                    { "language", "pt-BR" },
+                    { "timezoneOffset", 3 },
+                    { "extraData", "extraData" }
+                }
+            );
+        }
     }
 }
