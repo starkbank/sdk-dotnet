@@ -186,6 +186,34 @@ namespace StarkBank.Utils
             );
         }
 
+        public static IEnumerable<SubResource> Put(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, IEnumerable<SubResource> entities = null, Dictionary<string, object> query = null)
+        {
+            return StarkCore.Utils.Rest.Put(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: query,
+                entities: entities,
+                user: user
+            );
+        }
+
+        public static IEnumerable<SubResource> Put(User user = null, string resourceName = null, Api.ResourceMaker resourceMaker = null, IEnumerable<Dictionary<string, object>> entities = null, Dictionary<string, object> query = null)
+        {
+            return StarkCore.Utils.Rest.Put(
+                host: host,
+                apiVersion: apiVersion,
+                sdkVersion: sdkVersion,
+                resourceName: resourceName,
+                resourceMaker: resourceMaker,
+                query: query,
+                entities: entities,
+                user: user
+            );
+        }
+
         static public Response GetRaw(string path, Dictionary<string, object> query, User user, string prefix = null, bool raiseException = true)
         {
             return StarkCore.Utils.Rest.GetRaw(

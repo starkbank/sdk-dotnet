@@ -31,6 +31,7 @@ namespace StarkBank
     ///     <item>OverdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
     ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
     ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
+    ///     <item>Splits [list of StarkBank.Split objects, default null]: list of Split objects to indicate payment receivers. ex: [Split(amount=100, receiverID="5656565656565656")]</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ReceiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
     ///     <item>ReceiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
@@ -65,6 +66,7 @@ namespace StarkBank
         public List<string> Tags { get; }
         public List<Dictionary<string, object>> Descriptions { get; }
         public List<Dictionary<string, object>> Discounts { get; }
+        public List<Split> Splits { get; }
         public int? Fee { get; }
         public string Line { get; }
         public string BarCode { get; }
@@ -104,6 +106,7 @@ namespace StarkBank
         ///     <item>receiverTaxID [string]: receiver(Sacador Avalista) tax ID(CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
         ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
         ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
+        ///     <item>splits [list of StarkBank.Split objects, default null]: list of Split objects to indicate payment receivers. ex: [Split(amount=100, receiverID="5656565656565656")]</item>
         ///     <item>tags [list of strings]: list of strings for tagging</item>
         /// </list>
         /// <br/>
@@ -125,7 +128,7 @@ namespace StarkBank
             int? overdueLimit = null, string receiverName = null, string receiverTaxID = null, List<string> tags = null,
             List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null, 
             string id = null, int? fee = null, string line = null, string barCode = null, string status = null, 
-            List<string> transactionIds = null, string workspaceID = null, DateTime? created = null, 
+            List<string> transactionIds = null, string workspaceID = null, List<Split> splits = null, DateTime? created = null, 
             string ourNumber = null) : base(id)
         {
             Amount = amount;
@@ -152,6 +155,7 @@ namespace StarkBank
             Status = status;
             TransactionIds = transactionIds;
             WorkspaceID = workspaceID;
+            Splits = splits;
             OurNumber = ourNumber;
             Created = created;
         }
@@ -442,6 +446,7 @@ namespace StarkBank
             List<string> tags = json.tags.ToObject<List<string>>();
             List<Dictionary<string, object>> descriptions = json.descriptions.ToObject<List<Dictionary<string, object>>>();
             List<Dictionary<string, object>> discounts = json.discounts.ToObject<List<Dictionary<string, object>>>();
+            List<Split> splits = ParseSplit(json.splits);
             foreach(Dictionary<string, object> discount in discounts) {
                 discount["date"] = StarkCore.Utils.Checks.CheckDateTime((string)discount["date"]);
             }
@@ -460,10 +465,22 @@ namespace StarkBank
                 amount: amount, name: name, taxID: taxID, streetLine1: streetLine1, streetLine2: streetLine2,
                 district: district, city: city, stateCode: stateCode, zipCode: zipCode, due: due, fine: fine,
                 interest: interest, overdueLimit: overdueLimit, receiverName: receiverName, receiverTaxID: receiverTaxID,
-                tags: tags, descriptions: descriptions, discounts: discounts, id: id, fee: fee, line: line,
+                tags: tags, descriptions: descriptions, discounts: discounts, splits: splits, id: id, fee: fee, line: line,
                 barCode: barCode, status: status, transactionIds: transactionIds, workspaceID: workspaceID,
                 created: created, ourNumber: ourNumber
             );
+        }
+
+        private static List<Split> ParseSplit(dynamic json)
+        {
+            if(json is null) return null;
+
+            List<Split> splits = new List<Split>();
+
+            foreach (dynamic split in json) {
+                splits.Add(Split.ResourceMaker(split));
+            }
+            return splits;
         }
     }
 }
