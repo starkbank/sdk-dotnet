@@ -98,7 +98,7 @@ namespace StarkBank
 		}
 
         public static IEnumerable<MerchantPurchase> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+            string status = null, List<string> tags = null, List<string> ids = null, string holderId = null, User user = null)
         {
             (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
@@ -110,14 +110,15 @@ namespace StarkBank
                     { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
-                    { "ids", ids }
+                    { "ids", ids },
+                    { "holderId", holderId },
                 },
                 user: user
             ).Cast<MerchantPurchase>();
         }
 
         public static (List<MerchantPurchase> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
-            DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+            DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, string holderId = null, User user = null)
         {
             (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
@@ -130,7 +131,8 @@ namespace StarkBank
                     { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
-                    { "ids", ids }
+                    { "ids", ids },
+                    { "holderId", holderId },
                 },
                 user: user
             );
