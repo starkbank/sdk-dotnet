@@ -25,6 +25,7 @@ namespace StarkBank
     ///     <item>Interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
     ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "due":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"due", "2020-11-25T17:59:26.249976+00:00"}}</item>
     ///     <item>Rules [list of StarkBank.Invoice.Rule objects, default null]: list of Invoice.Rule objects for modifying invoice behavior. ex: [Invoice.Rule(key="allowedTaxIds", value=["012.345.678-90", "45.059.493/0001-73"])]</item>
+    ///     <item>Splits [list of StarkBank.Split objects, default null]: list of Split objects to indicate payment receivers. ex: [Split(amount=100, receiverID="5656565656565656")]</item>
     ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
     ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
     ///     <item>PdfUrl [string]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
@@ -53,6 +54,7 @@ namespace StarkBank
         public List<Dictionary<string, object>> Descriptions { get; }
         public List<Dictionary<string, object>> Discounts { get; }
         public List<Rule> Rules { get; }
+        public List<Split> Splits { get; }
         public List<string> Tags { get; }
         public long Amount { get; }
         public long? NominalAmount { get; }
@@ -92,6 +94,7 @@ namespace StarkBank
         ///     <item>interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
         ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "due":string pairs. ex: new List<Dictionary<string,object>>(){new Dictionary<string, string>{{"percentage", 1.5},{"due", DateTime(2020, 3, 10, 10, 30, 12, 15)}}</item>
         ///     <item>rules [list of StarkBank.Invoice.Rule objects, default null]: list of Invoice.Rule objects for modifying invoice behavior. ex: [Invoice.Rule(key="allowedTaxIds", value=["012.345.678-90", "45.059.493/0001-73"])]</item>
+        ///     <item>Splits [list of StarkBank.Invoice.Split objects, default null]: list of Invoice.Split objects to indicate payment receivers. ex: [Invoice.Split(amount=100, receiverID="5656565656565656")]</item>
         ///     <item>tags [list of strings, default null]: list of strings for tagging</item>
         ///     <item>descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
         /// </list>
@@ -115,7 +118,7 @@ namespace StarkBank
         /// </summary>
         public Invoice(long amount, string name, string taxID, DateTime? due = null, long? expiration = null, double? fine = null, double? interest = null,
             List<string> tags = null, List<Dictionary<string, object>> descriptions = null, List<Dictionary<string, object>> discounts = null, List<Rule> rules = null,
-            long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null,
+            long? nominalAmount = null, long? fineAmount = null, long? interestAmount = null, long? discountAmount = null, List<Split> splits = null,
             string id = null, string brcode = null, string pdfUrl = null, string link = null, int? fee = null, string status = null, List<string> transactionIds = null, DateTime? created = null, DateTime? updated = null) : base(id)
         {
             Amount = amount;
@@ -138,6 +141,7 @@ namespace StarkBank
             PdfUrl = pdfUrl;
             Link = link;
             Status = status;
+            Splits = splits;
             TransactionIds = transactionIds;
             Created = created;
             Updated = updated;
@@ -496,6 +500,7 @@ namespace StarkBank
             List<Dictionary<string, object>> descriptions = json.descriptions.ToObject<List<Dictionary<string, object>>>();
             List<Dictionary<string, object>> discounts = json.discounts.ToObject<List<Dictionary<string, object>>>();
             List<Rule> rules = ParseRule(json.rules);
+            List<Split> splits = ParseSplit(json.splits);
             foreach (Dictionary<string, object> discount in discounts) {
                 discount["due"] = StarkCore.Utils.Checks.CheckDateTime((string)discount["due"]);
             }
@@ -518,10 +523,22 @@ namespace StarkBank
             return new Invoice(
                 amount: amount, name: name, taxID: taxID, due: due, expiration: expiration, fine: fine, interest: interest,
                 tags: tags, descriptions: descriptions, discounts: discounts, nominalAmount: nominalAmount, fineAmount: fineAmount,
-                interestAmount: interestAmount, discountAmount: discountAmount, id: id, brcode: brcode, pdfUrl: pdf, link: link,
+                interestAmount: interestAmount, discountAmount: discountAmount, id: id, brcode: brcode, pdfUrl: pdf, link: link, splits: splits,
                 rules: rules, fee: fee, status: status, transactionIds: transactionIds, created: created, updated: updated
             );
 
+        }
+
+        private static List<Split> ParseSplit(dynamic json)
+        {
+            if(json is null) return null;
+
+            List<Split> splits = new List<Split>();
+
+            foreach (dynamic split in json) {
+                splits.Add(Split.ResourceMaker(split));
+            }
+            return splits;
         }
 
         private static List<Rule> ParseRule(dynamic json)

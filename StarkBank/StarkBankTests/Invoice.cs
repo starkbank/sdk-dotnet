@@ -135,6 +135,7 @@ namespace StarkBankTests
 
         internal static Invoice Example()
         {
+            SplitReceiver receiver = SplitReceiver.Query(limit: 1).First();
             return new Invoice(
                 amount: 1000000,
                 due: DateTime.Now.AddDays(10),
@@ -167,6 +168,12 @@ namespace StarkBankTests
                     new Invoice.Rule(
                         key: "allowedTaxIds",
                         value: new List<string> {"012.345.678-90", "45.059.493/0001-73"}
+                    )
+                },
+                splits: new List<Split>() {
+                    new Split(
+                        amount: 100000,
+                        receiverID: receiver.ID
                     )
                 }
             );

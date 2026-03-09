@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- Split, SplitReceiver and SplitProfile resources
 
 ## [2.21.0] - 2026-01-07
 ### Added

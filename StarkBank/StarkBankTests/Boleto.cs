@@ -69,6 +69,7 @@ namespace StarkBankTests
 
         internal static Boleto Example()
         {
+            SplitReceiver receiver = SplitReceiver.Query(limit: 1).First();
             return new Boleto(
                 amount: 1000000,
                 due: DateTime.Today.Date.AddDays(10),
@@ -109,6 +110,12 @@ namespace StarkBankTests
                         {"percentage", 3.5},
                         {"date", DateTime.Today.Date.AddDays(2)}
                     }
+                },
+                splits: new List<Split>() {
+                    new Split(
+                        amount: 100000,
+                        receiverID: receiver.ID
+                    )
                 }
             );
         }
