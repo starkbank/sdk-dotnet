@@ -2372,7 +2372,8 @@ MerchantSession example = new MerchantSession(
     allowedInstallments: new List<MerchantSession.AllowedInstallment> { installement },
     challengeMode: "disabled",
     expiration: 3600,
-    tags: new List<string> { "yourTags" }
+    tags: new List<string> { "yourTags" },
+    holderId: "5656565656565656"
 );
 
 MerchantSession session = MerchantSession.Create(example);
@@ -2431,7 +2432,7 @@ using System;
 using System.Collections.Generic;
 using StarkBank;
 
-List<MerchantSession> sessions = MerchantSession.Query(limit: 2).ToList();
+List<MerchantSession> sessions = MerchantSession.Query(limit: 2, holderId: "5656565656565656").ToList();
 foreach (MerchantSession session in sessions)
 {
     Console.WriteLine(session);
@@ -2467,7 +2468,8 @@ MerchantPurchase purchase = new MerchantPurchase(
     amount: 1000,
     cardId: "6295415968235520",
     challengeMode: "disabled",
-    fundingType: "credit"
+    fundingType: "credit",
+    holderId: "5656565656565656"
 );
 
 MerchantPurchase createdPurchase = MerchantPurchase.Create(purchase);
@@ -2482,7 +2484,7 @@ using System;
 using System.Collections.Generic;
 using StarkBank;
 
-List<MerchantPurchase> purchases = MerchantPurchase.Query(limit: 2).ToList();
+List<MerchantPurchase> purchases = MerchantPurchase.Query(limit: 2, holderId: "5656565656565656").ToList();
 foreach (MerchantPurchase purchase in purchases)
 {
     Console.WriteLine(purchase);
