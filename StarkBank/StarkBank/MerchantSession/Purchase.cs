@@ -18,6 +18,7 @@ namespace StarkBank
 			public string HolderName { get; }
 			public string HolderEmail { get; }
 			public string HolderPhone { get; }
+			public string HolderId { get; }
 			public string FundingType { get; }
 			public string BillingCountryCode { get; }
 			public string BillingCity { get; }
@@ -41,7 +42,7 @@ namespace StarkBank
 
 			public Purchase(int amount, string cardExpiration, string cardNumber, string cardSecurityCode,
 			string holderName, string fundingType, int? installmentCount = null, string cardId = null, string holderEmail = null,
-			string holderPhone = null, string billingCountryCode = null, string billingCity = null, string billingStateCode = null,
+			string holderPhone = null, string holderId = null, string billingCountryCode = null, string billingCity = null, string billingStateCode = null,
 			string billingStreetLine1 = null, string billingStreetLine2 = null, string billingZipCode = null, Dictionary<string, object> metadata = null,
 			string cardEnding = null, string challengeMode = null, string challengeUrl = null, DateTime? created = null, string currencyCode = null,
 			string endToEndId = null, int? fee = null, string network = null, string source = null, 
@@ -56,6 +57,7 @@ namespace StarkBank
 				HolderName = holderName;
 				HolderEmail = holderEmail;
 				HolderPhone = holderPhone;
+				HolderId = holderId;
 				FundingType = fundingType;
 				BillingCountryCode = billingCountryCode;
 				BillingCity = billingCity;
@@ -95,6 +97,7 @@ namespace StarkBank
 				string holderName = json.holderName;
 				string holderEmail = json.holderEmail;
 				string holderPhone = json.holderPhone;
+				string holderId = json.holderId;
 				string fundingType = json.fundingType;
 				string billingCountryCode = json.billingCountryCode;
 				string billingCity = json.billingCity;
@@ -120,7 +123,7 @@ namespace StarkBank
 				return new Purchase(
 					amount: amount, cardExpiration: cardExpiration, cardNumber: cardNumber, cardSecurityCode: cardSecurityCode,
 					holderName: holderName, fundingType: fundingType, installmentCount: installmentCount, cardId: cardId, holderEmail: holderEmail,
-					holderPhone: holderPhone, billingCountryCode: billingCountryCode, billingCity: billingCity, billingStateCode: billingStateCode,
+					holderPhone: holderPhone, holderId: holderId, billingCountryCode: billingCountryCode, billingCity: billingCity, billingStateCode: billingStateCode,
 					billingStreetLine1: billingStreetLine1, billingStreetLine2: billingStreetLine2, billingZipCode: billingZipCode, metadata: metadata, 
 					cardEnding: cardEnding, challengeMode: challengeMode, challengeUrl: challengeUrl, created: created, currencyCode: currencyCode, 
 					endToEndId: endToEndId, fee: fee, network: network, source: source, status: status, tags: tags, updated: updated, id: id

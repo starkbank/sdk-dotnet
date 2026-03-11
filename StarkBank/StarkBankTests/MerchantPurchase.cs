@@ -17,14 +17,7 @@ namespace StarkBankTests
             MerchantSession sessionExample = MerchantSessionTest.Example();
             MerchantSession session = MerchantSession.Create(sessionExample);
 
-            MerchantSession.Purchase purchaseJson = new MerchantSession.Purchase(
-                    amount: 1000,
-                    cardExpiration: "2035-01",
-                    cardNumber: "36490101441625",
-                    cardSecurityCode: "123",
-                    holderName: "Margaery Tyrell",
-                    fundingType: "credit"
-                );
+            MerchantSession.Purchase purchaseJson = MerchantSessionTest.PurchaseExample();
 
             MerchantSession.Purchase sessionPurchase = MerchantSession.PostPurchase(session.Uuid, purchaseJson);
 
@@ -36,8 +29,6 @@ namespace StarkBankTests
             );
 
             MerchantPurchase createdPurchase = MerchantPurchase.Create(purchase);
-
-            Debug.WriteLine(createdPurchase);
         }
 
         [Fact]
@@ -120,7 +111,7 @@ namespace StarkBankTests
                     cardNumber: "5102589999999954",
                     cardSecurityCode: "123",
                     holderName: "Holder Name",
-                    holderEmail: "holdeName@email.com",
+                    holderEmail: "holderName@email.com",
                     holderPhone: "11111111111",
                     fundingType: "credit",
                     billingCountryCode: "BRA",
@@ -141,11 +132,7 @@ namespace StarkBankTests
 
             string purchaseId = MerchantSession.PostPurchase(id: sessionId, purchaseExample).ID;
 
-            Debug.WriteLine(purchaseId);
-
             MerchantPurchase purchase = MerchantPurchase.Update(id: purchaseId, status: "canceled", amount: 0);
-
-            Debug.WriteLine(purchase);
         }
 
         [Fact]

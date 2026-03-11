@@ -18,11 +18,14 @@ namespace StarkBank
 		public string Status { get; }
 		public List<string> Tags { get; }
 		public string Uuid { get; }
+        public string HolderId { get; }
+        public string SoftDescriptor { get; }
         public DateTime? Created { get; }
         public DateTime? Updated { get; }
 
         public MerchantSession(List<string> allowedFundingTypes, List<AllowedInstallment> allowedInstallments, int expiration,
-        List<string> allowedIps = null, string challengeMode = null, string status = null, List<string> tags = null, string uuid = null, DateTime? created = null, DateTime? updated = null, string id = null) : base(id)
+        List<string> allowedIps = null, string challengeMode = null, string status = null, List<string> tags = null, string uuid = null,
+        string holderId = null, string softDescriptor = null, DateTime? created = null, DateTime? updated = null, string id = null) : base(id)
 		{
 			AllowedFundingTypes = allowedFundingTypes;
 			AllowedInstallments = allowedInstallments;
@@ -32,6 +35,8 @@ namespace StarkBank
 			Status = status;
 			Tags = tags;
 			Uuid = uuid;
+			HolderId = holderId;
+			SoftDescriptor = softDescriptor;
 			Created = created;
 			Updated = updated;
 		}
@@ -59,7 +64,7 @@ namespace StarkBank
         }
 
 		public static IEnumerable<MerchantSession> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+            string status = null, List<string> tags = null, List<string> ids = null, string holderId = null, User user = null)
         {
             (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
@@ -71,14 +76,15 @@ namespace StarkBank
                     { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
-                    { "ids", ids }
+                    { "ids", ids },
+                    { "holderId", holderId },
                 },
                 user: user
             ).Cast<MerchantSession>();
         }
 
         public static (List<MerchantSession> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
-            DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+            DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, string holderId = null, User user = null)
         {
             (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
@@ -91,7 +97,8 @@ namespace StarkBank
                     { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
-                    { "ids", ids }
+                    { "ids", ids },
+                    { "holderId", holderId },
                 },
                 user: user
             );
@@ -133,6 +140,8 @@ namespace StarkBank
 			string status = json.status;
 			List<string> tags = json.tags.ToObject<List<string>>();
 			string uuid = json.uuid;
+			string holderId = json.holderId;
+            string softDescriptor = json.softDescriptor;
             string createdString = json.created;
             string updatedString = json.updated;
             DateTime? created = StarkCore.Utils.Checks.CheckDateTime(createdString);
@@ -140,8 +149,8 @@ namespace StarkBank
             string id = json.id;
 
             return new MerchantSession(
-				allowedFundingTypes: allowedFundingTypes, allowedInstallments: allowedInstallments, expiration: expiration,
-				allowedIps: allowedIps, challengeMode: challengeMode, status: status, tags: tags, uuid: uuid, created: created, updated: updated, id: id
+				allowedFundingTypes: allowedFundingTypes, allowedInstallments: allowedInstallments, expiration: expiration, allowedIps: allowedIps,
+                challengeMode: challengeMode, status: status, tags: tags, uuid: uuid, holderId: holderId, softDescriptor: softDescriptor, created: created, updated: updated, id: id
 			);
 		}
 

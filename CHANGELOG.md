@@ -14,6 +14,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 ### Added
+- HolderId query parameter to MerchantPurchase and MerchantSession
+- HolderName to MerchantPurchase
+- HolderId to MerchantPurchase and MerchantSession
 - Split, SplitReceiver and SplitProfile resources
 
 ## [2.21.0] - 2026-01-07

@@ -15,8 +15,10 @@ namespace StarkBank
         public string FundingType { get; }
 		public string CardId { get; }
         public int? InstallmentCount { get; }
+        public string HolderName { get; }
 		public string HolderEmail { get; }
 		public string HolderPhone { get; }
+        public string HolderId { get; }
 		public string BillingCountryCode { get; }
 		public string BillingCity { get; }
 		public string BillingStateCode { get; }
@@ -37,19 +39,21 @@ namespace StarkBank
         public List<string> Tags { get; }
         public DateTime? Updated { get; }
 
-        public MerchantPurchase(int amount, string fundingType, string cardId, string challengeMode = null, int? installmentCount = null, string holderEmail = null,
-        string holderPhone = null, string billingCountryCode = null, string billingCity = null, string billingStateCode = null, string billingStreetLine1 = null,
-            string billingStreetLine2 = null, string billingZipCode = null, Dictionary<string, object> metadata = null, string id = null, string cardEnding = null,
-        string challengeUrl = null, DateTime? created = null, string currencyCode = null, string endToEndId = null, int? fee = null, string network = null,
-        string source = null, string status = null, List<string> tags = null, DateTime? updated = null) : base(id)
+        public MerchantPurchase(int amount, string fundingType, string cardId, string challengeMode = null, int? installmentCount = null,
+        string holderName = null, string holderEmail = null, string holderPhone = null, string holderId = null, string billingCountryCode = null,
+        string billingCity = null, string billingStateCode = null, string billingStreetLine1 = null, string billingStreetLine2 = null, string billingZipCode = null,
+        Dictionary<string, object> metadata = null, string id = null, string cardEnding = null, string challengeUrl = null, DateTime? created = null, string currencyCode = null,
+        string endToEndId = null, int? fee = null, string network = null, string source = null, string status = null, List<string> tags = null, DateTime? updated = null) : base(id)
             {
                 Amount = amount;
                 FundingType = fundingType;
                 CardId = cardId;
                 ChallengeMode = challengeMode;
                 InstallmentCount = installmentCount;
+                HolderName = holderName;
                 HolderEmail = holderEmail;
                 HolderPhone = holderPhone;
+                HolderId = holderId;
                 BillingCountryCode = billingCountryCode;
                 BillingCity = billingCity;
                 BillingStateCode = billingStateCode;
@@ -94,7 +98,7 @@ namespace StarkBank
 		}
 
         public static IEnumerable<MerchantPurchase> Query(int? limit = null, DateTime? after = null, DateTime? before = null,
-            string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+            string status = null, List<string> tags = null, List<string> ids = null, string holderId = null, User user = null)
         {
             (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             return Rest.GetList(
@@ -106,14 +110,15 @@ namespace StarkBank
                     { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
-                    { "ids", ids }
+                    { "ids", ids },
+                    { "holderId", holderId },
                 },
                 user: user
             ).Cast<MerchantPurchase>();
         }
 
         public static (List<MerchantPurchase> page, string pageCursor) Page(string cursor = null, int? limit = null, DateTime? after = null,
-            DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, User user = null)
+            DateTime? before = null, string status = null, List<string> tags = null, List<string> ids = null, string holderId = null, User user = null)
         {
             (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
             (List<StarkCore.Utils.SubResource> page, string pageCursor) = Rest.GetPage(
@@ -126,7 +131,8 @@ namespace StarkBank
                     { "before", new StarkCore.Utils.StarkDate(before) },
                     { "status", status },
                     { "tags", tags },
-                    { "ids", ids }
+                    { "ids", ids },
+                    { "holderId", holderId },
                 },
                 user: user
             );
@@ -166,8 +172,10 @@ namespace StarkBank
                 string fundingType = json.fundingType;
                 string cardId = json.cardId;
                 int? installmentCount = json.installmentCount;
+                string holderName = json.holderName;
                 string holderEmail = json.holderEmail;
                 string holderPhone = json.holderPhone;
+                string holderId = json.holderId;
                 string billingCountryCode = json.billingCountryCode;
                 string billingCity = json.billingCity;
                 string billingStateCode = json.billingStateCode;
@@ -189,7 +197,7 @@ namespace StarkBank
                 DateTime? updated = json.updated;
 
             return new MerchantPurchase(amount: amount, fundingType: fundingType, cardId: cardId, installmentCount: installmentCount,
-                holderEmail: holderEmail, holderPhone: holderPhone, billingCountryCode: billingCountryCode,
+                holderName: holderName, holderEmail: holderEmail, holderPhone: holderPhone, holderId: holderId, billingCountryCode: billingCountryCode,
                 billingCity: billingCity, billingStateCode: billingStateCode, billingStreetLine1: billingStreetLine1,
                 billingStreetLine2: billingStreetLine2, billingZipCode: billingZipCode, metadata: metadata, challengeMode: challengeMode, id: id,
                 cardEnding: cardEnding, challengeUrl: challengeUrl, created: created, currencyCode: currencyCode, endToEndId: endToEndId,
