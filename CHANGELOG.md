@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.22.0] - 2026-03-11
 ### Added
 - HolderId query parameter to MerchantPurchase and MerchantSession
 - HolderName to MerchantPurchase
