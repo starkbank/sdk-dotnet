@@ -23,7 +23,7 @@ namespace StarkBank
     ///     <item>DisplayDescription [string, default None]: Invoice description to be shown to the payer. ex: "Subscription payment"</item>
     ///     <item>Due [DateTime or integer, default None]: subscription invoice due offset. Available only for type "push". ex: timedelta(days=7)</item>
     ///     <item>ExternalID [string, default None]: string that must be unique among all your subscriptions. Duplicated external_ids will cause failures. ex: "my-external-id"</item>
-    ///     <item>ReferenceCode [string, default None]: reference code for reconciliation. ex: "REF123456"</item>
+    ///     <item>ReferenceCode [string, default None]: safe string that must be unique among all your Pix Subscriptions and represent a contract, used for reconciliation. ex: "REF123456"</item>
     ///     <item>End [DateTime or string, default None]: subscription end date. ex: "2023-04-01"</item>
     ///     <item>Data [dictionary, default None]: additional data for the subscription based on type</item>
     ///     <item>Name [string, default None]: subscription debtor name. ex: "Iron Bank S.A."</item>
@@ -284,7 +284,7 @@ namespace StarkBank
         /// <summary>
         /// Cancel a InvoicePullSubscription entity
         /// <br/>
-        /// Cancel a InvoicePullSubscription entity previously created in the Stark Bank API
+        /// Cancel a InvoicePullSubscription entity previously created in the Stark Bank API. The subscription must have "active" status to be canceled.
         /// <br/>
         /// Parameters(required):
         /// <list>

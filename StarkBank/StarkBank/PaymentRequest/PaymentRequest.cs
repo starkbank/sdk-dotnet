@@ -19,10 +19,10 @@ namespace StarkBank
     /// Properties:
     /// <list>
     ///     <item>CenterID [string]: target cost center ID. ex: "5656565656565656"</item>
-    ///     <item>Payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.</item>
+    ///     <item>Payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity to be approved and executed. Do not set a "scheduled" value on this payment; use the PaymentRequest's own "due" parameter instead.</item>
     ///     <item>Type [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: "transfer", "brcode-payment"</item>
     ///     <item>Due [DateTime]: Payment target date in ISO format. ex: new DateTime(2020, 3, 10, 10, 30, 0, 0)</item>
-    ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
+    ///     <item>Tags [list of strings, default null]: list of strings for tagging. All tags will be converted to lowercase.</item>
     ///     <item>ID [string]: unique id returned when PaymentRequest is created. ex: "5656565656565656"</item>
     ///     <item>Amount [integer]: PaymentRequest amount. ex: 100000 = R$1.000,00</item>
     ///     <item>Description [string]: payment request description. ex: "Tony Stark's Suit"</item>

@@ -171,7 +171,7 @@ namespace StarkBank
         /// <summary>
         /// Delete a notification Event
         /// <br/>
-        /// Delete a of notification Event entity previously created in the Stark Bank API by its ID
+        /// Delete a notification Event entity previously created in the Stark Bank API by its id. This action cannot be undone.
         /// <br/>
         /// Parameters (required):
         /// <list>

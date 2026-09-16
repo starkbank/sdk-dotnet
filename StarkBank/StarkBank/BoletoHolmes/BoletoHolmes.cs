@@ -46,7 +46,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>tags [list of strings, default null]: list of strings for tagging</item>
+        ///     <item>tags [list of strings, default null]: list of strings for tagging. All tags will be converted to lowercase.</item>
         /// </list>
         /// <br/>
         /// Attributes (return-only):
@@ -72,7 +72,7 @@ namespace StarkBank
         /// <summary>
         /// Create BoletoHolmes
         /// <br/>
-        /// Send a list of BoletoHolmes objects for creation in the Stark Bank API
+        /// Send a list of BoletoHolmes objects for creation in the Stark Bank API. Results are asynchronous; register a webhook to receive investigation results instead of polling.
         /// <br/>
         /// Parameters (required):
         /// <list>

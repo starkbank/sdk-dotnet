@@ -18,7 +18,7 @@ namespace StarkBank
     ///     <item>BarCode [string, default null]: Bar code number that describes the payment. Either 'line' or 'barCode' parameters are required. If both are sent, they must match. ex: "83660000001084301380074119002551100010601813"</item>
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
     ///     <item>Scheduled [DateTime or string, default today]: payment scheduled date. ex: DateTime(2020, 3, 10)</item>
-    ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
+    ///     <item>Tags [list of strings, default null]: list of strings for tagging. All tags will be converted to lowercase.</item>
     ///     <item>Id [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
     ///     <item>Type [string]: tax type. ex: "das"</item>
     ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
@@ -192,8 +192,8 @@ namespace StarkBank
         /// <summary>
         /// Retrieve a specific TaxPayment pdf file
         /// <br/>
-        // Receive a single TaxPayment pdf file generated in the Stark Bank API by passing its id.
-        // Only valid for tax payments with "success" status.
+        /// Receive a single TaxPayment pdf file generated in the Stark Bank API by its id.
+        /// Only valid for tax payments with "success", "processing" or "created" status.
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -314,7 +314,7 @@ namespace StarkBank
         /// <summary>
         /// Delete a TaxPayment entity
         /// <br/>
-        /// Delete a TaxPayment entity previously created in the Stark Bank API
+        /// Cancel a scheduled TaxPayment entity. It can only be canceled before it starts being processed; payments that have already been processed can still be deleted, but that removes the record rather than canceling it.
         /// <br/>
         /// Parameters (required):
         /// <list>

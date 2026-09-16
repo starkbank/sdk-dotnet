@@ -17,7 +17,7 @@ namespace StarkBank
     ///     <item>InvoiceID [string]: Id of the invoice previously created to be sent for payment. ex: "5656565656565656"
     ///     <item>Due [DateTime or string]: payment scheduled date in UTC ISO format. ex: "2023-10-28T17:59:26.249976+00:00"
     ///     <item>AttemptType [string, default "default"]: attempt type for the payment. Options: "default", "retry". ex: "retry"
-    ///     <item>Tags [list of strings, default []]: list of strings for tagging
+    ///     <item>Tags [list of strings, default []]: list of strings for tagging. All tags will be converted to lowercase.
     ///     <item>ExternalID [string, default None]: a string that must be unique among all your InvoicePullRequests. Duplicated external_ids will cause failures. ex: "my-external-id"
     ///     <item>DisplayDescription [string, default None]: Description to be shown to the payer. ex: "Payment for services"
     ///     <item>ID [string]: unique id returned when InvoicePullRequest is created. ex: "5656565656565656"

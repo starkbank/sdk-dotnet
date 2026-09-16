@@ -19,7 +19,7 @@ namespace StarkBank
     ///     <item>BarCode [string, default null]: Bar code number that describes the payment. Either 'line' or 'barCode' parameters are required. If both are sent, they must match. ex: "34195819600000000621090063571277307144464000"</item>
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
     ///     <item>Scheduled [DateTime, default today]: payment scheduled date. ex: new DateTime(2020, 3, 10)</item>
-    ///     <item>Tags [list of strings]: list of strings for tagging</item>
+    ///     <item>Tags [list of strings]: list of strings for tagging. All tags will be converted to lowercase.</item>
     ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
     ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
     ///     <item>Amount [long integer]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
@@ -203,8 +203,8 @@ namespace StarkBank
         /// <summary>
         /// Retrieve a specific UtilityPayment pdf file
         /// <br/>
-        /// Receive a single UtilityPayment pdf file generated in the Stark Bank API by passing its id.
-        /// Only valid for utility payments with "success" status.
+        /// Receive a single UtilityPayment pdf file generated in the Stark Bank API by its id.
+        /// Only valid for utility payments with "success", "processing" or "created" status.
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -325,7 +325,7 @@ namespace StarkBank
         /// <summary>
         /// Delete a UtilityPayment entity
         /// <br/>
-        /// Delete a UtilityPayment entity previously created in the Stark Bank API
+        /// Cancel a scheduled UtilityPayment entity. It can only be canceled before it starts being processed.
         /// <br/>
         /// Parameters (required):
         /// <list>

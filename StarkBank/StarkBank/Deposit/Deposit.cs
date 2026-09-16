@@ -255,11 +255,11 @@ namespace StarkBank
         /// Parameters(required):
         /// <list>
         ///     <item>id[string]: object unique id. ex: "5656565656565656"</item>
+        ///     <item>amount [long integer]: the new amount of the Deposit. If amount = 0, the Deposit will be fully reversed.</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>amount [long integer]: The new amount of the Deposit. If the amount = 0 the Deposit will be fully reversed</item>
         ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
         /// </list>
         /// <br/>

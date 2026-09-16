@@ -134,7 +134,7 @@ namespace StarkBank
             /// Parameters (optional):
             /// <list>
             ///     <item>cursor [string, default null]: cursor returned on the previous page function call</item>
-            ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+            ///     <item>limit [integer, default 100]: maximum number of objects to be retrieved per page. Must be an integer between 1 and 100. ex: 35</item>
             ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
             ///     <item>types [list of strings, default null]: filter for log event types. ex: "created", "paid", "canceled" or "overdue"</item>

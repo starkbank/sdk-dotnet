@@ -16,18 +16,18 @@ namespace StarkBank
     /// <br/>
     /// Properties:
     /// <list>
-    ///     <item>Amount [long integer]: Invoice value in cents. Minimum = 0 (any value will be accepted). ex: 1234 (= R$ 12.34)</item>
+    ///     <item>Amount [long integer]: Invoice value in cents. If you create an Invoice with amount zero, any amount paid by the customer will be accepted; otherwise, only the exact amount specified is accepted. ex: 1234 (= R$ 12.34)</item>
     ///     <item>TaxID [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"</item>
     ///     <item>Name [string]: payer name. ex: "Iron Bank S.A."</item>
     ///     <item>Due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0) for immediate invoices and DateTime(2020, 3, 10) for scheduled invoices</item>
-    ///     <item>Expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
+    ///     <item>Expiration [long integer, default 5097600 (59 days)]: time interval in seconds between due date and expiration date. After expiration, the Invoice can no longer be paid. ex 123456789</item>
     ///     <item>Fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
     ///     <item>Interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
-    ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "due":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"due", "2020-11-25T17:59:26.249976+00:00"}}</item>
+    ///     <item>Discounts [list of dictionaries, default null]: list of up to 5 dictionaries with "percentage":float and "due":string pairs, specifying the discount percentage and the limit date up to which it is valid. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"due", "2020-11-25T17:59:26.249976+00:00"}}</item>
     ///     <item>Rules [list of StarkBank.Invoice.Rule objects, default null]: list of Invoice.Rule objects for modifying invoice behavior. ex: [Invoice.Rule(key="allowedTaxIds", value=["012.345.678-90", "45.059.493/0001-73"])]</item>
     ///     <item>Splits [list of StarkBank.Split objects, default null]: list of Split objects to indicate payment receivers. ex: [Split(amount=100, receiverID="5656565656565656")]</item>
-    ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
-    ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "key":string and (optional) "value":string pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
+    ///     <item>Tags [list of strings, default null]: list of strings for tagging. All tags will be converted to lowercase.</item>
+    ///     <item>Descriptions [list of dictionaries, default null]: list of up to 15 dictionaries with "key":string and (optional) "value":string pairs, used to help the customer understand why they are being charged. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"key", "Taxes"},{"value", "100"}}</item>
     ///     <item>PdfUrl [string]: public Invoice PDF URL. ex: "https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8"</item>
     ///     <item>Link [string]: public Invoice webpage URL. ex: "https://my-workspace.sandbox.starkbank.com/invoicelink/d454fa4e524441c1b0c1a729457ed9d8"</item>
     ///     <item>NominalAmount [long integer]: Invoice emission value in cents (will change if invoice is updated, but not if it's paid). ex: 400000</item>
@@ -89,7 +89,7 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>due [DateTime, default now + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 0, 0) for immediate invoices and DateTime(2020, 3, 10) for scheduled invoices</item>
-        ///     <item>expiration [long integer, default null]: time interval in seconds between due date and expiration date. ex 123456789</item>
+        ///     <item>expiration [long integer, default 5097600 (59 days)]: time interval in seconds between due date and expiration date. After expiration, the invoice can no longer be paid. ex 123456789</item>
         ///     <item>fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5</item>
         ///     <item>interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2</item>
         ///     <item>discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "due":string pairs. ex: new List<Dictionary<string,object>>(){new Dictionary<string, string>{{"percentage", 1.5},{"due", DateTime(2020, 3, 10, 10, 30, 12, 15)}}</item>
@@ -157,7 +157,7 @@ namespace StarkBank
         /// <summary>
         /// Create Invoices
         /// <br/>
-        /// Send a list of Invoice objects for creation in the Stark Bank API
+        /// Send a list of up to 100 Invoice objects for creation in the Stark Bank API at a time
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -286,7 +286,7 @@ namespace StarkBank
         /// <br/>
         /// Parameters (optional):
         /// <list>
-        ///     <item>limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35</item>
+        ///     <item>limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35</item>
         ///     <item>after [DateTime, default null]: date filter for objects created only after specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>before [DateTime, default null]: date filter for objects created only before specified date. ex: DateTime(2020, 3, 10)</item>
         ///     <item>status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"</item>
@@ -371,7 +371,7 @@ namespace StarkBank
         /// <summary>
         /// Update Invoice entity
         /// <br/>
-        /// Update an Invoice by passing id, if it hasn't been paid yet.
+        /// Update an Invoice by passing its id. If the invoice hasn't been paid yet, you can adjust parameters such as the amount, due date and expiration; if it has already been paid, you may only decrease the amount, which triggers a payment reversal.
         /// <br/>
         /// Parameters(required):
         /// <list>
@@ -381,7 +381,7 @@ namespace StarkBank
         /// Parameters (optional):
         /// <list>
         ///     <item>status [string]: you may cancel the Invoice by passing "canceled" in the status. ex: "canceled"</item>
-        ///     <item>amount [long integer]: nominal amount charged by the Invoice. ex: 100 (R$1.00)</item>
+        ///     <item>amount [long integer]: new amount to be charged. If the Invoice has already been paid, this is the final amount after reversal. ex: 100 (R$1.00)</item>
         ///     <item>due [DateTime, default today + 2 days]: Invoice due date in UTC ISO format. ex: DateTime(2020, 3, 10, 10, 30, 12, 15)</item>
         ///     <item>expiration [long integer, default null]: time interval in seconds between the due date and the expiration date. ex 123456789</item>
         ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>

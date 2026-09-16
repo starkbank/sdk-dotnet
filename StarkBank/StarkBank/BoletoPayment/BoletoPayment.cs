@@ -21,7 +21,7 @@ namespace StarkBank
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
     ///     <item>Amount [long integer, default null]: amount automatically calculated from line or barCode. ex: 23456 (= R$ 234.56)</item>
     ///     <item>Scheduled [DateTime, default today]: payment scheduled date. ex: new DateTime(2020, 3, 10)</item>
-    ///     <item>Tags [list of strings]: list of strings for tagging</item>
+    ///     <item>Tags [list of strings]: list of strings for tagging. All tags will be converted to lowercase.</item>
     ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
     ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
     ///     <item>Fee [integer]: fee charged when BoletoPayment is created. ex: 200 (= R$ 2.00)</item>
@@ -198,8 +198,8 @@ namespace StarkBank
         /// <summary>
         /// Retrieve a specific BoletoPayment pdf file
         /// <br/>
-        /// Receive a single BoletoPayment pdf file generated in the Stark Bank API by passing its id.
-        /// Only valid for boleto payments with "success" status.
+        /// Receive a single BoletoPayment pdf file generated in the Stark Bank API by its id.
+        /// Only valid for boleto payments with "success", "processing" or "created" status.
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -320,7 +320,7 @@ namespace StarkBank
         /// <summary>
         /// Delete a BoletoPayment entity
         /// <br/>
-        /// Delete a BoletoPayment entity previously created in the Stark Bank API
+        /// Cancel a scheduled BoletoPayment entity. It can only be canceled before it starts being processed.
         /// <br/>
         /// Parameters (required):
         /// <list>
