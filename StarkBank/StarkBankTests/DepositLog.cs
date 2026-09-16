@@ -53,5 +53,21 @@ namespace StarkBankTests
             }
             Assert.True(ids.Count == 10);
         }
+
+        [Fact]
+        public void Pdf()
+        {
+            List<Deposit.Log> logs = Deposit.Log.Query(
+                limit: 1,
+                before: DateTime.Now.Date,
+                types: new List<string> { "reversed" }
+            ).ToList();
+            foreach (Deposit.Log log in logs)
+            {
+                byte[] pdf = Deposit.Log.Pdf(id: log.ID);
+                Assert.True(pdf.Length > 0);
+                System.IO.File.WriteAllBytes("deposit-log.pdf", pdf);
+            }
+        }
     }
 }
