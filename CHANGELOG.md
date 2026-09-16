@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- Pdf method to Deposit.Log
+
 ### Fixed
 - Docstrings across Invoice, Transfer, Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DynamicBrcode, Deposit, Event, Webhook, Workspace, DarfPayment, PaymentRequest, TaxPayment, UtilityPayment and DictKey to state business rules already enforced by the API but missing or contradicted in the SDK's own comments
 - Missing docstrings on MerchantPurchase, MerchantSession, MerchantCard, MerchantInstallment and their Log resources

@@ -1,10 +1,10 @@
 ﻿using Xunit;
-using System;
-using StarkBank;
+using System;
+using StarkBank;
 using System.Linq;
 using System.Collections.Generic;
-
-
+
+
 namespace StarkBankTests
 {
     public class DepositLogTest
@@ -21,9 +21,9 @@ namespace StarkBankTests
             ).ToList();
             Assert.Equal(50, logs.Count);
             Assert.True(logs.First().ID != logs.Last().ID);
-            foreach (Deposit.Log log in logs)
-            {
-                TestUtils.Log(log);
+            foreach (Deposit.Log log in logs)
+            {
+                TestUtils.Log(log);
                 Assert.NotNull(log.ID);
                 Assert.Equal("created", log.Type);
             }
@@ -33,25 +33,42 @@ namespace StarkBankTests
         }
 
         [Fact]
-        public void Page()
+        public void Page()
+        {
+            List<string> ids = new List<string>();
+            List<Deposit.Log> page;
+            string cursor = null;
+            for (int i = 0; i < 2; i++)
+            {
+                (page, cursor) = Deposit.Log.Page(limit: 5, cursor: cursor);
+                foreach (Deposit.Log entity in page)
+                {
+                    Assert.DoesNotContain(entity.ID, ids);
+                    ids.Add(entity.ID);
+                }
+                if (cursor == null)
+                {
+                    break;
+                }
+            }
+            Assert.True(ids.Count == 10);
+        }
+
+        [Fact]
+        public void Pdf()
         {
-            List<string> ids = new List<string>();
-            List<Deposit.Log> page;
-            string cursor = null;
-            for (int i = 0; i < 2; i++)
+            List<Deposit.Log> logs = Deposit.Log.Query(
+                limit: 1,
+                before: DateTime.Now.Date,
+                types: new List<string> { "reversed" }
+            ).ToList();
+            Assert.NotEmpty(logs);
+            foreach (Deposit.Log log in logs)
             {
-                (page, cursor) = Deposit.Log.Page(limit: 5, cursor: cursor);
-                foreach (Deposit.Log entity in page)
-                {
-                    Assert.DoesNotContain(entity.ID, ids);
-                    ids.Add(entity.ID);
-                }
-                if (cursor == null)
-                {
-                    break;
-                }
+                byte[] pdf = Deposit.Log.Pdf(id: log.ID);
+                Assert.True(pdf.Length > 0);
+                System.IO.File.WriteAllBytes("deposit-log.pdf", pdf);
             }
-            Assert.True(ids.Count == 10);
         }
     }
 }

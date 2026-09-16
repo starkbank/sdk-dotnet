@@ -172,6 +172,38 @@ namespace StarkBank
                 return (logs, pageCursor);
             }
 
+            /// <summary>
+            /// Retrieve a reversed Deposit.Log pdf file
+            /// <br/>
+            /// Receive a reversed Deposit.Log pdf receipt file generated in the Stark Bank API by its id.
+            /// <br/>
+            /// Parameters (required):
+            /// <list>
+            ///     <item>id [string]: object unique id. ex: "5656565656565656"</item>
+            /// </list>
+            /// <br/>
+            /// Parameters (optional):
+            /// <list>
+            ///     <item>user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.Settings.User was set before function call</item>
+            /// </list>
+            /// <br/>
+            /// Return:
+            /// <list>
+            ///     <item>Deposit.Log pdf file</item>
+            /// </list>
+            /// </summary>
+            public static byte[] Pdf(string id, User user = null)
+            {
+                (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
+                return Rest.GetContent(
+                    resourceName: resourceName,
+                    resourceMaker: resourceMaker,
+                    subResourceName: "pdf",
+                    id: id,
+                    user: user
+                );
+            }
+
             internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
             {
                 return (resourceName: "DepositLog", resourceMaker: ResourceMaker);

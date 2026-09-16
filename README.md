@@ -934,6 +934,22 @@ StarkBank.Deposit.Log log = StarkBank.Deposit.Log.Get("4701727546671104");
 Console.WriteLine(log);
 ```
 
+## Get a reversed deposit log PDF
+
+Whenever a Deposit is successfully reversed, a reversed log will be created.
+To retrieve a specific reversal receipt, you can request the corresponding log PDF:
+
+```c#
+using System;
+
+byte[] pdf = StarkBank.Deposit.Log.Pdf("4701727546671104");
+System.IO.File.WriteAllBytes("deposit-log.pdf", pdf);
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
 ## Create boletos
 
 You can create boletos to charge customers or to receive money from accounts
