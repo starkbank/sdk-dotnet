@@ -20,8 +20,8 @@ namespace StarkBank
     /// <list>
     ///     <item>Id [string]: id returned on creation, this is the BR code. ex: "00020126360014br.gov.bcb.pix0114+552840092118152040000530398654040.095802BR5915Jamie Lannister6009Sao Paulo620705038566304FC6C"</item>
     ///     <item>Amount [integer]: DynamicBrcode value in cents. Minimum = 0 (any value will be accepted). ex: 1234 (= R$ 12.34)</item>
-    ///     <item>Expiration [integer, default 3600 (1 hour)]: time interval in seconds between due date and expiration date. ex 123456789</item>
-    ///     <item>Tags [list of strings, default []]: list of strings for tagging, these will be passed to the respective Deposit resource when paid</item>
+    ///     <item>Expiration [integer, default 3600 (1 hour)]: time interval in seconds between creation and expiration. After expiration, the brcode can no longer be paid. ex 123456789</item>
+    ///     <item>Tags [list of strings, default []]: list of strings for tagging (converted to lowercase); these are passed to the respective Deposit resource when paid</item>
     ///     <item>DisplayDescription [string, default null]: optional description to be shown in the receiver bank interface. ex: "Payment for service #1234"</item>
     ///     <item>Rules [List of Rules, default []]: list of dynamic brcode rules to be applied to this brcode. ex: new List<DynamicBrCode.Rule>(){new DynamicBrCode.Rule(Key: "allowedTaxIds", Value: new List<string>(){"012.345.678-90", "20.018.183/0001-80"})}</item>
     ///     <item>Uuid [string]: unique uuid returned when the DynamicBrcode is created. ex: "4e2eab725ddd495f9c98ffd97440702d"</item>
@@ -95,7 +95,7 @@ namespace StarkBank
         /// <summary>
         /// Create DynamicBrcodes
         /// <br/>
-        /// Send a list of DynamicBrcode objects for creation in the Stark Bank API
+        /// Send a list of up to 100 DynamicBrcode objects for creation in the Stark Bank API at a time
         /// <br/>
         /// Parameters (required):
         /// <list>

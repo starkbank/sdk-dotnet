@@ -26,11 +26,11 @@ namespace StarkBank
     ///     <item>StateCode [string]: payer address state. ex: GO</item>
     ///     <item>ZipCode [string]: payer address zip code. ex: 01311-200</item>
     ///     <item>Due [DateTime, default today + 2 days]: Boleto due date in ISO format. ex: new DateTime(2020, 3, 10)</item>
-    ///     <item>Fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
-    ///     <item>Interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
-    ///     <item>OverdueLimit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)</item>
-    ///     <item>Descriptions [list of dictionaries, default null]: list of dictionaries with "text":string and (optional) "amount":int pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
-    ///     <item>Discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
+    ///     <item>Fine [float, default 2.0]: Boleto fine for overdue payment in %. ex: 2.5</item>
+    ///     <item>Interest [float, default 1.0]: Boleto monthly interest for overdue payment in %. ex: 5.2</item>
+    ///     <item>OverdueLimit [integer, default 59]: number of days after the due date after which the Boleto can no longer be paid. Must be between 0 and 59. ex: 7</item>
+    ///     <item>Descriptions [list of dictionaries, default null]: list of up to 15 dictionaries with "text":string and (optional) "amount":int pairs. If the 'booklet' PDF layout is used, only the text of the first description is shown, filling the installment cell. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"amount", 1000},{"text", "Taxes"}}</item>
+    ///     <item>Discounts [list of dictionaries, default null]: list of up to 2 dictionaries with "percentage":float and "date":DateTime pairs. ex: new List<Dictionary<string,string>>(){new Dictionary<string, string>{{"percentage", 1.5},{"date", new DateTime(2020, 3, 8)}}</item>
     ///     <item>Splits [list of StarkBank.Split objects, default null]: list of Split objects to indicate payment receivers. ex: [Split(amount=100, receiverID="5656565656565656")]</item>
     ///     <item>Tags [list of strings]: list of strings for tagging</item>
     ///     <item>ReceiverName [string]: receiver (Sacador Avalista) full name. ex: "Anthony Edward Stark"</item>
@@ -170,7 +170,7 @@ namespace StarkBank
         /// <summary>
         /// Create Boletos
         /// <br/>
-        /// Send a list of Boleto objects for creation in the Stark Bank API
+        /// Send a list of up to 100 Boleto objects for creation in the Stark Bank API. If a Boleto is paid late with fine or interest applied, or paid with a discount, its amount attribute is updated to reflect the amount actually paid.
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -273,7 +273,7 @@ namespace StarkBank
         /// Parameters(optional):
         /// <list>
         ///     <item>layout[string, default null]: Layout specification. Available options are "default" and "booklet"</item>
-        ///     <item>hiddenFields[string, default null]: Layout specification. Available options are "default" and "booklet"</item>
+        ///     <item>hiddenFields[list of strings, default null]: list of Boleto pdf fields to hide. Available option is "customerAddress". ex: ["customerAddress"]</item>
         ///     <item>user[Project object]: Project object. Not necessary if StarkBank.User.Default was set before function call</item>
         /// </list>
         /// <br/>
@@ -392,7 +392,7 @@ namespace StarkBank
         /// <summary>
         /// Delete a Boleto entity
         /// <br/>
-        /// Delete a Boleto entity previously created in the Stark Bank API
+        /// Delete a Boleto entity previously created in the Stark Bank API. A request is sent to CIP to cancel the boleto registration; once canceled, it can no longer be paid. This action cannot be undone.
         /// <br/>
         /// Parameters(required):
         /// <list>

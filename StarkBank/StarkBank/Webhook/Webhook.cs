@@ -10,8 +10,8 @@ namespace StarkBank
     /// Webhook subscription object
     /// <br/>
     /// A Webhook is used to subscribe to notification events on a user-selected endpoint.
-    /// Currently available services for subscription are transfer, invoice, deposit, brcode-payment, boleto, boleto-payment,
-    /// and utility-payment
+    /// Currently available services for subscription are transfer, boleto, boleto-payment, utility-payment, brcode-payment,
+    /// boleto-holmes, deposit, darf-payment, payment-request and invoice.
     /// <br/>
     /// Properties:
     /// <list>

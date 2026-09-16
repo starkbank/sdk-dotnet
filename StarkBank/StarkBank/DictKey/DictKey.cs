@@ -78,7 +78,7 @@ namespace StarkBank
         /// <summary>
         /// Retrieve a specific DictKey
         /// <br/>
-        /// Receive a single DictKey object by passing its id
+        /// Receive a single DictKey object by passing its id. This method includes keys you do not own; use it to check a key before sending a Transfer. Avoid looking up DICT keys without sending a transfer afterwards, since Bacen blocks users making too many standalone lookups in a short time span (invalid searches count too). The encrypted branchCode/accountNumber can be used directly to create a Transfer without decrypting them.
         /// <br/>
         /// Parameters(required):
         /// <list>

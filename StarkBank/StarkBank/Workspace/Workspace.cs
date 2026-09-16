@@ -76,7 +76,7 @@ namespace StarkBank
         /// <summary>
         /// Create Workspace
         /// <br/>
-        /// Send a single Workspace for creation in the Stark Bank API
+        /// Send a single Workspace for creation in the Stark Bank API. Note: only Organization credentials can create Workspaces.
         /// <br/>
         /// Parameters (required):
         /// <list>

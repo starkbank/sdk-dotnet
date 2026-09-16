@@ -20,7 +20,7 @@ namespace StarkBank
     ///     <item>Description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"</item>
     ///     <item>Amount [long integer]: If the BR Code does not provide an amount, this parameter is mandatory, else it is optional, but when it is informed, it must be a match. ex: 23456 (= R$ 234.56)</item>
     ///     <item>Scheduled [DateTime]: payment scheduled datetime. ex: new DateTime(2020, 3, 10)</item>
-    ///     <item>Tags [list of strings]: list of strings for tagging</item>
+    ///     <item>Tags [list of strings]: list of strings for tagging. All tags will be converted to lowercase.</item>
     ///     <item>Rules [list of BrcodePayment.Rule objects, default null]: list of rules to overwrite default behavior. ex: new List<BrcodePayment.Rule>() {new BrcodePayment.Rule("resendingLimit", 5)}</item>
     ///     <item>Metadata [Dictionary object]: object used to store additional information about the Transfer object.</item>
     ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
@@ -112,7 +112,7 @@ namespace StarkBank
         /// <summary>
         /// Create BrcodePayments
         /// <br/>
-        /// Send a list of BrcodePayment objects for creation in the Stark Bank API
+        /// Send a list of BrcodePayment objects for creation in the Stark Bank API. Note: since the brcode is processed asynchronously, the returned amount will initially be zero.
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -205,7 +205,7 @@ namespace StarkBank
         /// <summary>
         /// Retrieve a specific BrcodePayment pdf file
         /// <br/>
-        /// Receive a single BrcodePayment pdf receipt file generated in the Stark Bank API by passing its id.
+        /// Receive a single BrcodePayment pdf receipt file generated in the Stark Bank API by passing its id. Only valid for payments whose status is "success", "processing" or "created".
         /// <br/>
         /// Parameters (required):
         /// <list>

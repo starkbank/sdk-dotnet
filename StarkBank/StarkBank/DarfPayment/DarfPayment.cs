@@ -24,7 +24,7 @@ namespace StarkBank
     ///     <item>Due [DateTime]: due date for payment. ex: datetime.date(2021, 5, 17)</item>
     ///     <item>ReferenceNumber [string, null]: number assigned to the region of the tax. ex: "08.1.17.00-4"</item>
     ///     <item>Scheduled [DateTime or string, default today]: payment scheduled date. ex: DateTime(2020, 3, 10)</item>
-    ///     <item>Tags [list of strings, default null]: list of strings for tagging</item>
+    ///     <item>Tags [list of strings, default null]: list of strings for tagging. All tags will be converted to lowercase.</item>
     ///     <item>ID [string]: unique id returned when payment is created. ex: "5656565656565656"</item>
     ///     <item>Status [string]: current payment status. ex: "success" or "failed"</item>
     ///     <item>Amount [int]: Total amount due calculated from other amounts. ex: 24146 (= R$ 241.46)</item>
@@ -210,8 +210,8 @@ namespace StarkBank
         /// <summary>
         /// Retrieve a specific DarfPayment pdf file
         /// <br/>
-        // Receive a single DarfPayment pdf file generated in the Stark Bank API by passing its id.
-        // Only valid for tax payments with "success" status.
+        /// Receive a single DarfPayment pdf file generated in the Stark Bank API by its id.
+        /// Only valid for darf payments with "success", "processing" or "created" status.
         /// <br/>
         /// Parameters (required):
         /// <list>
@@ -332,7 +332,7 @@ namespace StarkBank
         /// <summary>
         /// Delete a DarfPayment entity
         /// <br/>
-        /// Delete a DarfPayment entity previously created in the Stark Bank API
+        /// Cancel a scheduled DarfPayment entity. It can only be canceled before it starts being processed.
         /// <br/>
         /// Parameters (required):
         /// <list>
