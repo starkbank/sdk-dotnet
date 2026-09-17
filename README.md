@@ -1760,6 +1760,137 @@ StarkBank.DarfPayment.Log log = StarkBank.DarfPayment.Log.Get("1902837198237992"
 Console.WriteLine(log);
 ```
 
+## Create VerifiedAccounts
+
+You can create VerifiedAccounts to confirm that a bank account or Pix key belongs to a given tax ID before sending a transfer.
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.VerifiedAccount> accounts = StarkBank.VerifiedAccount.Create(
+    new List<StarkBank.VerifiedAccount>() {
+        new StarkBank.VerifiedAccount(
+            taxId: "012.345.678-90",
+            name: "Tony Stark",
+            bankCode: "341",
+            branchCode: "2201",
+            number: "76543-8",
+            type: "checking",
+            tags: new List<string> { "iron", "suit" }
+        ),
+        new StarkBank.VerifiedAccount(
+            taxId: "012.345.678-90",
+            keyId: "tony@starkbank.com",
+            tags: new List<string> { "iron", "suit" }
+        )
+    }
+);
+
+foreach (StarkBank.VerifiedAccount account in accounts)
+{
+    Console.WriteLine(account);
+}
+```
+
+## Get a VerifiedAccount
+
+You can get a specific VerifiedAccount by its id:
+
+```c#
+using System;
+
+StarkBank.VerifiedAccount account = StarkBank.VerifiedAccount.Get("5155165527080960");
+
+Console.WriteLine(account);
+```
+
+## Cancel a VerifiedAccount
+
+You can cancel a VerifiedAccount by its id:
+
+```c#
+using System;
+
+StarkBank.VerifiedAccount account = StarkBank.VerifiedAccount.Cancel("5155165527080960");
+
+Console.WriteLine(account);
+```
+
+## Query VerifiedAccounts
+
+To search for VerifiedAccounts using filters, run:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.VerifiedAccount> accounts = StarkBank.VerifiedAccount.Query(
+    limit: 10,
+    status: "active",
+    tags: new List<string> { "iron", "suit" }
+).ToList();
+
+foreach (StarkBank.VerifiedAccount account in accounts)
+{
+    Console.WriteLine(account);
+}
+```
+
+## Query VerifiedAccount logs
+
+You can search for VerifiedAccount logs by specifying filters:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.VerifiedAccount.Log> logs = StarkBank.VerifiedAccount.Log.Query(
+    limit: 10
+).ToList();
+
+foreach (StarkBank.VerifiedAccount.Log log in logs)
+{
+    Console.WriteLine(log);
+}
+```
+
+## Get a VerifiedAccount log
+
+If you want to get a specific VerifiedAccount log by its id, just run:
+
+```c#
+using System;
+
+StarkBank.VerifiedAccount.Log log = StarkBank.VerifiedAccount.Log.Get("1902837198237992");
+
+Console.WriteLine(log);
+```
+
+## Create VerifiedTransfers
+
+You can send a transfer to a previously verified account by creating a VerifiedTransfer:
+
+```c#
+using System;
+using System.Collections.Generic;
+
+List<StarkBank.VerifiedTransfer> transfers = StarkBank.VerifiedTransfer.Create(
+    new List<StarkBank.VerifiedTransfer>() {
+        new StarkBank.VerifiedTransfer(
+            amount: 1000,
+            accountId: "5155165527080960",
+            tags: new List<string> { "iron", "suit" }
+        )
+    }
+);
+
+foreach (StarkBank.VerifiedTransfer transfer in transfers)
+{
+    Console.WriteLine(transfer);
+}
+```
+
 ## Preview payment information before executing the payment
 
 You can preview multiple types of payment to confirm any information before actually paying.

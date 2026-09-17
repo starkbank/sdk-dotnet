@@ -15,6 +15,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [Unreleased]
 ### Added
 - Pdf method to Deposit.Log
+- VerifiedAccount resource, with Create, Get, Cancel, Query and Page methods, plus VerifiedAccount.Log Get, Query and Page
+- VerifiedTransfer resource, with Create method, reusing Transfer.Rule
 
 ### Fixed
 - Docstrings across Invoice, Transfer, Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DynamicBrcode, Deposit, Event, Webhook, Workspace, DarfPayment, PaymentRequest, TaxPayment, UtilityPayment and DictKey to state business rules already enforced by the API but missing or contradicted in the SDK's own comments
