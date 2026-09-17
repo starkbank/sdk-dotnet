@@ -24,7 +24,7 @@ namespace StarkBank
 			///     <item>id [string]: unique id returned when the log is created. ex: "5656565656565656"</item>
 			///     <item>created [DateTime]: creation datetime for the log.</item>
 			///     <item>type [string]: type of the MerchantSession event which triggered the log creation. ex: "created", "updated"</item>
-			///     <item>errors [list of dictionaries]: list of errors linked to this MerchantSession event.</item>
+			///     <item>errors [list of dictionaries]: list of errors linked to this MerchantSession event. The acquiring service currently never populates this field, so its element shape is unconfirmed.</item>
 			///     <item>session [MerchantSession object]: MerchantSession entity to which the log refers to.</item>
 			/// </list>
 			/// </summary>
