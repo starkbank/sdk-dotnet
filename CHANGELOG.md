@@ -22,6 +22,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Docstrings across Invoice, Transfer, Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DynamicBrcode, Deposit, Event, Webhook, Workspace, DarfPayment, PaymentRequest, TaxPayment, UtilityPayment and DictKey to state business rules already enforced by the API but missing or contradicted in the SDK's own comments
 - Missing docstrings on MerchantPurchase, MerchantSession, MerchantCard, MerchantInstallment and their Log resources
 
+## [2.23.0] - 2026-10-13
+### Deprecated
+- MerchantSession.PostPurchase function, since card data must be sent directly from the front-end to the Stark Bank API
+
 ## [2.22.0] - 2026-03-11
 ### Added
 - HolderId query parameter to MerchantPurchase and MerchantSession
