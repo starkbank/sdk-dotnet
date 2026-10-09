@@ -14,44 +14,29 @@ namespace StarkBankTests
         [Fact]
         public void ChallengeModeDisabledCreate()
         {
-            MerchantSession sessionExample = MerchantSessionTest.Example();
-            MerchantSession session = MerchantSession.Create(sessionExample);
+            foreach (MerchantPurchase confirmedPurchase in MerchantPurchase.Query(limit: 1, status: "confirmed"))
+            {
+                MerchantPurchase purchase = new MerchantPurchase(
+                    amount: 1000,
+                    cardId: confirmedPurchase.CardId,
+                    challengeMode: "disabled",
+                    fundingType: "credit"
+                );
 
-            MerchantSession.Purchase purchaseJson = MerchantSessionTest.PurchaseExample();
-
-            MerchantSession.Purchase sessionPurchase = MerchantSession.PostPurchase(session.Uuid, purchaseJson);
-
-            MerchantPurchase purchase = new MerchantPurchase(
-                amount: 1000,
-                cardId: sessionPurchase.CardId,
-                challengeMode: "disabled",
-                fundingType: "credit"
-            );
-
-            MerchantPurchase createdPurchase = MerchantPurchase.Create(purchase);
+                MerchantPurchase createdPurchase = MerchantPurchase.Create(purchase);
+            }
         }
 
         [Fact]
         public void ChallengeModeEnabledCreate()
         {
-            MerchantSession sessionExample = MerchantSessionTest.Example();
-            MerchantSession session = MerchantSession.Create(sessionExample);
+            foreach (MerchantPurchase confirmedPurchase in MerchantPurchase.Query(limit: 1, status: "confirmed"))
+            {
+                MerchantPurchase purchase = Example(cardId: confirmedPurchase.CardId);
+                MerchantPurchase createdPurchase = MerchantPurchase.Create(purchase);
 
-            MerchantSession.Purchase purchaseExample = new MerchantSession.Purchase(
-                    amount: 1000,
-                    cardExpiration: "2035-01",
-                    cardNumber: "36490101441625",
-                    cardSecurityCode: "123",
-                    holderName: "Margaery Tyrell",
-                    fundingType: "credit"
-                ); 
-
-            MerchantSession.Purchase sessionPurchase = MerchantSession.PostPurchase(session.Uuid, purchaseExample);
-
-            MerchantPurchase purchase = Example(cardId: sessionPurchase.CardId);
-            MerchantPurchase createdPurchase = MerchantPurchase.Create(purchase);
-
-            Debug.WriteLine(createdPurchase);
+                Debug.WriteLine(createdPurchase);
+            }
         }
 
         [Fact]
@@ -101,38 +86,10 @@ namespace StarkBankTests
         [Fact]
         public void Update()
         {
-            MerchantSession sessionExample = MerchantSessionTest.Example();
-            string sessionId = MerchantSession.Create(sessionExample).Uuid;
-
-            MerchantSession.Purchase purchaseExample = new MerchantSession.Purchase(
-                    amount: 1000,
-                    installmentCount: 1,
-                    cardExpiration: "2035-01",
-                    cardNumber: "5102589999999954",
-                    cardSecurityCode: "123",
-                    holderName: "Holder Name",
-                    holderEmail: "holderName@email.com",
-                    holderPhone: "11111111111",
-                    fundingType: "credit",
-                    billingCountryCode: "BRA",
-                    billingCity: "São Paulo",
-                    billingStateCode: "SP",
-                    billingStreetLine1: "Rua do Holder Name, 123",
-                    billingStreetLine2: "",
-                    billingZipCode: "11111-111",
-                    metadata: new Dictionary<string, object>
-                    {
-                        { "userAgent", "Postman" },
-                        { "userIp", "255.255.255.255" },
-                        { "language", "pt-BR" },
-                        { "timezoneOffset", 3 },
-                        { "extraData", "extraData" }
-                    }
-                );
-
-            string purchaseId = MerchantSession.PostPurchase(id: sessionId, purchaseExample).ID;
-
-            MerchantPurchase purchase = MerchantPurchase.Update(id: purchaseId, status: "canceled", amount: 0);
+            foreach (MerchantPurchase createdPurchase in MerchantPurchase.Query(limit: 1, status: "created"))
+            {
+                MerchantPurchase purchase = MerchantPurchase.Update(id: createdPurchase.ID, status: "canceled", amount: 0);
+            }
         }
 
         [Fact]
