@@ -68,14 +68,8 @@ namespace StarkBankTests
         [Fact]
         public void Purchase()
         {
-
-            MerchantSession sessionExample = Example();
-            string sessionId = MerchantSession.Create(sessionExample).Uuid;
-
-            MerchantSession.Purchase purchaseExample = PurchaseExample();
-
-            MerchantSession.Purchase purchase = MerchantSession.PostPurchase(id: sessionId, purchaseExample);
-            Assert.NotNull(purchase);
+            var purchase = Assert.Throws<Exception>(() => MerchantSession.PostPurchase(id: "0bb894a2697d41d99fe02cad2c00c9bc", PurchaseExample()));
+            Assert.Contains("Function deprecated since v2.23.0", purchase.Message);
         }
 
         internal static MerchantSession Example()

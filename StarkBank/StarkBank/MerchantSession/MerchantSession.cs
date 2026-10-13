@@ -237,20 +237,11 @@ namespace StarkBank
         ///     <item>MerchantSession.Purchase object with updated attributes</item>
         /// </list>
         /// </summary>
+        [Obsolete("Function deprecated since v2.23.0")]
         public static Purchase PostPurchase(string id, Purchase purchase, User user = null)
-		{
-            (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) = Resource();
-            (string subResourceName, StarkCore.Utils.Api.ResourceMaker subResourceMaker) = Purchase.Resource();
-
-            return Rest.PostSubResource(
-				resourceName: resourceName,
-                subResourceName: subResourceName,
-                subResourceMaker: subResourceMaker,
-				entity: purchase,
-				id: id,
-				user: user
-			) as Purchase;
-		}
+        {
+            throw new Exception("Function deprecated since v2.23.0");
+        }
 
         internal static (string resourceName, StarkCore.Utils.Api.ResourceMaker resourceMaker) Resource()
         {
