@@ -21,6 +21,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ### Fixed
 - Docstrings across Invoice, Transfer, Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DynamicBrcode, Deposit, Event, Webhook, Workspace, DarfPayment, PaymentRequest, TaxPayment, UtilityPayment and DictKey to state business rules already enforced by the API but missing or contradicted in the SDK's own comments
 - Missing docstrings on MerchantPurchase, MerchantSession, MerchantCard, MerchantInstallment and their Log resources
+- Invoice.Query docstring: limit has no default and is unlimited when null
+- Deposit.Update docstring: states that the API requires amount and that the parameter is nullable only to keep the signature compatible
 
 ## [2.23.0] - 2026-10-13
 ### Deprecated
