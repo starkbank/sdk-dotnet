@@ -255,7 +255,7 @@ namespace StarkBank
         /// Parameters(required):
         /// <list>
         ///     <item>id[string]: object unique id. ex: "5656565656565656"</item>
-        ///     <item>amount [long integer]: the new amount of the Deposit. If amount = 0, the Deposit will be fully reversed.</item>
+        ///     <item>amount [long integer]: the new amount of the Deposit. If amount = 0, the Deposit will be fully reversed. The API requires this value; the parameter is nullable only to keep the method signature compatible.</item>
         /// </list>
         /// <br/>
         /// Parameters (optional):
